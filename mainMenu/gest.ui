@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>MainWindowGest</class>
+    <widget class="QMainWindow" name="MainWindowGest">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1045</width>
+                <height>443</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>MainWindow</string>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+                <property name="spacing">
+                    <number>0</number>
+                </property>
+                <item>
+                    <widget class="QWidget" name="widget_2" native="true">
+                        <property name="styleSheet">
+                            <string notr="true">border-top: 2px solid ;
+                                border-left: 2px solid;
+                                border-right: 2px solid ;
+                                background-color: rgb(238, 238, 238);
+                                border-color: rgb(26, 61, 119);
+                            </string>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout_2">
+                            <item>
+                                <spacer name="verticalSpacer">
+                                    <property name="orientation">
+                                        <enum>Qt::Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>QSizePolicy::Fixed</enum>
+                                    </property>
+                                    <property name="sizeHint" stdset="0">
+                                        <size>
+                                            <width>20</width>
+                                            <height>80</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="label">
+                                    <property name="font">
+                                        <font>
+                                            <pointsize>24</pointsize>
+                                            <weight>75</weight>
+                                            <bold>true</bold>
+                                            <underline>false</underline>
+                                        </font>
+                                    </property>
+                                    <property name="styleSheet">
+                                        <string notr="true">color: rgb(26, 61, 119);
+                                            background-color: rgb(238, 238, 238);
+                                            border-top: 2px solid;
+                                            border-left: 2px solid;
+                                            border-right: 2px solid;
+                                            border-color:rgb(238, 238, 238);
+                                        </string>
+                                    </property>
+                                    <property name="text">
+                                        <string>TABLEAU DE BORD</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>Qt::AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QWidget" name="widget" native="true">
+                        <property name="styleSheet">
+                            <string notr="true">border-bottom: 2px solid;
+                                border-left: 2px solid;
+                                border-right: 2px solid;
+                                border-color:rgb(26, 61, 119);
+                                background-color: rgb(238, 238, 238);
+                            </string>
+                        </property>
+                        <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+                            <property name="leftMargin">
+                                <number>0</number>
+                            </property>
+                            <property name="topMargin">
+                                <number>0</number>
+                            </property>
+                            <property name="rightMargin">
+                                <number>0</number>
+                            </property>
+                            <property name="bottomMargin">
+                                <number>0</number>
+                            </property>
+                            <item>
+                                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                                    <item>
+                                        <widget class="QPushButton" name="pushButtonMembres">
+                                            <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="font">
+                                                <font>
+                                                    <pointsize>14</pointsize>
+                                                    <weight>50</weight>
+                                                    <bold>false</bold>
+                                                </font>
+                                            </property>
+                                            <property name="cursor">
+                                                <cursorShape>PointingHandCursor</cursorShape>
+                                            </property>
+                                            <property name="styleSheet">
+                                                <string notr="true"/>
+                                            </property>
+                                            <property name="text">
+                                                <string/>
+                                            </property>
+                                            <property name="icon">
+                                                <iconset resource="resources_main_gest.qrc">
+                                                    <normaloff>:/hhh/membres.png</normaloff>:/hhh/membres.png
+                                                </iconset>
+                                            </property>
+                                            <property name="iconSize">
+                                                <size>
+                                                    <width>320</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="checkable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QPushButton" name="pushButtonAbonnements">
+                                            <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="font">
+                                                <font>
+                                                    <pointsize>14</pointsize>
+                                                    <weight>50</weight>
+                                                    <bold>false</bold>
+                                                </font>
+                                            </property>
+                                            <property name="cursor">
+                                                <cursorShape>PointingHandCursor</cursorShape>
+                                            </property>
+                                            <property name="styleSheet">
+                                                <string notr="true"/>
+                                            </property>
+                                            <property name="text">
+                                                <string/>
+                                            </property>
+                                            <property name="icon">
+                                                <iconset resource="resources_main_gest.qrc">
+                                                    <normaloff>:/hhh/Abonnements.png</normaloff>:/hhh/Abonnements.png
+                                                </iconset>
+                                            </property>
+                                            <property name="iconSize">
+                                                <size>
+                                                    <width>320</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="checkable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QPushButton" name="pushButtonEdt">
+                                            <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="font">
+                                                <font>
+                                                    <pointsize>14</pointsize>
+                                                    <weight>50</weight>
+                                                    <bold>false</bold>
+                                                </font>
+                                            </property>
+                                            <property name="cursor">
+                                                <cursorShape>PointingHandCursor</cursorShape>
+                                            </property>
+                                            <property name="styleSheet">
+                                                <string notr="true"/>
+                                            </property>
+                                            <property name="text">
+                                                <string/>
+                                            </property>
+                                            <property name="icon">
+                                                <iconset resource="resources_main_gest.qrc">
+                                                    <normaloff>:/hhh/EDT.png</normaloff>:/hhh/EDT.png
+                                                </iconset>
+                                            </property>
+                                            <property name="iconSize">
+                                                <size>
+                                                    <width>320</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="checkable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <widget class="QPushButton" name="pushButtonLosts">
+                                            <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="minimumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="maximumSize">
+                                                <size>
+                                                    <width>250</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="font">
+                                                <font>
+                                                    <pointsize>14</pointsize>
+                                                    <weight>50</weight>
+                                                    <bold>false</bold>
+                                                </font>
+                                            </property>
+                                            <property name="cursor">
+                                                <cursorShape>PointingHandCursor</cursorShape>
+                                            </property>
+                                            <property name="styleSheet">
+                                                <string notr="true"/>
+                                            </property>
+                                            <property name="text">
+                                                <string/>
+                                            </property>
+                                            <property name="icon">
+                                                <iconset resource="resources_main_gest.qrc">
+                                                    <normaloff>:/hhh/losts.png</normaloff>:/hhh/losts.png
+                                                </iconset>
+                                            </property>
+                                            <property name="iconSize">
+                                                <size>
+                                                    <width>320</width>
+                                                    <height>250</height>
+                                                </size>
+                                            </property>
+                                            <property name="checkable">
+                                                <bool>true</bool>
+                                            </property>
+                                        </widget>
+                                    </item>
+                                </layout>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+            </layout>
+        </widget>
+    </widget>
+    <resources>
+        <include location="resources_main_gest.qrc"/>
+    </resources>
+    <connections/>
+</ui>

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="hhh">
+        <file>Abonnements.png</file>
+        <file>EDT.png</file>
+        <file>losts.png</file>
+        <file>membres.png</file>
+    </qresource>
+</RCC>

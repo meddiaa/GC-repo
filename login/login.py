@@ -1,8 +1,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
+import mysql.connector
 
 class Ui_DialogLogin(object):
     def setupUi(self, DialogLogin):
+        self.mydb = mysql.connector.connect(
+            host="localhost",
+            user="oussama",
+            password="projet2cp",
+            database="projet2cp",
+            port="3306"
+        )
         DialogLogin.setObjectName("DialogLogin")
         DialogLogin.resize(1200, 800)
         DialogLogin.setMinimumSize(QtCore.QSize(1200, 800))
@@ -132,7 +140,9 @@ class Ui_DialogLogin(object):
         self.label_2.setText(_translate("DialogLogin", "Mot de passe oublié ? "))
 
     def login(self):
-        if self.pushButton.isChecked() and self.lineEdit.text() == "admin" and self.lineEdit_2.text() == "admin":
+        username = self.lineEdit.text()
+        password = self.lineEdit_2.text()
+        if self.pushButton.isChecked() and self.verify(username, password):
             self.window = QtWidgets.QMainWindow()
             self.ui = Ui_MainWindowAdmin()
             self.ui.setupUi(self.window)
@@ -155,13 +165,22 @@ class Ui_DialogLogin(object):
             self.msg.setWindowTitle("Erreur")
             self.msg.setWindowIcon(QtGui.QIcon('../resourcesGenerales/iconGC.png'))
             self.msg.exec_()
+            self.lineEdit.setText("")
+            self.lineEdit_2.setText("")
 
+    def verify(self, username, password):
+        mycursor = self.mydb.cursor()
+        query = " SELECT * FROM pythontest WHERE username = %s AND pass_word = %s "
+        values = (username, password)
+        mycursor.execute(query, values)
+        result = mycursor.fetchall()
+        mycursor.close()
+        return bool(result)
 
-import resources_login_rc
+import resources_login_rc 
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     DialogLogin = QtWidgets.QDialog()
     ui = Ui_DialogLogin()

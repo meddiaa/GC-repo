@@ -296,13 +296,14 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:26pt; color:#1a3d77;\">Ajouter un Athlète</span></p></body></html>"))
         self.lineEditNom.setPlaceholderText(_translate("MainWindow", " Nom"))
         self.lineEditPrenom.setPlaceholderText(_translate("MainWindow", " Prénom"))
+        self.dateEdit.setToolTip(_translate("mainwindow", "date naissance"))
         self.lineEditNumtlph.setPlaceholderText(_translate("MainWindow", "   Numero de téléphone"))
         self.lineEditEmail.setPlaceholderText(_translate("MainWindow", " E-mail"))
         self.lineEditContactUrgence.setPlaceholderText(_translate("MainWindow", " Contact de l\'urgence"))
         self.label_3.setText(_translate("MainWindow", "Sexe:"))
         self.checkBoxMasculin.setText(_translate("MainWindow", "Masculin"))
         self.checkBoxFeminin.setText(_translate("MainWindow", "Féminin"))
-        self.label_4.setText(_translate("MainWindow", "payé:"))
+        self.label_4.setText(_translate("MainWindow", "Bané:"))
         self.checkBoxBanedYes.setText(_translate("MainWindow", "Oui"))
         self.checkBoxBannedNo.setText(_translate("MainWindow", "Non"))
         self.label_5.setText(_translate("MainWindow", "Assuré:"))
@@ -315,12 +316,13 @@ class Ui_MainWindow(object):
     def add_member(self):
         username = self.lineEditNom.text()
         familyName = self.lineEditPrenom.text()
+        date_naissance = self.dateEdit.date().toString("yyyy-MM-dd")
         num_tlphn = self.lineEditNumtlph.text()
         email = self.lineEditEmail.text()
         sexe = ""
         if self.checkBoxMasculin.isChecked():
             sexe = "M"
-        elif self.checkBoxFeminine.isChecked():
+        elif self.checkBoxFeminin.isChecked():
             sexe = "F"
         bane = False
         if self.checkBoxBanedYes.isChecked():
@@ -328,18 +330,32 @@ class Ui_MainWindow(object):
         assure = False
         if self.checkBoxAssureOui.isChecked():
             assure = True
-        if self.insertDb(username, familyName, num_tlphn, email, sexe, bane, assure):
-            print("Insertion avec succès")
+        if username == "" or familyName == "" or num_tlphn == "" or date_naissance == "" or sexe == "" or not bane or not assure:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Veuillez Saisir Les Champs Obligatoires (Nom, Prénom , Date de naissance et Numéro de téléphone )")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.insertDb(username, familyName, date_naissance, num_tlphn, email, sexe, bane, assure) and self.pushButtonSave.isChecked():
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Membre Ajouté avec succés")
+            self.msg.setWindowTitle("Succès")
+            self.msg.exec_()
         else:
-            print("Insertion échouée")
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Insertion Echouée")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
 
-    def insertDb(self, username, familyName, num_tlphn, email, sexe, bane, assure):
+    def insertDb(self, username, familyName, date_naissance, num_tlphn, email, sexe, bane, assure):
         mycursor = self.mydb.cursor()
         mycursor.execute("SELECT MAX(ID) FROM adhérant")
         last_id = mycursor.fetchone()[0]
         new_id = last_id + 1
-        query = "INSERT INTO adhérant (ID, nom, prénom, numéro_téléphone, email, Gender, Assuré, Bané) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        values = (new_id, username, familyName, num_tlphn, email, sexe, assure, bane)
+        query = "INSERT INTO adhérant (ID, nom, prénom, date_naissance , numéro_téléphone, email, Gender, Assuré, Bané) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (new_id, username, familyName, date_naissance, num_tlphn, email, sexe, assure, bane)
         mycursor.execute(query, values)
         self.mydb.commit()
         mycursor.close()

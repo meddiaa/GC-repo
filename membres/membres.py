@@ -245,6 +245,7 @@ class Ui_membres(object):
             port="3306"
         )
         self.cursor = self.connection.cursor()
+        self.afficher_tout()
 
     def retranslateUi(self, membres):
         _translate = QtCore.QCoreApplication.translate
@@ -332,6 +333,18 @@ class Ui_membres(object):
             self.msg.setWindowTitle("Erreur")
             self.msg.exec_()
             return
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(0)
+        for numero_ligne, donnees_ligne in enumerate(data):
+            self.tableWidget.insertRow(numero_ligne)
+            for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                item.setFont(QtGui.QFont("Arial", 20))
+                self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+    def afficher_tout(self):
+        query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant"
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
         self.tableWidget.clearContents()
         self.tableWidget.setRowCount(0)
         for numero_ligne, donnees_ligne in enumerate(data):

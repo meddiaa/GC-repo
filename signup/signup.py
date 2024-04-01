@@ -11,17 +11,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_signinup(object):
-    def setupUi(self, signinup):
-        signinup.setObjectName("signinup")
-        signinup.resize(910, 540)
-        signinup.setStyleSheet("QWidget #signinup\n"
+class Ui_signup(object):
+    def setupUi(self, signup):
+        signup.setObjectName("signup")
+        signup.resize(910, 540)
+        signup.setMinimumSize(QtCore.QSize(1200, 800))
+        signup.setMaximumSize(QtCore.QSize(1200, 800))
+        signup.setStyleSheet("QWidget #signup\n"
 "{\n"
 "background-color: rgb(217, 217, 217)\n"
 "}")
-        self.verticalLayout = QtWidgets.QVBoxLayout(signinup)
+        self.verticalLayout = QtWidgets.QVBoxLayout(signup)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.background = QtWidgets.QWidget(signinup)
+        self.background = QtWidgets.QWidget(signup)
         self.background.setStyleSheet("QWidget #background{\n"
 "border-image: url(:/background/image 1.png) 0 0 0 0 stretch stretch;\n"
 "}")
@@ -151,27 +153,27 @@ class Ui_signinup(object):
         self.gridLayout.addWidget(self.box, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.background)
 
-        self.retranslateUi(signinup)
-        QtCore.QMetaObject.connectSlotsByName(signinup)
+        self.retranslateUi(signup)
+        QtCore.QMetaObject.connectSlotsByName(signup)
 
-    def retranslateUi(self, signinup):
+    def retranslateUi(self, signup):
         _translate = QtCore.QCoreApplication.translate
-        signinup.setWindowTitle(_translate("signinup", "Form"))
-        self.inscriptionconnexion.setText(_translate("signinup", "Inscrivez-Vous"))
-        self.voulezvous.setText(_translate("signinup", "Inscrivez-vous pour creer votre propre espace"))
-        self.lineEdit_4.setPlaceholderText(_translate("signinup", "  Nom d\'Utilisateur"))
-        self.lineEdit_3.setPlaceholderText(_translate("signinup", " Adresse Mail"))
-        self.lineEdit.setPlaceholderText(_translate("signinup", " Mot de Passe"))
-        self.lineEdit_2.setPlaceholderText(_translate("signinup", " Confirmer le Mot de Passe"))
-        self.seconnecter.setText(_translate("signinup", "S\'inscrire"))
+        signup.setWindowTitle(_translate("signup", "Form"))
+        self.inscriptionconnexion.setText(_translate("signup", "Inscrivez-Vous"))
+        self.voulezvous.setText(_translate("signup", "Inscrivez-vous pour creer votre propre espace"))
+        self.lineEdit_4.setPlaceholderText(_translate("signup", "  Nom d\'Utilisateur"))
+        self.lineEdit_3.setPlaceholderText(_translate("signup", " Adresse Mail"))
+        self.lineEdit.setPlaceholderText(_translate("signup", " Mot de Passe"))
+        self.lineEdit_2.setPlaceholderText(_translate("signup", " Confirmer le Mot de Passe"))
+        self.seconnecter.setText(_translate("signup", "S\'inscrire"))
 import signup_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    signinup = QtWidgets.QWidget()
-    ui = Ui_signinup()
-    ui.setupUi(signinup)
-    signinup.show()
+    signup = QtWidgets.QWidget()
+    ui = Ui_signup()
+    ui.setupUi(signup)
+    signup.show()
     sys.exit(app.exec_())

@@ -172,7 +172,7 @@ import signup_rc
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    signup = QtWidgets.QWidget()
+    signup = QtWidgets.QDialog()
     ui = Ui_signup()
     ui.setupUi(signup)
     signup.show()

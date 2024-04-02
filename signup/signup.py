@@ -9,19 +9,30 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from login.login import Ui_DialogLogin
+import mysql.connector
 
-
-class Ui_signinup(object):
-    def setupUi(self, signinup):
-        signinup.setObjectName("signinup")
-        signinup.resize(910, 540)
-        signinup.setStyleSheet("QWidget #signinup\n"
+class Ui_signup(object):
+    def setupUi(self, signup):
+        self.mydb = (mysql.connector.connect(
+                    host="localhost",
+                    user="oussama",
+                    password="projet2cp",
+                    database="projet2cp",
+                    port="3306"
+        )
+        )
+        signup.setObjectName("signup")
+        signup.resize(910, 540)
+        signup.setMinimumSize(QtCore.QSize(1200, 800))
+        signup.setMaximumSize(QtCore.QSize(1200, 800))
+        signup.setStyleSheet("QWidget #signup\n"
 "{\n"
 "background-color: rgb(217, 217, 217)\n"
 "}")
-        self.verticalLayout = QtWidgets.QVBoxLayout(signinup)
+        self.verticalLayout = QtWidgets.QVBoxLayout(signup)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.background = QtWidgets.QWidget(signinup)
+        self.background = QtWidgets.QWidget(signup)
         self.background.setStyleSheet("QWidget #background{\n"
 "border-image: url(:/background/image 1.png) 0 0 0 0 stretch stretch;\n"
 "}")
@@ -150,28 +161,73 @@ class Ui_signinup(object):
         self.verticalLayout_2.addItem(spacerItem6)
         self.gridLayout.addWidget(self.box, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.background)
+        self.seconnecter.clicked.connect(self.inscrire_admin_gest)
 
-        self.retranslateUi(signinup)
-        QtCore.QMetaObject.connectSlotsByName(signinup)
+        self.retranslateUi(signup)
+        QtCore.QMetaObject.connectSlotsByName(signup)
+        self.signup = signup
 
-    def retranslateUi(self, signinup):
+    def retranslateUi(self, signup):
         _translate = QtCore.QCoreApplication.translate
-        signinup.setWindowTitle(_translate("signinup", "Form"))
-        self.inscriptionconnexion.setText(_translate("signinup", "Inscrivez-Vous"))
-        self.voulezvous.setText(_translate("signinup", "Inscrivez-vous pour creer votre propre espace"))
-        self.lineEdit_4.setPlaceholderText(_translate("signinup", "  Nom d\'Utilisateur"))
-        self.lineEdit_3.setPlaceholderText(_translate("signinup", " Adresse Mail"))
-        self.lineEdit.setPlaceholderText(_translate("signinup", " Mot de Passe"))
-        self.lineEdit_2.setPlaceholderText(_translate("signinup", " Confirmer le Mot de Passe"))
-        self.seconnecter.setText(_translate("signinup", "S\'inscrire"))
+        signup.setWindowTitle(_translate("signup", "Form"))
+        self.inscriptionconnexion.setText(_translate("signup", "Inscrivez-Vous"))
+        self.voulezvous.setText(_translate("signup", "Inscrivez-vous pour creer votre propre espace"))
+        self.lineEdit_4.setPlaceholderText(_translate("signup", "  Nom d\'Utilisateur"))
+        self.lineEdit_3.setPlaceholderText(_translate("signup", " Adresse Mail"))
+        self.lineEdit.setPlaceholderText(_translate("signup", " Mot de Passe"))
+        self.lineEdit_2.setPlaceholderText(_translate("signup", " Confirmer le Mot de Passe"))
+        self.seconnecter.setText(_translate("signup", "S\'inscrire"))
+
+    def inscrire_admin_gest(self):
+        nom_utilisateur = self.lineEdit_4.text()
+        email = self.lineEdit_3.text()
+        password = self.lineEdit.text()
+        mot_passe_confirmé = self.lineEdit_2.text()
+        if nom_utilisateur == "" or email == "" or password == "" or mot_passe_confirmé == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Veuillez remplir tous les champs.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.seconnecter.isChecked() and self.insert_into_DB(password, nom_utilisateur, email) and password == mot_passe_confirmé:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Insertion terminée avec succès.")
+            self.msg.setWindowTitle("Succès")
+            self.msg.exec_()
+            self.signup.close()
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_DialogLogin()
+            self.ui.setupUi(self.window)
+            self.window.show()
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Insertion Echouée")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+
+    def insert_into_DB(self, mot_de_passe, nom, email):
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT MAX(admin_id) FROM admin_gest")
+        last_id = mycursor.fetchone()[0]
+        new_id = last_id + 1
+        query = "INSERT INTO admin_gest (admin_id, mot_de_passe, nom , email) VALUES (%s, %s, %s, %s)"
+        values = (new_id, mot_de_passe, nom, email)
+        mycursor.execute(query, values)
+        self.mydb.commit()
+        mycursor.close()
+        return True
+
 import signup_rc
+import resources_login_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    signinup = QtWidgets.QWidget()
-    ui = Ui_signinup()
-    ui.setupUi(signinup)
-    signinup.show()
+    signup = QtWidgets.QDialog()
+    ui = Ui_signup()
+    ui.setupUi(signup)
+    signup.show()
     sys.exit(app.exec_())

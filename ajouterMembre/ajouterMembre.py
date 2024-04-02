@@ -330,18 +330,24 @@ class Ui_MainWindow(object):
         assure = False
         if self.checkBoxAssureOui.isChecked():
             assure = True
-        if username == "" or familyName == "" or num_tlphn == "" or date_naissance == "" or sexe == "" or not bane or not assure:
+        if username == "" or familyName == "" or num_tlphn == "" or date_naissance == "":
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Critical)
             self.msg.setText("Veuillez Saisir Les Champs Obligatoires (Nom, Prénom , Date de naissance et Numéro de téléphone )")
             self.msg.setWindowTitle("Erreur")
             self.msg.exec_()
-        elif self.insertDb(username, familyName, date_naissance, num_tlphn, email, sexe, bane, assure) and self.pushButtonSave.isChecked():
+        elif self.insertDb(username, familyName, date_naissance, num_tlphn, email, sexe, bane, assure):
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
             self.msg.setText("Membre Ajouté avec succés")
             self.msg.setWindowTitle("Succès")
             self.msg.exec_()
+            self.lineEditNom.setText("")
+            self.lineEditEmail.setText("")
+            self.dateEdit.setDate(QtCore.QDate.currentDate())
+            self.lineEditNumtlph.setText("")
+            self.lineEditContactUrgence.setText("")
+            self.lineEditNumsec.setText("")
         else:
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Critical)

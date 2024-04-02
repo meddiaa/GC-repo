@@ -9,7 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from login.login import Ui_DialogLogin as Ui_DialogLogin
+from signup.signup import Ui_signup
 
 class Ui_signinup(object):
     def setupUi(self, signinup):
@@ -120,9 +121,27 @@ class Ui_signinup(object):
         self.verticalLayout_2.addItem(spacerItem5)
         self.gridLayout.addWidget(self.box, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.background)
-
+        self.seconnecter.clicked.connect(self.connecter)
+        self.sinscrire.clicked.connect(self.inscrire)
         self.retranslateUi(signinup)
         QtCore.QMetaObject.connectSlotsByName(signinup)
+        self.signinup = signinup
+    def connecter(self):
+        if self.seconnecter.isChecked():
+            self.signinup.close()
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_DialogLogin()
+            self.ui.setupUi(self.window)
+            self.window.show()
+    def inscrire(self):
+        if self.sinscrire.isChecked():
+            self.signinup.close()
+            self.window = QtWidgets.QDialog()
+            self.ui = Ui_signup()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+
 
     def retranslateUi(self, signinup):
         _translate = QtCore.QCoreApplication.translate
@@ -132,7 +151,10 @@ class Ui_signinup(object):
         self.sinscrire.setText(_translate("signinup", "S\'inscrire"))
         self.ou.setText(_translate("signinup", "ou"))
         self.seconnecter.setText(_translate("signinup", "Se connecter"))
+
 import signin_signup_rc
+import resources_login_rc
+import signup_rc
 
 
 if __name__ == "__main__":

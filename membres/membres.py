@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
-from PyQt5.QtWidgets import QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QLabel, QComboBox, QLineEdit
 import mysql.connector
 
 class Ui_membres(object):
@@ -227,16 +227,18 @@ class Ui_membres(object):
         self.femme.clicked.connect(self.afficher_femmes)
         self.homme.clicked.connect(self.afficher_hommes)
         self.pushButton.clicked.connect(self.recherche_critere)
+        self.supprimer.clicked.connect(self.supprimeradh)
         self.retranslateUi(membres)
         QtCore.QMetaObject.connectSlotsByName(membres)
         self.tableWidget.setColumnWidth(0, 115)
         self.tableWidget.setColumnWidth(1, 340)
         self.tableWidget.setColumnWidth(2, 350)
         self.tableWidget.setColumnWidth(3, 100)
-        self.tableWidget.setColumnWidth(4, 345)
+        self.tableWidget.setColumnWidth(4, 355)
         self.tableWidget.setColumnWidth(5, 350)
         self.tableWidget.setColumnWidth(6, 115)
         self.tableWidget.setColumnWidth(7, 115)
+        self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
         self.connection = mysql.connector.connect(
             host="localhost",
             user="oussama",
@@ -353,6 +355,29 @@ class Ui_membres(object):
                 item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
                 item.setFont(QtGui.QFont("Arial", 20))
                 self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+    def supprimeradh(self):
+        critere_id = self.filterdropdown.currentText()
+        supp_id = self.recherche.text()
+        if critere_id == "ID":
+            query = "DELETE FROM adhérant WHERE ID = %s"
+            self.cursor.execute(query, (supp_id,))
+            self.connection.commit()
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Votre adhérent a été supprimé avec succès")
+            self.msg.setWindowTitle("Suppression avec succès")
+            self.msg.exec_()
+            self.afficher_tout()
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Il faut supprimer un adhérent à partir de son ID seulement")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+
+
+
 
 import membres_rc
 

@@ -147,6 +147,8 @@ class Ui_DialogLogin(object):
             self.ui = Ui_MainWindowAdmin()
             self.ui.setupUi(self.window)
             self.window.show()
+            self.lineEdit.setText("")
+            self.lineEdit_2.setText("")
         elif self.lineEdit.text() == "" or self.lineEdit_2.text() == "":
             # show a message box to the user that the username or password is empty
             self.msg = QtWidgets.QMessageBox()
@@ -177,7 +179,7 @@ class Ui_DialogLogin(object):
         mycursor.close()
         return bool(result)
 
-import resources_login_rc 
+import resources_login_rc
 
 if __name__ == "__main__":
     import sys

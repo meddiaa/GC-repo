@@ -192,7 +192,7 @@ class Ui_signup(object):
         elif self.seconnecter.isChecked() and self.insert_into_DB(password, nom_utilisateur, email) and password == mot_passe_confirmé:
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
-            self.msg.setText("Insertion terminée avec succès.")
+            self.msg.setText("Inscription terminée avec succès.")
             self.msg.setWindowTitle("Succès")
             self.msg.exec_()
             self.signup.close()

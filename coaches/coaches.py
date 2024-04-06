@@ -11,14 +11,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_membres(object):
-    def setupUi(self, membres):
-        membres.setObjectName("membres")
-        membres.resize(1373, 576)
-        membres.setStyleSheet("background-color: rgb(210, 210, 210);")
-        self.gridLayout = QtWidgets.QGridLayout(membres)
+class Ui_coaches(object):
+    def setupUi(self, coaches):
+        coaches.setObjectName("coaches")
+        coaches.resize(1373, 576)
+        coaches.setStyleSheet("background-color: rgb(210, 210, 210);")
+        self.gridLayout = QtWidgets.QGridLayout(coaches)
         self.gridLayout.setObjectName("gridLayout")
-        self.topheader = QtWidgets.QWidget(membres)
+        self.topheader = QtWidgets.QWidget(coaches)
         self.topheader.setStyleSheet("\n"
 "background-color:  rgb(210, 210, 210)")
         self.topheader.setObjectName("topheader")
@@ -35,7 +35,7 @@ class Ui_membres(object):
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
         self.gridLayout.addWidget(self.topheader, 0, 0, 1, 1)
-        self.table = QtWidgets.QWidget(membres)
+        self.table = QtWidgets.QWidget(coaches)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.table.setFont(font)
@@ -91,7 +91,7 @@ class Ui_membres(object):
         self.tableWidget.verticalHeader().setDefaultSectionSize(38)
         self.verticalLayout.addWidget(self.tableWidget)
         self.gridLayout.addWidget(self.table, 2, 0, 1, 1)
-        self.FilterButton = QtWidgets.QWidget(membres)
+        self.FilterButton = QtWidgets.QWidget(coaches)
         self.FilterButton.setStyleSheet("\n"
 "background-color:  rgb(210, 210, 210)")
         self.FilterButton.setObjectName("FilterButton")
@@ -211,41 +211,41 @@ class Ui_membres(object):
         self.horizontalLayout.addItem(spacerItem5)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
 
-        self.retranslateUi(membres)
-        QtCore.QMetaObject.connectSlotsByName(membres)
+        self.retranslateUi(coaches)
+        QtCore.QMetaObject.connectSlotsByName(coaches)
 
-    def retranslateUi(self, membres):
+    def retranslateUi(self, coaches):
         _translate = QtCore.QCoreApplication.translate
-        membres.setWindowTitle(_translate("membres", "membre"))
-        self.label.setText(_translate("membres", "Gestion Des Coaches"))
+        coaches.setWindowTitle(_translate("coaches", "membre"))
+        self.label.setText(_translate("coaches", "Gestion Des Coaches"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("membres", "ID"))
+        item.setText(_translate("coaches", "ID"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("membres", "Nom"))
+        item.setText(_translate("coaches", "Nom"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("membres", "Prénom"))
+        item.setText(_translate("coaches", "Prénom"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("membres", "Sexe"))
+        item.setText(_translate("coaches", "Sexe"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("membres", "Date De Naissance"))
+        item.setText(_translate("coaches", "Date De Naissance"))
         item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("membres", "N° De Téléphone"))
+        item.setText(_translate("coaches", "N° De Téléphone"))
         item = self.tableWidget.horizontalHeaderItem(6)
-        item.setText(_translate("membres", "Sport"))
-        self.filterdropdown.setItemText(0, _translate("membres", "choisir"))
-        self.filterdropdown.setItemText(1, _translate("membres", "Nom"))
-        self.filterdropdown.setItemText(2, _translate("membres", "Prénom"))
-        self.filterdropdown.setItemText(3, _translate("membres", "ID"))
-        self.filterdropdown.setItemText(4, _translate("membres", "Sport"))
-        self.recherche.setText(_translate("membres", "rechercher"))
+        item.setText(_translate("coaches", "Sport"))
+        self.filterdropdown.setItemText(0, _translate("coaches", "choisir"))
+        self.filterdropdown.setItemText(1, _translate("coaches", "Nom"))
+        self.filterdropdown.setItemText(2, _translate("coaches", "Prénom"))
+        self.filterdropdown.setItemText(3, _translate("coaches", "ID"))
+        self.filterdropdown.setItemText(4, _translate("coaches", "Sport"))
+        self.recherche.setText(_translate("coaches", "rechercher"))
 import coaches_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    membres = QtWidgets.QWidget()
-    ui = Ui_membres()
-    ui.setupUi(membres)
-    membres.show()
+    coaches = QtWidgets.QWidget()
+    ui = Ui_coaches()
+    ui.setupUi(coaches)
+    coaches.show()
     sys.exit(app.exec_())

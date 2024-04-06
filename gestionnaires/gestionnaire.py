@@ -11,14 +11,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_membres(object):
-    def setupUi(self, membres):
-        membres.setObjectName("membres")
-        membres.resize(1373, 576)
-        membres.setStyleSheet("background-color: rgb(210, 210, 210);")
-        self.gridLayout = QtWidgets.QGridLayout(membres)
+class Ui_gestionnaire(object):
+    def setupUi(self, gestionnaire):
+        gestionnaire.setObjectName("gestionnaire")
+        gestionnaire.resize(1373, 576)
+        gestionnaire.setStyleSheet("background-color: rgb(210, 210, 210);")
+        self.gridLayout = QtWidgets.QGridLayout(gestionnaire)
         self.gridLayout.setObjectName("gridLayout")
-        self.topheader = QtWidgets.QWidget(membres)
+        self.topheader = QtWidgets.QWidget(gestionnaire)
         self.topheader.setStyleSheet("\n"
 "background-color:  rgb(210, 210, 210)")
         self.topheader.setObjectName("topheader")
@@ -35,7 +35,7 @@ class Ui_membres(object):
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
         self.gridLayout.addWidget(self.topheader, 0, 0, 1, 1)
-        self.table = QtWidgets.QWidget(membres)
+        self.table = QtWidgets.QWidget(gestionnaire)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.table.setFont(font)
@@ -89,7 +89,7 @@ class Ui_membres(object):
         self.tableWidget.verticalHeader().setDefaultSectionSize(38)
         self.verticalLayout.addWidget(self.tableWidget)
         self.gridLayout.addWidget(self.table, 2, 0, 1, 1)
-        self.FilterButton = QtWidgets.QWidget(membres)
+        self.FilterButton = QtWidgets.QWidget(gestionnaire)
         self.FilterButton.setStyleSheet("\n"
 "background-color:  rgb(210, 210, 210)")
         self.FilterButton.setObjectName("FilterButton")
@@ -153,33 +153,33 @@ class Ui_membres(object):
         self.horizontalLayout.addItem(spacerItem3)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
 
-        self.retranslateUi(membres)
-        QtCore.QMetaObject.connectSlotsByName(membres)
+        self.retranslateUi(gestionnaire)
+        QtCore.QMetaObject.connectSlotsByName(gestionnaire)
 
-    def retranslateUi(self, membres):
+    def retranslateUi(self, gestionnaire):
         _translate = QtCore.QCoreApplication.translate
-        membres.setWindowTitle(_translate("membres", "membre"))
-        self.label.setText(_translate("membres", "Gestion Des Gestionnaires"))
+        gestionnaire.setWindowTitle(_translate("gestionnaire", "membre"))
+        self.label.setText(_translate("gestionnaire", "Gestion Des Gestionnaires"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("membres", "ID"))
+        item.setText(_translate("gestionnaire", "ID"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("membres", "Nom"))
+        item.setText(_translate("gestionnaire", "Nom"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("membres", "Prénom"))
+        item.setText(_translate("gestionnaire", "Prénom"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("membres", "N° De Téléphone"))
+        item.setText(_translate("gestionnaire", "N° De Téléphone"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("membres", "Nom d\'Utilisateur"))
+        item.setText(_translate("gestionnaire", "Nom d\'Utilisateur"))
         item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("membres", "Mot De Passe"))
+        item.setText(_translate("gestionnaire", "Mot De Passe"))
 import gestionnaire_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    membres = QtWidgets.QWidget()
-    ui = Ui_membres()
-    ui.setupUi(membres)
-    membres.show()
+    gestionnaire = QtWidgets.QWidget()
+    ui = Ui_gestionnaire()
+    ui.setupUi(gestionnaire)
+    gestionnaire.show()
     sys.exit(app.exec_())

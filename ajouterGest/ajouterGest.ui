@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindowAjouterMembre</class>
- <widget class="QMainWindow" name="MainWindowAjouterMembre">
+ <class>MainWindowAjouterGest</class>
+ <widget class="QMainWindow" name="MainWindowAjouterGest">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -106,7 +106,7 @@
               <height>0</height>
              </size>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1,0,0,0,0">
+            <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1,0,0,0,0,0">
              <item>
               <widget class="QLineEdit" name="lineEditNom">
                <property name="minimumSize">
@@ -210,7 +210,34 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEdit">
+              <widget class="QLineEdit" name="lineEditNomUti">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>35</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>35</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <pointsize>10</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: rgb(255, 255, 255);</string>
+               </property>
+               <property name="placeholderText">
+                <string>Nom d'Utilisateur</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEditMDP">
                <property name="minimumSize">
                 <size>
                  <width>0</width>
@@ -260,6 +287,9 @@
                    <pointsize>10</pointsize>
                   </font>
                  </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
+                 </property>
                  <property name="styleSheet">
                   <string notr="true">background-color: rgb(35, 84, 209);
 color: rgb(252, 252, 252);
@@ -292,6 +322,9 @@ border-radius:5px;
                   <font>
                    <pointsize>10</pointsize>
                   </font>
+                 </property>
+                 <property name="cursor">
+                  <cursorShape>PointingHandCursor</cursorShape>
                  </property>
                  <property name="styleSheet">
                   <string notr="true">background-color: rgb(255, 93, 93);

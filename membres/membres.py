@@ -228,6 +228,7 @@ class Ui_membres(object):
         self.homme.clicked.connect(self.afficher_hommes)
         self.pushButton.clicked.connect(self.recherche_critere)
         self.supprimer.clicked.connect(self.supprimeradh)
+        self.ajouter.clicked.connect(self.ouverture_page_ajout)
         self.retranslateUi(membres)
         QtCore.QMetaObject.connectSlotsByName(membres)
         self.tableWidget.setColumnWidth(0, 115)
@@ -375,6 +376,83 @@ class Ui_membres(object):
             self.msg.setText("Il faut supprimer un adhérent à partir de son ID seulement")
             self.msg.setWindowTitle("Erreur")
             self.msg.exec_()
+
+    def ouverture_page_ajout(self):
+        self.deuxieme_fenetre = DeuxiemeFenetre()
+        self.deuxieme_fenetre.show()
+
+class DeuxiemeFenetre(QMainWindow):
+    def __init__(self):
+            super().__init__()
+            self.setWindowTitle("Deuxième Fenêtre")
+            self.setGeometry(800, 300, 350, 300)
+
+            self.button_ajouter = QPushButton("Ajouter", self)
+            self.button_ajouter.setGeometry(150, 200, 100, 30)
+
+            self.button_ajouter.clicked.connect(self.ajout)
+            self.label_mois = QLabel("Mois:", self)
+            self.label_mois.setGeometry(50, 20, 150, 30)
+
+            self.label_id = QLabel("ID:", self)
+            self.label_id.setGeometry(50, 70, 50, 30)
+
+            self.current_id = QLineEdit(self)
+            self.current_id.setGeometry(100, 70, 200, 30)
+
+            self.label_abonnement = QLabel("Abonnement:", self)
+            self.label_abonnement.setGeometry(50, 120, 100, 30)
+
+            self.combobox_abonnement = QComboBox(self)
+            self.combobox_abonnement.setGeometry(150, 120, 150, 30)
+            self.combobox_abonnement.addItem("karate garcon")
+            self.combobox_abonnement.addItem("karate fille")
+            self.combobox_abonnement.addItem("kick -16")
+            self.combobox_abonnement.addItem("kick +16")
+            self.combobox_abonnement.addItem("fitness N-Edd")
+            self.combobox_abonnement.addItem("Fitness femme")
+            self.combobox_abonnement.addItem("fitness hit")
+            self.combobox_abonnement.addItem("kick walid")
+            self.combobox_abonnement.addItem("self defense")
+
+            # Ajout des mois de l'année
+            mois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre",
+                    "Novembre", "Décembre"]
+            self.combobox_mois = QComboBox(self)
+            self.combobox_mois.setGeometry(150, 20, 150, 30)
+            self.combobox_mois.addItems(mois)
+
+    def ajout(self):
+            type_abonnement = self.combobox_abonnement.currentText()
+            mois_abonnement = self.combobox_mois.currentText()
+            id_abonnement = self.current_id.text()
+            print("ajout avec succes" + type_abonnement + mois_abonnement + id_abonnement)
+            try:
+                # Établissement de la connexion à la base de données MySQL
+                connection = mysql.connector.connect(
+                    host="localhost",
+                    user="oussama",
+                    password="projet2cp",
+                    database="projet2cp",
+                    port="3306"
+                )
+
+                cursor = connection.cursor()
+
+                # Requête pour insérer les données dans la table
+                query = "INSERT INTO abonnement (ID_abonnement, nom_abn) VALUES (%s, %s)"
+                values = (id_abonnement, type_abonnement)
+                cursor.execute(query, values)
+                connection.commit()
+                print("Ajout avec succès")
+
+            except mysql.connector.Error as error:
+                print("Erreur lors de l'ajout:", error)
+
+            finally:
+                if connection.is_connected():
+                    cursor.close()
+                    connection.close()
 
 
 

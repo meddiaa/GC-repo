@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
+from mainMenu.gest import Ui_MainWindowGest
 import mysql.connector
 
 class Ui_DialogLogin(object):
@@ -142,9 +143,18 @@ class Ui_DialogLogin(object):
     def login(self):
         username = self.lineEdit.text()
         password = self.lineEdit_2.text()
-        if self.pushButton.isChecked() and self.verify(username, password):
+        if self.pushButton.isChecked() and self.verify_admin(username, password):
+            DialogLogin.accept()
             self.window = QtWidgets.QMainWindow()
             self.ui = Ui_MainWindowAdmin()
+            self.ui.setupUi(self.window)
+            self.window.show()
+            self.lineEdit.setText("")
+            self.lineEdit_2.setText("")
+        elif self.pushButton.isChecked() and self.verify_gestionnaire(username, password):
+            DialogLogin.accept()
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_MainWindowGest()
             self.ui.setupUi(self.window)
             self.window.show()
             self.lineEdit.setText("")
@@ -158,7 +168,6 @@ class Ui_DialogLogin(object):
             # set message box icon
             self.msg.setWindowIcon(QtGui.QIcon('../resourcesGenerales/iconGC.png'))
             self.msg.exec_()
-
         else:
             # show a message box to the user that the username or password is incorrect
             self.msg = QtWidgets.QMessageBox()
@@ -170,9 +179,17 @@ class Ui_DialogLogin(object):
             self.lineEdit.setText("")
             self.lineEdit_2.setText("")
 
-    def verify(self, username, password):
+    def verify_admin(self, username, password):
         mycursor = self.mydb.cursor()
-        query = " SELECT * FROM admin_gest WHERE nom = %s AND mot_de_passe = %s "
+        query = " SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s "
+        values = (username, password)
+        mycursor.execute(query, values)
+        result = mycursor.fetchall()
+        mycursor.close()
+        return bool(result)
+    def verify_gestionnaire(self, username, password):
+        mycursor = self.mydb.cursor()
+        query = " SELECT * FROM gestionnaire WHERE nom = %s AND mot_de_passe = %s "
         values = (username, password)
         mycursor.execute(query, values)
         result = mycursor.fetchall()

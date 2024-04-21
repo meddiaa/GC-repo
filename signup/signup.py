@@ -223,6 +223,7 @@ import signup_rc
 import resources_login_rc
 
 
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)

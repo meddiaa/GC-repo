@@ -9,11 +9,15 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
+import mysql.connector
+
 
 
 class Ui_MainWindowObjetsPerdues(object):
     def setupUi(self, MainWindowObjetsPerdues):
         MainWindowObjetsPerdues.setObjectName("MainWindowObjetsPerdues")
+        MainWindowObjetsPerdues.resize(1327, 576)
         MainWindowObjetsPerdues.resize(933, 632)
         MainWindowObjetsPerdues.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindowObjetsPerdues)
@@ -105,7 +109,31 @@ class Ui_MainWindowObjetsPerdues(object):
         self.verticalLayout.setStretch(1, 7)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindowObjetsPerdues.setCentralWidget(self.centralwidget)
+        self.retranslateUi(MainWindowObjetsPerdues)
+        QtCore.QMetaObject.connectSlotsByName(MainWindowObjetsPerdues)
+        MainWindowObjetsPerdues.showMaximized()
+        self.pushButtonRechercher.clicked.connect(self.rechercher_objets)
+        self.radioButton.clicked.connect(self.trier_AZ)
+        self.radioButton_2.clicked.connect(self.trier_plus_recent)
+        self.radioButton_3.clicked.connect(self.trier_plus_ancien)
+        self.connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="moh@med18082004",
+            database="JSS",
+            port="3306"
+        )
+        self.cursor = self.connection.cursor()
+        self.afficher_tout()
 
+        self.tableWidgetLostObjects.setColumnWidth(0, 200)
+        self.tableWidgetLostObjects.setColumnWidth(1, 150)
+        self.tableWidgetLostObjects.setColumnWidth(2, 200)
+        self.tableWidgetLostObjects.setColumnWidth(3, 1500)
+    def retranslateUi(self, MainWindowObjetsPerdues):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindowObjetsPerdues.setWindowTitle(_translate("MainWindowObjetsPerdues", "Objets perdus"))
+        self.lineEditRecherche.setPlaceholderText(_translate("MainWindowObjetsPerdues", "Rechercher un objet"))
         self.retranslateUi(MainWindowObjetsPerdues)
         QtCore.QMetaObject.connectSlotsByName(MainWindowObjetsPerdues)
 
@@ -130,6 +158,47 @@ class Ui_MainWindowObjetsPerdues(object):
         item.setText(_translate("MainWindowObjetsPerdues", "Lieu"))
         item = self.tableWidgetLostObjects.horizontalHeaderItem(3)
         item.setText(_translate("MainWindowObjetsPerdues", "Description"))
+    def afficher_tout(self):
+        query = "SELECT object_name, datee, lieu, description FROM objets"
+        self.cursor.execute(query)
+        data = self.cursor.fetchall()
+        self.tableWidgetLostObjects.setRowCount(len(data))
+        for numero_ligne, donnees_ligne in enumerate(data):
+            for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                item.setFont(QtGui.QFont("Arial", 10))
+                self.tableWidgetLostObjects.setItem(numero_ligne, numero_colonne, item)
+        self.tableWidgetLostObjects.resizeColumnsToContents()
+
+    def rechercher_objets(self):
+        name_objet = self.lineEditRecherche.text()
+        query = "SELECT object_name, datee, lieu, description FROM objets WHERE object_name LIKE %s"
+        self.cursor.execute(query, (name_objet,))
+        data = self.cursor.fetchall()
+        if not data:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Aucun objet n'existe avec ce nom.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+            self.lineEditRecherche.setText("")
+            return
+        self.tableWidgetLostObjects.clearContents()
+        self.tableWidgetLostObjects.setRowCount(0)
+        for numero_ligne, donnees_ligne in enumerate(data):
+            self.tableWidgetLostObjects.insertRow(numero_ligne)
+            for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                item.setFont(QtGui.QFont("Arial", 10))
+                self.tableWidgetLostObjects.setItem(numero_ligne, numero_colonne, item)
+
+
+    def trier_AZ(self):
+        self.tableWidgetLostObjects.sortByColumn(0, QtCore.Qt.AscendingOrder)
+    def trier_plus_recent(self):
+        self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.DescendingOrder)
+    def trier_plus_ancien(self):
+        self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.AscendingOrder)
 
 
 if __name__ == "__main__":

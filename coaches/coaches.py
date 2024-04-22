@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
+import mysql.connector
 
 
 class Ui_coaches(object):
@@ -116,7 +118,6 @@ class Ui_coaches(object):
         self.filterdropdown.addItem("")
         self.filterdropdown.addItem("")
         self.filterdropdown.addItem("")
-        self.filterdropdown.addItem("")
         self.horizontalLayout.addWidget(self.filterdropdown)
         spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
@@ -210,9 +211,26 @@ class Ui_coaches(object):
         spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem5)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
-
+        self.connection = mysql.connector.connect(
+                host="localhost",
+                user="root",
+                password="moh@med18082004",
+                database="JSS",
+                port="3306"
+        )
+        self.cursor = self.connection.cursor()
+        self.afficher_tout()
+        self.pushButton.clicked.connect(self.rechercher_critere)
         self.retranslateUi(coaches)
         QtCore.QMetaObject.connectSlotsByName(coaches)
+        self.tableWidget.setColumnWidth(0, 150)
+        self.tableWidget.setColumnWidth(1, 350)
+        self.tableWidget.setColumnWidth(2, 350)
+        self.tableWidget.setColumnWidth(3, 400)
+        self.tableWidget.setColumnWidth(4, 130)
+        self.tableWidget.setColumnWidth(5, 350)
+        self.tableWidget.setColumnWidth(6, 150)
+        self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
 
     def retranslateUi(self, coaches):
         _translate = QtCore.QCoreApplication.translate
@@ -225,9 +243,9 @@ class Ui_coaches(object):
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("coaches", "Prénom"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("coaches", "Sexe"))
+        item.setText(_translate("coaches", "Date de naissance"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("coaches", "Date De Naissance"))
+        item.setText(_translate("coaches", "Sexe"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("coaches", "N° De Téléphone"))
         item = self.tableWidget.horizontalHeaderItem(6)
@@ -238,7 +256,72 @@ class Ui_coaches(object):
         self.filterdropdown.setItemText(3, _translate("coaches", "ID"))
         self.filterdropdown.setItemText(4, _translate("coaches", "Sport"))
         self.recherche.setText(_translate("coaches", "rechercher"))
-        coaches.showMaximized()
+
+    def afficher_tout(self):
+            self.tableWidget.setRowCount(0)
+            query = "SELECT coach.id_coach, coach.nom, coach.prénom, coach.date_naissance, coach.Gender, coach.numéro_tel FROM coach "
+            try:
+                    self.cursor.execute(query)
+                    results = self.cursor.fetchall()
+                    for row_index, row_data in enumerate(results):
+                            self.tableWidget.insertRow(row_index)
+                            for col_index, data in enumerate(row_data):
+                                    item = QtWidgets.QTableWidgetItem(str(data))
+                                    item.setFont(QtGui.QFont("Arial", 15))
+                                    self.tableWidget.setItem(row_index, col_index, item)
+                    self.tableWidget.resizeColumnsToContents()
+            except Exception as e:
+                    print("Erreur lors de la récupération des données:", e)
+
+    def rechercher_critere(self):
+            texte_recherche = self.recherche.text()  # Texte dans la barre de recherche
+            critere_recherche = self.filterdropdown.currentText()  # Critère choisi dans le dropdown
+
+            # Vérifiez que le critère est bien choisi
+            if critere_recherche == "choisir":
+                    self.msg = QtWidgets.QMessageBox()
+                    self.msg.setIcon(QtWidgets.QMessageBox.Warning)
+                    self.msg.setText("Veuillez choisir un critère de recherche.")
+                    self.msg.setWindowTitle("Erreur")
+                    self.msg.exec_()
+                    return
+
+            # Création de la requête SQL selon le critère choisi
+            if critere_recherche == "Nom":
+                    query = "SELECT coach.id_coach, coach.nom, coach.prénom, coach.date_naissance, coach.Gender, coach.numéro_tel, sport.nom FROM coach LEFT JOIN coach_sport ON coach.id_coach = coach_sport.id_coach LEFT JOIN sport ON coach_sport.id_sport = sport.id_sport WHERE coach.nom LIKE %s"
+            elif critere_recherche == "Prénom":
+                    query = "SELECT coach.id_coach, coach.nom, coach.prénom, coach.date_naissance, coach.Gender, coach.numéro_tel, sport.nom FROM coach LEFT JOIN coach_sport ON coach.id_coach = coach_sport.id_coach LEFT JOIN sport ON coach_sport.id_sport = sport.id_sport WHERE coach.prénom LIKE %s"
+            elif critere_recherche == "ID":
+                    query = "SELECT coach.id_coach, coach.nom, coach.prénom, coach.date_naissance, coach.Gender, coach.numéro_tel, sport.nom FROM coach LEFT JOIN coach_sport ON coach.id_coach = coach_sport.id_coach LEFT JOIN sport ON coach_sport.id_sport = sport.id_sport WHERE coach.id_coach LIKE %s"
+            # Ajoutez des caractères joker au texte de recherche
+            texte_recherche_avec_joker = f"%{texte_recherche}%"
+            # Exécution de la requête
+            self.cursor.execute(query, (texte_recherche_avec_joker,))
+            data = self.cursor.fetchall()  # Récupération des résultats
+
+
+            # Si aucun résultat n'est trouvé
+            if not data:
+                    self.msg = QtWidgets.QMessageBox()
+                    self.msg.setIcon(QtWidgets.QMessageBox.Information)
+                    self.msg.setText("Aucun coach n'existe avec ce critère de recherche.")
+                    self.msg.setWindowTitle("Information")
+                    self.msg.exec_()
+                    return
+
+            # Effacez le contenu existant dans le tableau
+            self.tableWidget.clearContents()
+            self.tableWidget.setRowCount(0)
+
+            # Remplissez le tableau avec les résultats
+            for numero_ligne, donnees_ligne in enumerate(data):
+                    self.tableWidget.insertRow(numero_ligne)
+                    for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                            item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                            item.setFont(QtGui.QFont("Arial", 15))
+                            self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+
 import coaches_rc
 
 

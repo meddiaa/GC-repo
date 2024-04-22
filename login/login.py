@@ -1,8 +1,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
+import mysql.connector
 
 class Ui_DialogLogin(object):
     def setupUi(self, DialogLogin):
+        self.mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="moh@med18082004",
+            database="JSS",
+            port="3306"
+        )
         DialogLogin.setObjectName("DialogLogin")
         DialogLogin.resize(1200, 800)
         DialogLogin.setMinimumSize(QtCore.QSize(1200, 800))
@@ -132,11 +140,24 @@ class Ui_DialogLogin(object):
         self.label_2.setText(_translate("DialogLogin", "Mot de passe oublié ? "))
 
     def login(self):
-        if self.pushButton.isChecked() and self.lineEdit.text() == "admin" and self.lineEdit_2.text() == "admin":
+        username = self.lineEdit.text()
+        password = self.lineEdit_2.text()
+        if self.pushButton.isChecked() and self.verify_admin(username, password):
+            DialogLogin.accept()
             self.window = QtWidgets.QMainWindow()
             self.ui = Ui_MainWindowAdmin()
             self.ui.setupUi(self.window)
             self.window.show()
+            self.lineEdit.setText("")
+            self.lineEdit_2.setText("")
+        elif self.pushButton.isChecked() and self.verify_gestionnaire(username, password):
+            DialogLogin.accept()
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_MainWindowGest()
+            self.ui.setupUi(self.window)
+            self.window.show()
+            self.lineEdit.setText("")
+            self.lineEdit_2.setText("")
         elif self.lineEdit.text() == "" or self.lineEdit_2.text() == "":
             # show a message box to the user that the username or password is empty
             self.msg = QtWidgets.QMessageBox()
@@ -146,7 +167,6 @@ class Ui_DialogLogin(object):
             # set message box icon
             self.msg.setWindowIcon(QtGui.QIcon('../resourcesGenerales/iconGC.png'))
             self.msg.exec_()
-
         else:
             # show a message box to the user that the username or password is incorrect
             self.msg = QtWidgets.QMessageBox()
@@ -155,13 +175,30 @@ class Ui_DialogLogin(object):
             self.msg.setWindowTitle("Erreur")
             self.msg.setWindowIcon(QtGui.QIcon('../resourcesGenerales/iconGC.png'))
             self.msg.exec_()
+            self.lineEdit.setText("")
+            self.lineEdit_2.setText("")
 
+    def verify_admin(self, username, password):
+        mycursor = self.mydb.cursor()
+        query = " SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s "
+        values = (username, password)
+        mycursor.execute(query, values)
+        result = mycursor.fetchall()
+        mycursor.close()
+        return bool(result)
+    def verify_gestionnaire(self, username, password):
+        mycursor = self.mydb.cursor()
+        query = " SELECT * FROM gestionnaire WHERE nom = %s AND mot_de_passe = %s "
+        values = (username, password)
+        mycursor.execute(query, values)
+        result = mycursor.fetchall()
+        mycursor.close()
+        return bool(result)
 
 import resources_login_rc
 
 if __name__ == "__main__":
     import sys
-
     app = QtWidgets.QApplication(sys.argv)
     DialogLogin = QtWidgets.QDialog()
     ui = Ui_DialogLogin()

@@ -2,6 +2,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
 import mysql.connector
 
+from mainMenu.gest import Ui_MainWindowGest
+
+
 class Ui_DialogLogin(object):
     def setupUi(self, DialogLogin):
         self.mydb = mysql.connector.connect(
@@ -196,6 +199,8 @@ class Ui_DialogLogin(object):
         return bool(result)
 
 import resources_login_rc
+from mainMenu import resources_main_admin
+from mainMenu import resources_main_gest
 
 if __name__ == "__main__":
     import sys

@@ -166,7 +166,7 @@ class Ui_MainWindowGest(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindowGest.setWindowTitle(_translate("MainWindowGest", "MainWindow"))
         self.label.setText(_translate("MainWindowGest", "JSS Excellence de Saoula."))
-import resources_main_gest
+from mainMenu import resources_main_gest
 
 
 if __name__ == "__main__":

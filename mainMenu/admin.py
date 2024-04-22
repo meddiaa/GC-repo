@@ -219,7 +219,7 @@ class Ui_MainWindowAdmin(object):
     def retranslateUi(self, MainWindowAdmin):
         _translate = QtCore.QCoreApplication.translate
         self.label.setText(_translate("MainWindowAdmin", "JSS Excellence de Saoula."))
-import resources_main_admin
+from mainMenu import resources_main_admin
 
 
 if __name__ == "__main__":

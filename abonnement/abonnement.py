@@ -220,6 +220,7 @@ class Ui_abonnement(object):
 
         self.retranslateUi(abonnement)
         QtCore.QMetaObject.connectSlotsByName(abonnement)
+        abonnement.showMaximized()
 
     def retranslateUi(self, abonnement):
         _translate = QtCore.QCoreApplication.translate

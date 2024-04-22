@@ -238,6 +238,7 @@ class Ui_coaches(object):
         self.filterdropdown.setItemText(3, _translate("coaches", "ID"))
         self.filterdropdown.setItemText(4, _translate("coaches", "Sport"))
         self.recherche.setText(_translate("coaches", "rechercher"))
+        coaches.showMaximized()
 import coaches_rc
 
 

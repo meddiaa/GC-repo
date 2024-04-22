@@ -212,9 +212,9 @@ class Ui_MainWindowAdmin(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.verticalLayout_8.addWidget(self.widget)
         MainWindowAdmin.setCentralWidget(self.centralwidget)
-
         self.retranslateUi(MainWindowAdmin)
         QtCore.QMetaObject.connectSlotsByName(MainWindowAdmin)
+        MainWindowAdmin.showMaximized()
 
     def retranslateUi(self, MainWindowAdmin):
         _translate = QtCore.QCoreApplication.translate

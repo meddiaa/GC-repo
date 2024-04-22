@@ -9,14 +9,21 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+<<<<<<< HEAD
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
 import mysql.connector
+=======
+>>>>>>> 10e8a07f3486aa57f17bd31c357ccf2368c6415a
 
 
 class Ui_MainWindowObjetsPerdues(object):
     def setupUi(self, MainWindowObjetsPerdues):
         MainWindowObjetsPerdues.setObjectName("MainWindowObjetsPerdues")
+<<<<<<< HEAD
         MainWindowObjetsPerdues.resize(1327, 576)
+=======
+        MainWindowObjetsPerdues.resize(933, 632)
+>>>>>>> 10e8a07f3486aa57f17bd31c357ccf2368c6415a
         MainWindowObjetsPerdues.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindowObjetsPerdues)
         self.centralwidget.setStyleSheet("")
@@ -107,6 +114,7 @@ class Ui_MainWindowObjetsPerdues(object):
         self.verticalLayout.setStretch(1, 7)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindowObjetsPerdues.setCentralWidget(self.centralwidget)
+<<<<<<< HEAD
         self.retranslateUi(MainWindowObjetsPerdues)
         QtCore.QMetaObject.connectSlotsByName(MainWindowObjetsPerdues)
         MainWindowObjetsPerdues.showMaximized()
@@ -132,6 +140,18 @@ class Ui_MainWindowObjetsPerdues(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindowObjetsPerdues.setWindowTitle(_translate("MainWindowObjetsPerdues", "Objets perdus"))
         self.lineEditRecherche.setPlaceholderText(_translate("MainWindowObjetsPerdues", "Rechercher un objet"))
+=======
+
+        self.retranslateUi(MainWindowObjetsPerdues)
+        QtCore.QMetaObject.connectSlotsByName(MainWindowObjetsPerdues)
+
+        #show window maximiased
+        MainWindowObjetsPerdues.showMaximized()
+    def retranslateUi(self, MainWindowObjetsPerdues):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindowObjetsPerdues.setWindowTitle(_translate("MainWindowObjetsPerdues", "Objets perdues"))
+        self.lineEditRecherche.setPlaceholderText(_translate("MainWindowObjetsPerdues", "Rechercher un onbejt"))
+>>>>>>> 10e8a07f3486aa57f17bd31c357ccf2368c6415a
         self.pushButtonRechercher.setText(_translate("MainWindowObjetsPerdues", "Rechercher"))
         self.radioButton.setText(_translate("MainWindowObjetsPerdues", "A-Z"))
         self.radioButton_2.setText(_translate("MainWindowObjetsPerdues", "Plus récent"))
@@ -147,6 +167,7 @@ class Ui_MainWindowObjetsPerdues(object):
         item.setText(_translate("MainWindowObjetsPerdues", "Lieu"))
         item = self.tableWidgetLostObjects.horizontalHeaderItem(3)
         item.setText(_translate("MainWindowObjetsPerdues", "Description"))
+<<<<<<< HEAD
     def afficher_tout(self):
         query = "SELECT object_name, datee, lieu, description FROM objets"
         self.cursor.execute(query)
@@ -188,6 +209,8 @@ class Ui_MainWindowObjetsPerdues(object):
         self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.DescendingOrder)
     def trier_plus_ancien(self):
         self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.AscendingOrder)
+=======
+>>>>>>> 10e8a07f3486aa57f17bd31c357ccf2368c6415a
 
 
 if __name__ == "__main__":

@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="background">
+    <file>images/right-arrow.png</file>
+    <file>images/right-chevron-.png</file>
+    <file>images/image 1.png</file>
+  </qresource>
+</RCC>

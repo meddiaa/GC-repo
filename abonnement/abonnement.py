@@ -248,7 +248,8 @@ class Ui_abonnement(object):
         self.filterdropdown.setItemText(2, _translate("abonnement", "Prénom"))
         self.filterdropdown.setItemText(3, _translate("abonnement", "ID Abonnement"))
         self.filterdropdown.setItemText(4, _translate("abonnement", "Sport"))
-        self.recherche.setText(_translate("abonnement", "rechercher"))
+        self.recherche.setPlaceholderText("Rechercher")
+
 import abonnement_rc
 
 

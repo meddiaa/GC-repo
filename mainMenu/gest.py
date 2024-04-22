@@ -160,6 +160,7 @@ class Ui_MainWindowGest(object):
 
         self.retranslateUi(MainWindowGest)
         QtCore.QMetaObject.connectSlotsByName(MainWindowGest)
+        MainWindowGest.showMaximized()
 
     def retranslateUi(self, MainWindowGest):
         _translate = QtCore.QCoreApplication.translate

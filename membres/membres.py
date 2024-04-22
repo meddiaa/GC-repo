@@ -276,7 +276,7 @@ class Ui_membres(object):
         self.filterdropdown.setItemText(1, _translate("membres", "Nom"))
         self.filterdropdown.setItemText(2, _translate("membres", "Prénom"))
         self.filterdropdown.setItemText(3, _translate("membres", "ID"))
-        self.recherche.setText(_translate("membres", "rechercher"))
+        self.recherche.setPlaceholderText("Rechercher")
         self.femme.setText(_translate("membres", "femme"))
         self.homme.setText(_translate("membres", "homme"))
 

@@ -1,5 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
+from datetime import datetime , timedelta
 import mysql.connector
 
 class Ui_membres(object):
@@ -229,6 +230,7 @@ class Ui_membres(object):
         self.pushButton.clicked.connect(self.recherche_critere)
         self.supprimer.clicked.connect(self.supprimeradh)
         self.modifier.clicked.connect(self.ouverture_page_modification)
+        self.ajouter.clicked.connect(self.ouverture_page_ajout)
         self.retranslateUi(membres)
         QtCore.QMetaObject.connectSlotsByName(membres)
         self.tableWidget.setColumnWidth(0, 115)
@@ -394,7 +396,27 @@ class Ui_membres(object):
             self.msg.setWindowTitle("Erreur")
             self.msg.exec_()
 
+    def ouverture_page_ajout(self):
+        texte_recherche = self.recherche.text()
+        query = "SELECT * FROM adhérant WHERE ID = %s"
+        value = (texte_recherche,)
+        self.cursor.execute(query, value)
+        resultats = self.cursor.fetchall()
+        if resultats:
+            self.deuxieme_fenetre = self.DeuxiemeFenetre(texte_recherche)
+            self.deuxieme_fenetre.show()
+        else:
+            print("erreur le resultat n'existe pas")
+
     class fenetre_modification(QMainWindow):
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="oussama",
+            password="projet2cp",
+            database="projet2cp",
+            port="3306"
+        )
+        cursor = connection.cursor()
         def __init__(self, infos, texte_recherche):
             super().__init__()
             self.texte_recherche = texte_recherche
@@ -411,17 +433,19 @@ class Ui_membres(object):
             self.button_enregistrer.clicked.connect(self.enregistrer_modifications)
 
         def enregistrer_modifications(self):
-            cursor = self.connection.cursor()
             try:
                 # extraction des informations
                 for label in self.labels_infos:
+
                     champ, valeur = label.toPlainText().split(":")
                     champ = champ.strip()  # Supprimer les espaces autour du nom du champ
                     valeur = valeur.strip()  # Supprimer les espaces autour de la valeur
 
                     # Requête SQL pour mettre à jour les données dans la base de données
                     query = f"UPDATE adhérant SET {champ} = %s WHERE ID = %s"
-                    cursor.execute(query, (valeur, self.texte_recherche))
+
+
+                    self.cursor.execute(query, (valeur, self.texte_recherche))
 
                 self.connection.commit()
 
@@ -431,8 +455,118 @@ class Ui_membres(object):
                 self.connection.rollback()
                 QMessageBox.critical(self, "Erreur", f"Erreur lors de l'enregistrement des modifications : {error}")
 
-            finally:
-                cursor.close()
+    class DeuxiemeFenetre(QMainWindow):
+            def __init__(self, texte_recherche):
+                super().__init__()
+                self.setWindowTitle("Deuxième Fenêtre")
+                self.setGeometry(800, 300, 350, 300)
+
+                self.texte_recherche = texte_recherche
+
+                self.button_ajouter = QPushButton("Ajouter", self)
+                self.button_ajouter.setGeometry(150, 200, 100, 30)
+                self.button_ajouter.clicked.connect(self.ajout)
+
+                self.label_mois = QLabel("date de début:", self)
+                self.label_mois.setGeometry(50, 20, 150, 30)
+
+                self.label_mois2 = QLabel("date de la fin:", self)
+                self.label_mois2.setGeometry(50, 50, 150, 30)
+
+                self.label_id = QLabel("ID:", self)
+                self.label_id.setGeometry(50, 80, 50, 30)
+
+                self.current_id = QLineEdit(self)
+                self.current_id.setGeometry(100, 80, 200, 30)
+                self.current_id.setText(texte_recherche)
+
+                self.label_abonnement = QLabel("Abonnement:", self)
+                self.label_abonnement.setGeometry(50, 120, 100, 30)
+
+                self.label_prix = QLabel("Prix:", self)
+                self.label_prix.setGeometry(50, 155, 100, 30)
+
+                self.current_prix = QLineEdit(self)
+                self.current_prix.setGeometry(150, 155, 150, 30)
+
+                self.combobox_abonnement = QComboBox(self)
+                self.combobox_abonnement.setGeometry(150, 120, 150, 30)
+                self.combobox_abonnement.addItem("karate garcon")
+                self.combobox_abonnement.addItem("karate fille")
+                self.combobox_abonnement.addItem("kick -16")
+                self.combobox_abonnement.addItem("kick +16")
+                self.combobox_abonnement.addItem("fitness N-Edd")
+                self.combobox_abonnement.addItem("Fitness femme")
+                self.combobox_abonnement.addItem("fitness hit")
+                self.combobox_abonnement.addItem("kick walid")
+                self.combobox_abonnement.addItem("self defense")
+
+                # Ajout des mois de l'année
+
+                date_debut = datetime.now().strftime("%Y-%m-%d")
+                date_fin = datetime.now() + timedelta(days=30)
+                self.textedit_datedefin = QTextEdit(self)
+                self.textedit_datedefin.setGeometry(155, 50, 150, 30)
+                self.textedit_datedefin.setPlainText(date_fin.strftime("%Y-%m-%d"))
+
+                self.textedit_datedebut = QTextEdit(self)
+                self.textedit_datedebut.setGeometry(155, 20, 150, 30)
+                self.textedit_datedebut.setPlainText(date_debut)
+
+            def ajout(self):
+                type_abonnement = self.combobox_abonnement.currentText()
+                debut_abonnement = self.textedit_datedebut.toPlainText()
+                fin_abonnement = self.textedit_datedefin.toPlainText()
+                id_abonnement = self.current_id.text()
+                prix = self.current_prix.text()
+
+                mois = datetime.now().month
+
+                def definition_mois(mois_actuelle):
+                    switcher = {
+                        1: "janvier",
+                        2: "février",
+                        3: "mars",
+                        4: "avril",
+                        5: "mai",
+                        6: "juin",
+                        7: "juillet",
+                        9: "septembre",
+                        10: "octobre",
+                        11: "novembre",
+                        12: "décembre",
+                    }
+                    mois_adhérant = switcher.get(mois_actuelle, "Cas par défaut")
+                    return mois_adhérant
+
+                mois_adhérant = definition_mois(mois)
+
+                try:
+                    # Établissement de la connexion à la base de données MySQL
+                    connection = mysql.connector.connect(
+                        host="localhost",
+                        user="oussama",
+                        password="projet2cp",
+                        database="projet2cp",
+                        port="3306"
+                    )
+
+                    # Requête pour insérer les données dans la table
+                    query = "INSERT INTO abonnement (type_abonnement, id_abonnement,date_debut,date_fin,prix ) VALUES (%s, %s, %s,%s,%s)"
+                    values = (type_abonnement, id_abonnement, debut_abonnement, fin_abonnement, prix)
+                    self.cursor.execute(query, values)
+
+                    connection.commit()
+
+                    query = f"UPDATE adhérant SET {mois_adhérant} = true WHERE ID = {id_abonnement}"
+
+                    self.cursor.execute(query)
+                    connection.commit()
+
+                    print("Ajout avec succès")
+
+                except mysql.connector.Error as error:
+                    print("Erreur lors de l'ajout:", error)
 
 
 import membres_rc

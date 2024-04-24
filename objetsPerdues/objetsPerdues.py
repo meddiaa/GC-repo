@@ -11,8 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
 import mysql.connector
-
-
+from ajouterObjet import Ui_Dialog
 
 class Ui_MainWindowObjetsPerdues(object):
     def setupUi(self, MainWindowObjetsPerdues):
@@ -116,6 +115,7 @@ class Ui_MainWindowObjetsPerdues(object):
         self.radioButton.clicked.connect(self.trier_AZ)
         self.radioButton_2.clicked.connect(self.trier_plus_recent)
         self.radioButton_3.clicked.connect(self.trier_plus_ancien)
+        self.pushButtonAjourter.clicked.connect((self.ajouter_objet))
         self.connection = mysql.connector.connect(
             host="localhost",
             user="oussama",
@@ -199,6 +199,48 @@ class Ui_MainWindowObjetsPerdues(object):
         self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.DescendingOrder)
     def trier_plus_ancien(self):
         self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.AscendingOrder)
+    def ajouter_objet(self):
+        self = QtWidgets.QMainWindow()
+        self.ui = Ui_Dialog()
+        self.ui.setupUi(self)
+        self.show()
+        object_name = self.window.lineEditObjet.text()
+        Lieu = self.window.lineEditLieu.text()
+        date = self.window.dateEdit.date().toString("yyyy-MM-dd")
+        description = self.window.lineEditDescription.text()
+        if object_name == "" or Lieu == "" or description == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Veuillez Saisir Les Champs Obligatoires")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.insertDb(object_name, date, Lieu, description):
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Objet Ajouté avec succés")
+            self.msg.setWindowTitle("Succès")
+            self.msg.exec_()
+            self.lineEditObjet.setText("")
+            self.lineEditLieu.setText("")
+            self.dateEdit.setDate(QtCore.QDate.currentDate())
+            self.lineEditDescription.setText("")
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Insertion Echouée")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+    def insertDb(self, object_name, date, Lieu, description):
+        mycursor = self.mydb.cursor()
+        query = "INSERT INTO objets(object_name,datee,lieu,description) VALUES (%s, %s, %s, %s)"
+        values = (object_name, date, Lieu, description)
+        mycursor.execute(query, values)
+        self.mydb.commit()
+        mycursor.close()
+        return True
+
+
+
 
 
 if __name__ == "__main__":

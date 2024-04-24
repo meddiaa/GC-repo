@@ -181,7 +181,7 @@ class Ui_DialogLogin(object):
 
     def verify_admin(self, username, password):
         mycursor = self.mydb.cursor()
-        query = " SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s "
+        query = "SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s"
         values = (username, password)
         mycursor.execute(query, values)
         result = mycursor.fetchall()

@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
-from datetime import datetime , timedelta
+from datetime import datetime, timedelta
 import mysql.connector
 
 class Ui_membres(object):

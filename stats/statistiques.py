@@ -17,22 +17,6 @@ import mysql.connector
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-class GraphWindow(QtWidgets.QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-
-        self.figure = plt.figure()
-        self.canvas = FigureCanvas(self.figure)
-
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.canvas)
-
-    def plot(self, hommes, femmes):
-        ax = self.figure.add_subplot(111)
-        ax.bar(['Hommes', 'Femmes'], [hommes, femmes])
-        ax.set_title('Nombre de membres')
-        ax.set_ylabel('Nombre')
-        self.canvas.draw()
 
 class Ui_MainWindowStats(object):
     def setupUi(self, MainWindowStats):
@@ -284,6 +268,7 @@ class Ui_MainWindowStats(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
+        self.comboBox.addItem("")
         self.verticalLayout_4.addWidget(self.comboBox)
         self.labelGainParSport = QtWidgets.QLabel(self.widget_3)
         font = QtGui.QFont()
@@ -411,32 +396,11 @@ class Ui_MainWindowStats(object):
         texte_7 = str(total_1)
         self.labelGainMois.setText(texte_7)
 
-        self.labelGainParSport.setText("20000")
+        self.comboBox.currentTextChanged.connect(self.paiment_sport)
 
-        self.graph_window = GraphWindow()
-        #Ajoutez un bouton pour afficher le graphique
-        self.btn_show_graph = QPushButton("Montrer le graphe", self.centralwidget)
-        self.btn_show_graph.clicked.connect(self.show_graph)
-        self.verticalLayout.addWidget(self.btn_show_graph)
-
-    def show_graph(self):
-            # Obtenez les données pour le graphique
-            hommes = self.nbr_hommes()
-            femmes = self.nbr_femmes()
-
-            # Affichez le graphique avec les données
-            self.graph_window.plot(hommes, femmes)
-            self.graph_window.show()
-
-    def update_labels(self):
-            nombre_de_femmes = self.nbr_femmes()
-            texte_femmes = str(nombre_de_femmes)
-            self.labelNbrFemmes.setText(texte_femmes)
-
-            nombre_de_hommes = self.nbr_hommes()
-            texte_hommes = str(nombre_de_hommes)
-            self.labelNbrHommes.setText(texte_hommes)
-
+        total_paiment = self.total_paiments()
+        texte_6 = str(total_paiment)
+        self.labelGainTotal.setText(texte_6)
 
 
     def retranslateUi(self, MainWindowStats):
@@ -458,11 +422,12 @@ class Ui_MainWindowStats(object):
         self.label_2.setText(_translate("MainWindowStats", "Ce mois (DA)"))
         self.labelGainMois.setText(_translate("MainWindowStats", "3500"))
         self.label_6.setText(_translate("MainWindowStats", "Par sport (DA)"))
-        self.comboBox.setItemText(0, _translate("MainWindowStats", "fitness"))
-        self.comboBox.setItemText(1, _translate("MainWindowStats", "GYM"))
-        self.comboBox.setItemText(2, _translate("MainWindowStats", "Karate"))
-        self.comboBox.setItemText(3, _translate("MainWindowStats", "Kick Boxing"))
-        self.comboBox.setItemText(4, _translate("MainWindowStats", "Self defense"))
+        self.comboBox.setItemText(0, _translate("MainWindowStats", "Choisir le Sport"))
+        self.comboBox.setItemText(1, _translate("MainWindowStats", "Judo"))
+        self.comboBox.setItemText(2, _translate("MainWindowStats", "Kickk"))
+        self.comboBox.setItemText(3, _translate("MainWindowStats", "Fitnesss"))
+        self.comboBox.setItemText(4, _translate("MainWindowStats", "self defense"))
+        self.comboBox.setItemText(5, _translate("MainWindowStats", "Karatee"))
         self.labelGainParSport.setText(_translate("MainWindowStats", "0"))
         self.label_14.setText(_translate("MainWindowStats", "Total (DA)"))
         self.labelGainTotal.setText(_translate("MainWindowStats", "121213E2141"))
@@ -474,6 +439,8 @@ class Ui_MainWindowStats(object):
 
         # change between the stacked widgets every time the button is clicked
         self.pushButton.clicked.connect(lambda: self.stackedWidget.setCurrentIndex((self.stackedWidget.currentIndex() + 1) % 2))
+
+
 
     def nbr_femmes(self):
             query = "SELECT COUNT(*) FROM adhérant WHERE Gender = 'F'"
@@ -506,6 +473,8 @@ class Ui_MainWindowStats(object):
             self.cursor.execute(query)
             nombre_de_gestionnaires = self.cursor.fetchone()[0]
             return nombre_de_gestionnaires+1
+    def total_paiments(self):
+        return self.paiment_mois('septembre')+self.paiment_mois('octobre')+self.paiment_mois('novembre')+self.paiment_mois('décembre')+self.paiment_mois('janvier')+self.paiment_mois('février')+self.paiment_mois('mars')+self.paiment_mois('avril')+self.paiment_mois('mai')+self.paiment_mois('juin')+self.paiment_mois('juillet')
     def paiment_mois(self,mois):
             query = f"SELECT SUM({mois}) FROM adhérant"
             self.cursor.execute(query)
@@ -514,6 +483,81 @@ class Ui_MainWindowStats(object):
             return total_paiements
 
 
+    def paiment_sport(self, mois):
+        sport_choisi = self.comboBox.currentText()
+        locale.setlocale(locale.LC_TIME, "fr_FR")
+        mois_actuel = datetime.now().month
+        mois = calendar.month_name[mois_actuel]
+        try:
+            self.cursor.execute("SELECT id_sport FROM sport WHERE nom = %s", (sport_choisi,))
+            sport_id = self.cursor.fetchone()
+
+            if not sport_id:
+                print("Sport introuvable.")
+                return None
+            sport_id = sport_id[0]
+            total_pai = self.get_total_paiement(mois, sport_id)
+            texte_8 = str(total_pai)
+            self.labelGainParSport.setText(texte_8)
+
+        except Exception as e:
+            print(f"Erreur lors du calcul du paiement du sport: {e}")
+            return None
+
+    def get_total_paiement(self, mois , id_sport):
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="oussama",
+            password="projet2cp",
+            database="projet2cp",
+            port="3306"
+        )
+        cursor = None
+        try:
+            cursor = connection.cursor()
+            adherant_ids = self.get_adherants(id_sport)
+            if not adherant_ids:
+                print(f"Aucun adhérant trouvé pour le sport avec ID {id_sport}.")
+                return 0
+            query = f"SELECT SUM({mois}) AS total_montant FROM adhérant WHERE ID IN ({', '.join(['%s'] * len(adherant_ids))})"
+            cursor.execute(query, tuple(adherant_ids))
+            result = cursor.fetchone()
+            return result[0] if result else 0
+        except Exception as e:
+            print(f"Erreur lors de l'obtention du paiement total: {e}")
+            return 0
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
+
+    def get_adherants(self, id_sport):
+        connection = mysql.connector.connect(
+            host="localhost",
+            user="oussama",
+            password="projet2cp",
+            database="projet2cp",
+            port="3306"
+        )
+        cursor = None
+        try:
+            cursor = connection.cursor()
+            cursor.execute("SELECT id_adherant FROM sport_adherant WHERE id_sport = %s", (id_sport,))
+            adherant_ids = cursor.fetchall()
+            if not adherant_ids:
+                print("Aucun adhérant trouvé pour ce sport.")
+                return []
+            adherants_list = [row[0] for row in adherant_ids]
+            return adherants_list
+        except Exception as e:
+            print(f"Erreur lors de la récupération des adhérents: {e}")
+            return []
+        finally:
+            if cursor:
+                cursor.close()
+            if connection:
+                connection.close()
 
 
 import res_rc

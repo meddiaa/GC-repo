@@ -23,15 +23,14 @@ class Ui_MainWindowStats(object):
     def setupUi(self, MainWindowStats):
         self.connection = mysql.connector.connect(
                     host="localhost",
-                    user="oussama",
-                    password="projet2cp",
-                    database="projet2cp",
+                    user="root",
+                    password="moh@med18082004",
+                    database="JSS",
                     port="3306"
         )
         self.cursor = self.connection.cursor()
         MainWindowStats.setObjectName("MainWindowStats")
         MainWindowStats.resize(1003, 624)
-        MainWindowStats.showMaximized()
         self.centralwidget = QtWidgets.QWidget(MainWindowStats)
         self.centralwidget.setStyleSheet("QWidget#centralwidget{\n"
 "border-image: url(:/background/images/image 1.png);\n"
@@ -405,6 +404,7 @@ class Ui_MainWindowStats(object):
         total_paiment = self.total_paiments()
         texte_6 = str(total_paiment)
         self.labelGainTotal.setText(texte_6)
+        MainWindowStats.showMaximized()
 
 
     def retranslateUi(self, MainWindowStats):
@@ -513,9 +513,9 @@ class Ui_MainWindowStats(object):
 
         connection = mysql.connector.connect(
             host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
+            user="root",
+            password="moh@med18082004",
+            database="JSS",
             port="3306"
         )
         cursor = None
@@ -541,9 +541,9 @@ class Ui_MainWindowStats(object):
     def get_adherants(self, id_sport):
         connection = mysql.connector.connect(
             host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
+            user="root",
+            password="moh@med18082004",
+            database="JSS",
             port="3306"
         )
         cursor = None

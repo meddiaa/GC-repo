@@ -5,9 +5,9 @@ def connect_to_DB():
     try:
         connection = mysql.connector.connect(
             host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
+            user="root",
+            password="moh@med18082004",
+            database="JSS",
             port="3306"
         )
         cursor = connection.cursor()

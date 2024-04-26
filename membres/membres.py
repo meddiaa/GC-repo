@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
 from datetime import datetime, timedelta
 import mysql.connector
+from connexion_DB import connect_to_DB
 
 class Ui_membres(object):
     def setupUi(self, membres):
@@ -242,14 +243,6 @@ class Ui_membres(object):
         self.tableWidget.setColumnWidth(6, 115)
         self.tableWidget.setColumnWidth(7, 115)
         self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
-        self.connection = mysql.connector.connect(
-            host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
-            port="3306"
-        )
-        self.cursor = self.connection.cursor()
         self.afficher_tout()
 
     def retranslateUi(self, membres):
@@ -281,13 +274,14 @@ class Ui_membres(object):
         self.homme.setText(_translate("membres", "homme"))
 
     def afficher_femmes(self):
+        connection, cursor = connect_to_DB()
         sélectionné = self.femme.isChecked()
         if sélectionné:
             self.tableWidget.clearContents()
             self.tableWidget.setRowCount(0)
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE Gender = 'F'"
-            self.cursor.execute(query)
-            data = self.cursor.fetchall()
+            cursor.execute(query)
+            data = cursor.fetchall()
             row_count = self.tableWidget.rowCount()
             for row_number, row_data in enumerate(data, row_count):
                 self.tableWidget.insertRow(row_number)
@@ -296,13 +290,14 @@ class Ui_membres(object):
                     item.setFont(QtGui.QFont("Arial", 15))
                     self.tableWidget.setItem(row_number, column_number, item)
     def afficher_hommes(self):
+        connection, cursor = connect_to_DB()
         sélectionné = self.homme.isChecked()
         if sélectionné:
             self.tableWidget.clearContents()
             self.tableWidget.setRowCount(0)
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE Gender = 'M'"
-            self.cursor.execute(query)
-            data = self.cursor.fetchall()
+            cursor.execute(query)
+            data = cursor.fetchall()
             row_count = self.tableWidget.rowCount()
             for row_number, row_data in enumerate(data, row_count):
                 self.tableWidget.insertRow(row_number)
@@ -312,6 +307,7 @@ class Ui_membres(object):
                     self.tableWidget.setItem(row_number, column_number, item)
 
     def recherche_critere(self):
+        connection, cursor = connect_to_DB()
         texte_recherche = self.recherche.text()
         critere_recherche = self.filterdropdown.currentText()
         if critere_recherche == "choisir":
@@ -329,8 +325,8 @@ class Ui_membres(object):
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE ID LIKE %s"
 
         texte_recherche_avec_joker = f"%{texte_recherche}%"
-        self.cursor.execute(query, (texte_recherche_avec_joker,))
-        data = self.cursor.fetchall()
+        cursor.execute(query, (texte_recherche_avec_joker,))
+        data = cursor.fetchall()
         if not data:
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
@@ -347,9 +343,10 @@ class Ui_membres(object):
                 item.setFont(QtGui.QFont("Arial", 15))
                 self.tableWidget.setItem(numero_ligne, numero_colonne, item)
     def afficher_tout(self):
+        connection, cursor = connect_to_DB()
         query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant"
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        cursor.execute(query)
+        data = cursor.fetchall()
         self.tableWidget.clearContents()
         self.tableWidget.setRowCount(0)
         for numero_ligne, donnees_ligne in enumerate(data):
@@ -360,12 +357,13 @@ class Ui_membres(object):
                 self.tableWidget.setItem(numero_ligne, numero_colonne, item)
 
     def supprimeradh(self):
+        connection, cursor = connect_to_DB()
         critere_id = self.filterdropdown.currentText()
         supp_id = self.recherche.text()
         if critere_id == "ID":
             query = "DELETE FROM adhérant WHERE ID = %s"
-            self.cursor.execute(query, (supp_id,))
-            self.connection.commit()
+            cursor.execute(query, (supp_id,))
+            connection.commit()
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
             self.msg.setText("Votre adhérent a été supprimé avec succès")
@@ -380,13 +378,14 @@ class Ui_membres(object):
             self.msg.exec_()
 
     def ouverture_page_modification(self):
+        connection, cursor = connect_to_DB()
         texte_recherche = self.recherche.text()
         # Connexion à la base de données MySQL
         query = "SELECT * FROM  adhérant WHERE ID = %s"
-        self.cursor.execute(query, (texte_recherche,))
-        resultats = self.cursor.fetchone()
+        cursor.execute(query, (texte_recherche,))
+        resultats = cursor.fetchone()
         if resultats:
-            infos = [f"{champ}: {valeur}" for champ, valeur in zip(self.cursor.column_names, resultats)]
+            infos = [f"{champ}: {valeur}" for champ, valeur in zip(cursor.column_names, resultats)]
             self.deuxieme_fenetre = self.fenetre_modification(infos, texte_recherche)
             self.deuxieme_fenetre.show()
         else:
@@ -397,11 +396,12 @@ class Ui_membres(object):
             self.msg.exec_()
 
     def ouverture_page_ajout(self):
+        connection, cursor = connect_to_DB()
         texte_recherche = self.recherche.text()
         query = "SELECT * FROM adhérant WHERE ID = %s"
         value = (texte_recherche,)
-        self.cursor.execute(query, value)
-        resultats = self.cursor.fetchall()
+        cursor.execute(query, value)
+        resultats = cursor.fetchall()
         if resultats:
             self.deuxieme_fenetre = self.DeuxiemeFenetre(texte_recherche)
             self.deuxieme_fenetre.show()
@@ -409,14 +409,7 @@ class Ui_membres(object):
             print("erreur le resultat n'existe pas")
 
     class fenetre_modification(QMainWindow):
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
-            port="3306"
-        )
-        cursor = connection.cursor()
+        connection, cursor = connect_to_DB()
         def __init__(self, infos, texte_recherche):
             super().__init__()
             self.texte_recherche = texte_recherche
@@ -433,28 +426,28 @@ class Ui_membres(object):
             self.button_enregistrer.clicked.connect(self.enregistrer_modifications)
 
         def enregistrer_modifications(self):
+            connection, cursor = connect_to_DB()
             try:
                 # extraction des informations
                 for label in self.labels_infos:
-
                     champ, valeur = label.toPlainText().split(":")
                     champ = champ.strip()  # Supprimer les espaces autour du nom du champ
                     valeur = valeur.strip()  # Supprimer les espaces autour de la valeur
 
                     # Requête SQL pour mettre à jour les données dans la base de données
                     query = f"UPDATE adhérant SET {champ} = %s WHERE ID = %s"
+                    cursor.execute(query, (valeur, self.texte_recherche))  # Utilisation de self.value
 
-
-                    self.cursor.execute(query, (valeur, self.texte_recherche))
-
-                self.connection.commit()
+                connection.commit()
 
                 QMessageBox.information(self, "Information", "Modifications enregistrées avec succès.")
 
             except mysql.connector.Error as error:
-                self.connection.rollback()
+                connection.rollback()
                 QMessageBox.critical(self, "Erreur", f"Erreur lors de l'enregistrement des modifications : {error}")
 
+            finally:
+                cursor.close()
     class DeuxiemeFenetre(QMainWindow):
             def __init__(self, texte_recherche):
                 super().__init__()
@@ -514,6 +507,7 @@ class Ui_membres(object):
                 self.textedit_datedebut.setPlainText(date_debut)
 
             def ajout(self):
+                connection, cursor = connect_to_DB()
                 type_abonnement = self.combobox_abonnement.currentText()
                 debut_abonnement = self.textedit_datedebut.toPlainText()
                 fin_abonnement = self.textedit_datedefin.toPlainText()
@@ -542,25 +536,15 @@ class Ui_membres(object):
                 mois_adhérant = definition_mois(mois)
 
                 try:
-                    # Établissement de la connexion à la base de données MySQL
-                    connection = mysql.connector.connect(
-                        host="localhost",
-                        user="oussama",
-                        password="projet2cp",
-                        database="projet2cp",
-                        port="3306"
-                    )
-
-                    # Requête pour insérer les données dans la table
                     query = "INSERT INTO abonnement (type_abonnement, id_abonnement,date_debut,date_fin,prix ) VALUES (%s, %s, %s,%s,%s)"
                     values = (type_abonnement, id_abonnement, debut_abonnement, fin_abonnement, prix)
-                    self.cursor.execute(query, values)
+                    cursor.execute(query, values)
 
                     connection.commit()
 
                     query = f"UPDATE adhérant SET {mois_adhérant} = true WHERE ID = {id_abonnement}"
 
-                    self.cursor.execute(query)
+                    cursor.execute(query)
                     connection.commit()
 
                     print("Ajout avec succès")

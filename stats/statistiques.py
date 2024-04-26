@@ -15,6 +15,7 @@ import calendar
 import locale
 import mysql.connector
 import matplotlib.pyplot as plt
+import io
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
@@ -362,7 +363,10 @@ class Ui_MainWindowStats(object):
         self.retranslateUi(MainWindowStats)
         self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindowStats)
-
+        self.plot_graph1()
+        self.plot_graph2()
+        self.plot_graph3()
+        self.plot_graph4()
         nombre_de_femmes = self.nbr_femmes()
         texte_1 = str(nombre_de_femmes)
         self.labelNbrFemmes.setText(texte_1)
@@ -504,7 +508,9 @@ class Ui_MainWindowStats(object):
             print(f"Erreur lors du calcul du paiement du sport: {e}")
             return None
 
+
     def get_total_paiement(self, mois , id_sport):
+
         connection = mysql.connector.connect(
             host="localhost",
             user="oussama",
@@ -559,7 +565,134 @@ class Ui_MainWindowStats(object):
             if connection:
                 connection.close()
 
+    def plot_graph1(self):
+            # Exemple de requête pour récupérer des données de la base de données
 
+
+            # Exemple de données de graphe
+            categories = ["homme","femme"]
+
+            valeurs=[self.nbr_hommes(),self.nbr_femmes()]
+            # Création du graphe
+            self.fig, self.ax = plt.subplots(figsize=(6, 4))
+
+            self.ax.bar(categories, valeurs)
+            self.ax.set_xlabel('genre')
+            self.ax.set_ylabel('nombre')
+            self.ax.set_title('nombre d\'hommes et de femmes')
+            self.ax.tick_params(axis='x', rotation=25)
+            self.fig.tight_layout()
+            buffer = io.BytesIO()
+
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            image = QtGui.QImage.fromData(buffer.getvalue())
+
+    # Afficher l'image dans le QLabel
+            pixmap = QtGui.QPixmap.fromImage(image)
+            self.label_4.setPixmap(pixmap)
+
+    def plot_graph2(self):
+            # Exemple de requête pour récupérer des données de la base de données
+            self.cursor.execute("SELECT sum(septembre),sum(octobre),sum(novembre),sum(décembre),sum(janvier),sum(février),sum(mars),sum(avril),sum(mai),sum(juin),sum(juillet) FROM adhérant")
+            rows = self.cursor.fetchone()
+
+            # Exemple de données de graphe
+            categories = ["septembre", "octobre", "novembre", "décembre",  "janvier", "février", "mars",  "avril", "mai","juin","juillet"]
+
+            valeurs = [rows[0], rows[1], rows[2], rows[3], rows[4], rows[5], rows[6], rows[7], rows[8], rows[9],  rows[10]]
+
+            # Création du graphe
+            self.fig, self.ax = plt.subplots(figsize=(6, 4))
+
+            self.ax.bar(categories, valeurs)
+            self.ax.set_xlabel('mois')
+            self.ax.set_ylabel('chiffre d\'affaire')
+            self.ax.set_title('Chiffre d\'affaire par mois')
+            self.ax.tick_params(axis='x', rotation=25)
+            self.fig.tight_layout()
+            buffer = io.BytesIO()
+
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            image = QtGui.QImage.fromData(buffer.getvalue())
+
+    # Afficher l'image dans le QLabel
+            pixmap = QtGui.QPixmap.fromImage(image)
+            self.label_8.setPixmap(pixmap)
+
+    def plot_graph3(self):
+            # Exemple de requête pour récupérer des données de la base de données
+
+
+            # Exemple de données de graphe
+            # Correction pour s'assurer que `categories` et `valeurs` ont la même longueur
+            categories = ["karateG", "KarateF", "kick-16", "kick+16", "fitness_N-edd",
+                          "fitness_F", "fitness_hit", "kick_walid", "selfD", "Judo"]
+
+            # Assurez-vous que `valeurs` correspond au même nombre de catégories
+            valeurs = [
+                len(self.get_adherants(1000)),
+                len(self.get_adherants(1001)),
+                len(self.get_adherants(1002)),
+                len(self.get_adherants(1003)),
+                len(self.get_adherants(1004)),
+                len(self.get_adherants(1005)),
+                len(self.get_adherants(1006)),  # Correction pour éviter la duplication des ID
+                len(self.get_adherants(1007)),
+                len(self.get_adherants(1008)),
+                len(self.get_adherants(1009))
+            ]
+
+            # Maintenant, `categories` et `valeurs` devraient avoir la même longueur
+            assert len(categories) == len(
+                valeurs), "Les listes 'categories' et 'valeurs' ont des longueurs différentes!"
+
+            self.fig, self.ax = plt.subplots(figsize=(6, 4))
+
+            self.ax.bar(categories, valeurs)
+            self.ax.set_xlabel('sport')
+            self.ax.set_ylabel('nombre d\'adhérants')
+            self.ax.set_title('nombre d\'adhérants par sport')
+            self.ax.tick_params(axis='x', rotation=25)
+            self.fig.tight_layout()
+            buffer = io.BytesIO()
+
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            image = QtGui.QImage.fromData(buffer.getvalue())
+
+    # Afficher l'image dans le QLabel
+            pixmap = QtGui.QPixmap.fromImage(image)
+            self.label_10.setPixmap(pixmap)
+
+
+    def plot_graph4(self):
+            # Exemple de requête pour récupérer des données de la base de données
+
+
+            # Exemple de données de graphe
+            categories = ["karateG","KarateF","kick-16","kick+16","fitness_N-edd","fitness_F","fitness_hit","kick_walid","selfD","Judo"]
+
+            valeurs=[self.get_total_paiement("novembre",1000),self.get_total_paiement("novembre",1001),self.get_total_paiement("novembre",1002),self.get_total_paiement("novembre",1003),self.get_total_paiement("novembre",1004),self.get_total_paiement("novembre",1005),self.get_total_paiement("novembre",1006),self.get_total_paiement("novembre",1007),self.get_total_paiement("novembre",1008),self.get_total_paiement("novembre",1009)]
+            # Création du graphe
+            self.fig, self.ax = plt.subplots(figsize=(6, 4))
+
+            self.ax.bar(categories, valeurs)
+            self.ax.set_xlabel('sport')
+            self.ax.set_ylabel('chiffre d\'affaire')
+            self.ax.set_title('chiffre d\'affaire par sport')
+            self.ax.tick_params(axis='x', rotation=25)
+            self.fig.tight_layout()
+            buffer = io.BytesIO()
+
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+            image = QtGui.QImage.fromData(buffer.getvalue())
+
+    # Afficher l'image dans le QLabel
+            pixmap = QtGui.QPixmap.fromImage(image)
+            self.label_12.setPixmap(pixmap)
 import res_rc
 
 

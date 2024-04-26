@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
-import mysql.connector
+from connexion_DB import connect_to_DB
 
 
 class Ui_coaches(object):
@@ -211,14 +211,6 @@ class Ui_coaches(object):
         spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem5)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
-        self.connection = mysql.connector.connect(
-                host="localhost",
-                user="oussama",
-                password="projet2cp",
-                database="projet2cp",
-                port="3306"
-        )
-        self.cursor = self.connection.cursor()
         self.afficher_tout()
         self.pushButton.clicked.connect(self.rechercher_critere)
         self.retranslateUi(coaches)
@@ -258,11 +250,12 @@ class Ui_coaches(object):
         self.recherche.setText(_translate("coaches", "rechercher"))
 
     def afficher_tout(self):
+            connection, cursor = connect_to_DB()
             self.tableWidget.setRowCount(0)
             query = "SELECT coach.id_coach, coach.nom, coach.prénom, coach.date_naissance, coach.Gender, coach.numéro_tel, sport.nom FROM coach LEFT JOIN coach_sport ON coach.id_coach = coach_sport.id_coach LEFT JOIN sport ON coach_sport.id_sport = sport.id_sport"
             try:
-                    self.cursor.execute(query)
-                    results = self.cursor.fetchall()
+                    cursor.execute(query)
+                    results = cursor.fetchall()
                     for row_index, row_data in enumerate(results):
                             self.tableWidget.insertRow(row_index)
                             for col_index, data in enumerate(row_data):
@@ -274,6 +267,7 @@ class Ui_coaches(object):
                     print("Erreur lors de la récupération des données:", e)
 
     def rechercher_critere(self):
+            connection, cursor = connect_to_DB()
             texte_recherche = self.recherche.text()  # Texte dans la barre de recherche
             critere_recherche = self.filterdropdown.currentText()  # Critère choisi dans le dropdown
 
@@ -296,8 +290,8 @@ class Ui_coaches(object):
             # Ajoutez des caractères joker au texte de recherche
             texte_recherche_avec_joker = f"%{texte_recherche}%"
             # Exécution de la requête
-            self.cursor.execute(query, (texte_recherche_avec_joker,))
-            data = self.cursor.fetchall()  # Récupération des résultats
+            cursor.execute(query, (texte_recherche_avec_joker,))
+            data = cursor.fetchall()  # Récupération des résultats
 
 
             # Si aucun résultat n'est trouvé

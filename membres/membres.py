@@ -1,6 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets, QtSql
+
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QLabel, QComboBox, QLineEdit
 import mysql.connector
+
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
+from datetime import datetime, timedelta
+import mysql.connector
+from connexion_DB import connect_to_DB
+
 
 class Ui_membres(object):
     def setupUi(self, membres):
@@ -228,6 +235,10 @@ class Ui_membres(object):
         self.homme.clicked.connect(self.afficher_hommes)
         self.pushButton.clicked.connect(self.recherche_critere)
         self.supprimer.clicked.connect(self.supprimeradh)
+
+
+        self.modifier.clicked.connect(self.ouverture_page_modification)
+
         self.ajouter.clicked.connect(self.ouverture_page_ajout)
         self.retranslateUi(membres)
         QtCore.QMetaObject.connectSlotsByName(membres)
@@ -240,6 +251,7 @@ class Ui_membres(object):
         self.tableWidget.setColumnWidth(6, 115)
         self.tableWidget.setColumnWidth(7, 115)
         self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+
         self.connection = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -248,6 +260,8 @@ class Ui_membres(object):
             port="3306"
         )
         self.cursor = self.connection.cursor()
+
+
         self.afficher_tout()
 
     def retranslateUi(self, membres):
@@ -277,40 +291,63 @@ class Ui_membres(object):
         self.recherche.setPlaceholderText(_translate("membres", "Rechercher"))
         self.femme.setText(_translate("membres", "femme"))
         self.homme.setText(_translate("membres", "homme"))
+
         membres.showMaximized()
 
     def afficher_femmes(self):
+        connection, cursor = connect_to_DB()
+
         sélectionné = self.femme.isChecked()
         if sélectionné:
             self.tableWidget.clearContents()
             self.tableWidget.setRowCount(0)
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE Gender = 'F'"
+
             self.cursor.execute(query)
             data = self.cursor.fetchall()
+
+            cursor.execute(query)
+            data = cursor.fetchall()
+
             row_count = self.tableWidget.rowCount()
             for row_number, row_data in enumerate(data, row_count):
                 self.tableWidget.insertRow(row_number)
                 for column_number, column_data in enumerate(row_data):
                     item = QtWidgets.QTableWidgetItem(str(column_data))
+
                     item.setFont(QtGui.QFont("Arial", 20))
                     self.tableWidget.setItem(row_number, column_number, item)
+
+
     def afficher_hommes(self):
+        connection, cursor = connect_to_DB()
+
         sélectionné = self.homme.isChecked()
         if sélectionné:
             self.tableWidget.clearContents()
             self.tableWidget.setRowCount(0)
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE Gender = 'M'"
+
             self.cursor.execute(query)
             data = self.cursor.fetchall()
+
+            cursor.execute(query)
+            data = cursor.fetchall()
+
             row_count = self.tableWidget.rowCount()
             for row_number, row_data in enumerate(data, row_count):
                 self.tableWidget.insertRow(row_number)
                 for column_number, column_data in enumerate(row_data):
                     item = QtWidgets.QTableWidgetItem(str(column_data))
+
                     item.setFont(QtGui.QFont("Arial", 20))
                     self.tableWidget.setItem(row_number, column_number, item)
 
+
+
     def recherche_critere(self):
+        connection, cursor = connect_to_DB()
+
         texte_recherche = self.recherche.text()
         critere_recherche = self.filterdropdown.currentText()
         if critere_recherche == "choisir":
@@ -328,8 +365,13 @@ class Ui_membres(object):
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE ID LIKE %s"
 
         texte_recherche_avec_joker = f"%{texte_recherche}%"
+
         self.cursor.execute(query, (texte_recherche_avec_joker,))
         data = self.cursor.fetchall()
+
+        cursor.execute(query, (texte_recherche_avec_joker,))
+        data = cursor.fetchall()
+
         if not data:
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
@@ -343,28 +385,41 @@ class Ui_membres(object):
             self.tableWidget.insertRow(numero_ligne)
             for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
                 item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+
                 item.setFont(QtGui.QFont("Arial", 20))
                 self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
     def afficher_tout(self):
+        connection, cursor = connect_to_DB()
         query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant"
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        cursor.execute(query)
+        data = cursor.fetchall()
+
         self.tableWidget.clearContents()
         self.tableWidget.setRowCount(0)
         for numero_ligne, donnees_ligne in enumerate(data):
             self.tableWidget.insertRow(numero_ligne)
             for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
                 item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+
                 item.setFont(QtGui.QFont("Arial", 20))
                 self.tableWidget.setItem(numero_ligne, numero_colonne, item)
 
+
     def supprimeradh(self):
+        connection, cursor = connect_to_DB()
+
         critere_id = self.filterdropdown.currentText()
         supp_id = self.recherche.text()
         if critere_id == "ID":
             query = "DELETE FROM adhérant WHERE ID = %s"
+
             self.cursor.execute(query, (supp_id,))
             self.connection.commit()
+
+            cursor.execute(query, (supp_id,))
+            connection.commit()
+
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
             self.msg.setText("Votre adhérent a été supprimé avec succès")
@@ -378,9 +433,10 @@ class Ui_membres(object):
             self.msg.setWindowTitle("Erreur")
             self.msg.exec_()
 
-    def ouverture_page_ajout(self):
-        self.deuxieme_fenetre = DeuxiemeFenetre()
-        self.deuxieme_fenetre.show()
+
+    #def ouverture_page_ajout(self):
+     ##   self.deuxieme_fenetre = DeuxiemeFenetre()
+       ## self.deuxieme_fenetre.show()
 
 class DeuxiemeFenetre(QMainWindow):
     def __init__(self):
@@ -457,6 +513,182 @@ class DeuxiemeFenetre(QMainWindow):
                     cursor.close()
                     connection.close()
 
+
+
+    def ouverture_page_modification(self):
+        connection, cursor = connect_to_DB()
+        texte_recherche = self.recherche.text()
+        # Connexion à la base de données MySQL
+        query = "SELECT * FROM  adhérant WHERE ID = %s"
+        cursor.execute(query, (texte_recherche,))
+        resultats = cursor.fetchone()
+        if resultats:
+            infos = [f"{champ}: {valeur}" for champ, valeur in zip(cursor.column_names, resultats)]
+            self.deuxieme_fenetre = self.fenetre_modification(infos, texte_recherche)
+            self.deuxieme_fenetre.show()
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Aucun adhérent trouvé avec cet ID")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+
+    def ouverture_page_ajout(self):
+        connection, cursor = connect_to_DB()
+        texte_recherche = self.recherche.text()
+        query = "SELECT * FROM adhérant WHERE ID = %s"
+        value = (texte_recherche,)
+        cursor.execute(query, value)
+        resultats = cursor.fetchall()
+        if resultats:
+            self.deuxieme_fenetre = self.DeuxiemeFenetre(texte_recherche)
+            self.deuxieme_fenetre.show()
+        else:
+            print("erreur le resultat n'existe pas")
+
+    class fenetre_modification(QMainWindow):
+        connection, cursor = connect_to_DB()
+        def __init__(self, infos, texte_recherche):
+            super().__init__()
+            self.texte_recherche = texte_recherche
+            self.setWindowTitle("Informations de l'adhérent")
+            self.setGeometry(200, 200, 400, 300)
+            self.labels_infos = []
+            for i, info in enumerate(infos):
+                label = QTextEdit(info, self)
+                label.setGeometry(50, 30 + i * 30, 300, 30)
+                self.labels_infos.append(label)
+
+            self.button_enregistrer = QPushButton("Enregistrer les modifications", self)
+            self.button_enregistrer.setGeometry(100, 200, 200, 30)
+            self.button_enregistrer.clicked.connect(self.enregistrer_modifications)
+
+        def enregistrer_modifications(self):
+            connection, cursor = connect_to_DB()
+            try:
+                # extraction des informations
+                for label in self.labels_infos:
+                    champ, valeur = label.toPlainText().split(":")
+                    champ = champ.strip()  # Supprimer les espaces autour du nom du champ
+                    valeur = valeur.strip()  # Supprimer les espaces autour de la valeur
+
+                    # Requête SQL pour mettre à jour les données dans la base de données
+                    query = f"UPDATE adhérant SET {champ} = %s WHERE ID = %s"
+                    cursor.execute(query, (valeur, self.texte_recherche))  # Utilisation de self.value
+
+                connection.commit()
+
+                QMessageBox.information(self, "Information", "Modifications enregistrées avec succès.")
+
+            except mysql.connector.Error as error:
+                connection.rollback()
+                QMessageBox.critical(self, "Erreur", f"Erreur lors de l'enregistrement des modifications : {error}")
+
+            finally:
+                cursor.close()
+    class DeuxiemeFenetre(QMainWindow):
+            def __init__(self, texte_recherche):
+                super().__init__()
+                self.setWindowTitle("Deuxième Fenêtre")
+                self.setGeometry(800, 300, 350, 300)
+
+                self.texte_recherche = texte_recherche
+
+                self.button_ajouter = QPushButton("Ajouter", self)
+                self.button_ajouter.setGeometry(150, 200, 100, 30)
+                self.button_ajouter.clicked.connect(self.ajout)
+
+                self.label_mois = QLabel("date de début:", self)
+                self.label_mois.setGeometry(50, 20, 150, 30)
+
+                self.label_mois2 = QLabel("date de la fin:", self)
+                self.label_mois2.setGeometry(50, 50, 150, 30)
+
+                self.label_id = QLabel("ID:", self)
+                self.label_id.setGeometry(50, 80, 50, 30)
+
+                self.current_id = QLineEdit(self)
+                self.current_id.setGeometry(100, 80, 200, 30)
+                self.current_id.setText(texte_recherche)
+
+                self.label_abonnement = QLabel("Abonnement:", self)
+                self.label_abonnement.setGeometry(50, 120, 100, 30)
+
+                self.label_prix = QLabel("Prix:", self)
+                self.label_prix.setGeometry(50, 155, 100, 30)
+
+                self.current_prix = QLineEdit(self)
+                self.current_prix.setGeometry(150, 155, 150, 30)
+
+                self.combobox_abonnement = QComboBox(self)
+                self.combobox_abonnement.setGeometry(150, 120, 150, 30)
+                self.combobox_abonnement.addItem("karate garcon")
+                self.combobox_abonnement.addItem("karate fille")
+                self.combobox_abonnement.addItem("kick -16")
+                self.combobox_abonnement.addItem("kick +16")
+                self.combobox_abonnement.addItem("fitness N-Edd")
+                self.combobox_abonnement.addItem("Fitness femme")
+                self.combobox_abonnement.addItem("fitness hit")
+                self.combobox_abonnement.addItem("kick walid")
+                self.combobox_abonnement.addItem("self defense")
+
+                # Ajout des mois de l'année
+
+                date_debut = datetime.now().strftime("%Y-%m-%d")
+                date_fin = datetime.now() + timedelta(days=30)
+                self.textedit_datedefin = QTextEdit(self)
+                self.textedit_datedefin.setGeometry(155, 50, 150, 30)
+                self.textedit_datedefin.setPlainText(date_fin.strftime("%Y-%m-%d"))
+
+                self.textedit_datedebut = QTextEdit(self)
+                self.textedit_datedebut.setGeometry(155, 20, 150, 30)
+                self.textedit_datedebut.setPlainText(date_debut)
+
+            def ajout(self):
+                connection, cursor = connect_to_DB()
+                type_abonnement = self.combobox_abonnement.currentText()
+                debut_abonnement = self.textedit_datedebut.toPlainText()
+                fin_abonnement = self.textedit_datedefin.toPlainText()
+                id_abonnement = self.current_id.text()
+                prix = self.current_prix.text()
+
+                mois = datetime.now().month
+
+                def definition_mois(mois_actuelle):
+                    switcher = {
+                        1: "janvier",
+                        2: "février",
+                        3: "mars",
+                        4: "avril",
+                        5: "mai",
+                        6: "juin",
+                        7: "juillet",
+                        9: "septembre",
+                        10: "octobre",
+                        11: "novembre",
+                        12: "décembre",
+                    }
+                    mois_adhérant = switcher.get(mois_actuelle, "Cas par défaut")
+                    return mois_adhérant
+
+                mois_adhérant = definition_mois(mois)
+
+                try:
+                    query = "INSERT INTO abonnement (type_abonnement, id_abonnement,date_debut,date_fin,prix ) VALUES (%s, %s, %s,%s,%s)"
+                    values = (type_abonnement, id_abonnement, debut_abonnement, fin_abonnement, prix)
+                    cursor.execute(query, values)
+
+                    connection.commit()
+
+                    query = f"UPDATE adhérant SET {mois_adhérant} = true WHERE ID = {id_abonnement}"
+
+                    cursor.execute(query)
+                    connection.commit()
+
+                    print("Ajout avec succès")
+
+                except mysql.connector.Error as error:
+                    print("Erreur lors de l'ajout:", error)
 
 
 

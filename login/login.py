@@ -1,8 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
+
 import mysql.connector
 
 from mainMenu.gest import Ui_MainWindowGest
+
+
+from mainMenu.gest import Ui_MainWindowGest
+from connexion_DB import connect_to_DB
 
 
 class Ui_DialogLogin(object):
@@ -182,6 +187,7 @@ class Ui_DialogLogin(object):
             self.lineEdit_2.setText("")
 
     def verify_admin(self, username, password):
+
         mycursor = self.mydb.cursor()
         query = " SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s "
         values = (username, password)
@@ -196,6 +202,20 @@ class Ui_DialogLogin(object):
         mycursor.execute(query, values)
         result = mycursor.fetchall()
         mycursor.close()
+        connection, cursor = connect_to_DB()
+        query = "SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s"
+        values = (username, password)
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+        cursor.close()
+        return bool(result)
+    def verify_gestionnaire(self, username, password):
+        connection, cursor = connect_to_DB()
+        query = " SELECT * FROM gestionnaire WHERE nom = %s AND mot_de_passe = %s "
+        values = (username, password)
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+        cursor.close()
         return bool(result)
 
 import resources_login_rc

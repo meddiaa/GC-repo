@@ -9,10 +9,19 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from login.login import Ui_DialogLogin
+import mysql.connector
 
 class Ui_signup(object):
     def setupUi(self, signup):
+        self.mydb = (mysql.connector.connect(
+                    host="localhost",
+                    user="oussama",
+                    password="projet2cp",
+                    database="projet2cp",
+                    port="3306"
+        )
+        )
         signup.setObjectName("signup")
         signup.resize(910, 540)
         signup.setMinimumSize(QtCore.QSize(1200, 800))
@@ -152,9 +161,11 @@ class Ui_signup(object):
         self.verticalLayout_2.addItem(spacerItem6)
         self.gridLayout.addWidget(self.box, 0, 0, 1, 1)
         self.verticalLayout.addWidget(self.background)
+        self.seconnecter.clicked.connect(self.inscrire_admin_gest)
 
         self.retranslateUi(signup)
         QtCore.QMetaObject.connectSlotsByName(signup)
+        self.signup = signup
 
     def retranslateUi(self, signup):
         _translate = QtCore.QCoreApplication.translate
@@ -166,7 +177,51 @@ class Ui_signup(object):
         self.lineEdit.setPlaceholderText(_translate("signup", " Mot de Passe"))
         self.lineEdit_2.setPlaceholderText(_translate("signup", " Confirmer le Mot de Passe"))
         self.seconnecter.setText(_translate("signup", "S\'inscrire"))
+
+    def inscrire_admin_gest(self):
+        nom_utilisateur = self.lineEdit_4.text()
+        email = self.lineEdit_3.text()
+        password = self.lineEdit.text()
+        mot_passe_confirmé = self.lineEdit_2.text()
+        if nom_utilisateur == "" or email == "" or password == "" or mot_passe_confirmé == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Veuillez remplir tous les champs.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.seconnecter.isChecked() and self.insert_into_DB(password, nom_utilisateur, email) and password == mot_passe_confirmé:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Inscription terminée avec succès.")
+            self.msg.setWindowTitle("Succès")
+            self.msg.exec_()
+            self.signup.close()
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_DialogLogin()
+            self.ui.setupUi(self.window)
+            self.window.show()
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Insertion Echouée")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+
+    def insert_into_DB(self, mot_de_passe, nom, email):
+        mycursor = self.mydb.cursor()
+        mycursor.execute("SELECT MAX(admin_id) FROM admin_gest")
+        last_id = mycursor.fetchone()[0]
+        new_id = last_id + 1
+        query = "INSERT INTO admin_gest (admin_id, mot_de_passe, nom , email) VALUES (%s, %s, %s, %s)"
+        values = (new_id, mot_de_passe, nom, email)
+        mycursor.execute(query, values)
+        self.mydb.commit()
+        mycursor.close()
+        return True
+
 import signup_rc
+import resources_login_rc
+
 
 
 if __name__ == "__main__":

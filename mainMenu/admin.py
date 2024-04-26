@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from objetsPerdues.objetsPerdues import Ui_MainWindowObjetsPerdues
+from stats.statistiques import Ui_MainWindowStats
 
 
 class Ui_MainWindowAdmin(object):
@@ -215,10 +217,31 @@ class Ui_MainWindowAdmin(object):
         self.retranslateUi(MainWindowAdmin)
         QtCore.QMetaObject.connectSlotsByName(MainWindowAdmin)
         MainWindowAdmin.showMaximized()
+        self.pushButtonLosts.clicked.connect(self.afficherObjetsPerdues)
+        self.pushButtonStats.clicked.connect(self.afficherStatistique)
 
     def retranslateUi(self, MainWindowAdmin):
         _translate = QtCore.QCoreApplication.translate
         self.label.setText(_translate("MainWindowAdmin", "JSS Excellence de Saoula."))
+
+    def afficherObjetsPerdues(self):
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_MainWindowObjetsPerdues()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+    def afficherStatistique(self):
+            self.window = QtWidgets.QMainWindow()
+            self.ui = Ui_MainWindowStats()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+
+
+
+
+
+
 from mainMenu import resources_main_admin
 
 

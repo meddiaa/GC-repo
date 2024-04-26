@@ -10,8 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
-import mysql.connector
 from ajouterObjet import Ui_Dialog
+from connexion_DB import connect_to_DB
 
 class Ui_MainWindowObjetsPerdues(object):
     def setupUi(self, MainWindowObjetsPerdues):
@@ -116,16 +116,7 @@ class Ui_MainWindowObjetsPerdues(object):
         self.radioButton_2.clicked.connect(self.trier_plus_recent)
         self.radioButton_3.clicked.connect(self.trier_plus_ancien)
         self.pushButtonAjourter.clicked.connect((self.ajouter_objet))
-        self.connection = mysql.connector.connect(
-            host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
-            port="3306"
-        )
-        self.cursor = self.connection.cursor()
         self.afficher_tout()
-
         self.tableWidgetLostObjects.setColumnWidth(0, 200)
         self.tableWidgetLostObjects.setColumnWidth(1, 150)
         self.tableWidgetLostObjects.setColumnWidth(2, 200)
@@ -159,9 +150,10 @@ class Ui_MainWindowObjetsPerdues(object):
         item = self.tableWidgetLostObjects.horizontalHeaderItem(3)
         item.setText(_translate("MainWindowObjetsPerdues", "Description"))
     def afficher_tout(self):
+        connection, cursor = connect_to_DB()
         query = "SELECT object_name, datee, lieu, description FROM objets"
-        self.cursor.execute(query)
-        data = self.cursor.fetchall()
+        cursor.execute(query)
+        data = cursor.fetchall()
         self.tableWidgetLostObjects.setRowCount(len(data))
         for numero_ligne, donnees_ligne in enumerate(data):
             for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
@@ -171,10 +163,11 @@ class Ui_MainWindowObjetsPerdues(object):
         self.tableWidgetLostObjects.resizeColumnsToContents()
 
     def rechercher_objets(self):
+        connection, cursor = connect_to_DB()
         name_objet = self.lineEditRecherche.text()
         query = "SELECT object_name, datee, lieu, description FROM objets WHERE object_name LIKE %s"
-        self.cursor.execute(query, (name_objet,))
-        data = self.cursor.fetchall()
+        cursor.execute(query, (name_objet,))
+        data = cursor.fetchall()
         if not data:
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
@@ -231,17 +224,13 @@ class Ui_MainWindowObjetsPerdues(object):
             self.msg.setWindowTitle("Erreur")
             self.msg.exec_()
     def insertDb(self, object_name, date, Lieu, description):
-        mycursor = self.mydb.cursor()
+        connection, cursor = connect_to_DB()
         query = "INSERT INTO objets(object_name,datee,lieu,description) VALUES (%s, %s, %s, %s)"
         values = (object_name, date, Lieu, description)
-        mycursor.execute(query, values)
-        self.mydb.commit()
-        mycursor.close()
+        cursor.execute(query, values)
+        connection.commit()
+        cursor.close()
         return True
-
-
-
-
 
 if __name__ == "__main__":
     import sys

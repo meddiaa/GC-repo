@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox,
 from datetime import datetime
 import calendar
 import locale
-import mysql.connector
+from connexion_DB import connect_to_DB
 import matplotlib.pyplot as plt
 import io
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -21,14 +21,6 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 class Ui_MainWindowStats(object):
     def setupUi(self, MainWindowStats):
-        self.connection = mysql.connector.connect(
-                    host="localhost",
-                    user="oussama",
-                    password="projet2cp",
-                    database="projet2cp",
-                    port="3306"
-        )
-        self.cursor = self.connection.cursor()
         MainWindowStats.setObjectName("MainWindowStats")
         MainWindowStats.resize(1003, 624)
         MainWindowStats.showMaximized()
@@ -447,54 +439,62 @@ class Ui_MainWindowStats(object):
 
 
     def nbr_femmes(self):
-            query = "SELECT COUNT(*) FROM adhérant WHERE Gender = 'F'"
-            self.cursor.execute(query)
-            nombre_de_femmes = self.cursor.fetchone()[0]
-            return nombre_de_femmes
+        connection, cursor = connect_to_DB()
+        query = "SELECT COUNT(*) FROM adhérant WHERE Gender = 'F'"
+        cursor.execute(query)
+        nombre_de_femmes = cursor.fetchone()[0]
+        return nombre_de_femmes
     def nbr_hommes(self):
-            query = "SELECT COUNT(*) FROM adhérant WHERE Gender = 'M'"
-            self.cursor.execute(query)
-            nombre_de_hommes = self.cursor.fetchone()[0]
-            return nombre_de_hommes
+        connection, cursor = connect_to_DB()
+        query = "SELECT COUNT(*) FROM adhérant WHERE Gender = 'M'"
+        cursor.execute(query)
+        nombre_de_hommes = cursor.fetchone()[0]
+        return nombre_de_hommes
     def nbr_membres(self):
-            query = "SELECT COUNT(*) FROM adhérant"
-            self.cursor.execute(query)
-            nombre_de_membres = self.cursor.fetchone()[0]
-            return nombre_de_membres
+        connection, cursor = connect_to_DB()
+        query = "SELECT COUNT(*) FROM adhérant"
+        cursor.execute(query)
+        nombre_de_membres = cursor.fetchone()[0]
+        return nombre_de_membres
     def nbr_sport(self):
-            query = "SELECT COUNT(*) FROM sport"
-            self.cursor.execute(query)
-            nombre_de_sport = self.cursor.fetchone()[0]
-            return nombre_de_sport
+        connection, cursor = connect_to_DB()
+        query = "SELECT COUNT(*) FROM sport"
+        cursor.execute(query)
+        nombre_de_sport = cursor.fetchone()[0]
+        return nombre_de_sport
     def nbr_coach(self):
-            query = "SELECT COUNT(*) FROM coach"
-            self.cursor.execute(query)
-            nombre_de_coach = self.cursor.fetchone()[0]
-            return nombre_de_coach
+        connection, cursor = connect_to_DB()
+        query = "SELECT COUNT(*) FROM coach"
+        cursor.execute(query)
+        nombre_de_coach = cursor.fetchone()[0]
+        return nombre_de_coach
 
     def nbr_utilisateurs(self):
-            query = "SELECT COUNT(*) FROM gestionnaire"
-            self.cursor.execute(query)
-            nombre_de_gestionnaires = self.cursor.fetchone()[0]
-            return nombre_de_gestionnaires+1
+        connection, cursor = connect_to_DB()
+        query = "SELECT COUNT(*) FROM gestionnaire"
+        cursor.execute(query)
+        nombre_de_gestionnaires = cursor.fetchone()[0]
+        return nombre_de_gestionnaires+1
     def total_paiments(self):
         return self.paiment_mois('septembre')+self.paiment_mois('octobre')+self.paiment_mois('novembre')+self.paiment_mois('décembre')+self.paiment_mois('janvier')+self.paiment_mois('février')+self.paiment_mois('mars')+self.paiment_mois('avril')+self.paiment_mois('mai')+self.paiment_mois('juin')+self.paiment_mois('juillet')
     def paiment_mois(self,mois):
-            query = f"SELECT SUM({mois}) FROM adhérant"
-            self.cursor.execute(query)
-            result = self.cursor.fetchone()
-            total_paiements = result[0] if result else 0
-            return total_paiements
+        connection, cursor = connect_to_DB()
+        query = f"SELECT SUM({mois}) FROM adhérant"
+        cursor.execute(query)
+        result = cursor.fetchone()
+        total_paiements = result[0] if result else 0
+        return total_paiements
 
 
     def paiment_sport(self, mois):
+        connection, cursor = connect_to_DB()
         sport_choisi = self.comboBox.currentText()
         locale.setlocale(locale.LC_TIME, "fr_FR")
         mois_actuel = datetime.now().month
         mois = calendar.month_name[mois_actuel]
         try:
-            self.cursor.execute("SELECT id_sport FROM sport WHERE nom = %s", (sport_choisi,))
-            sport_id = self.cursor.fetchone()
+            cursor.execute("SELECT id_sport FROM sport WHERE nom = %s", (sport_choisi,))
+            sport_id = cursor.fetchone()
 
             if not sport_id:
                 print("Sport introuvable.")
@@ -510,14 +510,7 @@ class Ui_MainWindowStats(object):
 
 
     def get_total_paiement(self, mois , id_sport):
-
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
-            port="3306"
-        )
+        connection, cursor = connect_to_DB()
         cursor = None
         try:
             cursor = connection.cursor()
@@ -539,13 +532,7 @@ class Ui_MainWindowStats(object):
                 connection.close()
 
     def get_adherants(self, id_sport):
-        connection = mysql.connector.connect(
-            host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
-            port="3306"
-        )
+        connection, cursor = connect_to_DB()
         cursor = None
         try:
             cursor = connection.cursor()
@@ -570,16 +557,16 @@ class Ui_MainWindowStats(object):
 
 
             # Exemple de données de graphe
-            categories = ["homme","femme"]
+            categories = ["Homme","Femme"]
 
             valeurs=[self.nbr_hommes(),self.nbr_femmes()]
             # Création du graphe
             self.fig, self.ax = plt.subplots(figsize=(6, 4))
 
             self.ax.bar(categories, valeurs)
-            self.ax.set_xlabel('genre')
-            self.ax.set_ylabel('nombre')
-            self.ax.set_title('nombre d\'hommes et de femmes')
+            self.ax.set_xlabel('SEXE')
+            self.ax.set_ylabel('Nombre')
+            self.ax.set_title('Nombre d\'Hommes et de Femmes')
             self.ax.tick_params(axis='x', rotation=25)
             self.fig.tight_layout()
             buffer = io.BytesIO()
@@ -593,9 +580,10 @@ class Ui_MainWindowStats(object):
             self.label_4.setPixmap(pixmap)
 
     def plot_graph2(self):
+            connection, cursor = connect_to_DB()
             # Exemple de requête pour récupérer des données de la base de données
-            self.cursor.execute("SELECT sum(septembre),sum(octobre),sum(novembre),sum(décembre),sum(janvier),sum(février),sum(mars),sum(avril),sum(mai),sum(juin),sum(juillet) FROM adhérant")
-            rows = self.cursor.fetchone()
+            cursor.execute("SELECT sum(septembre),sum(octobre),sum(novembre),sum(décembre),sum(janvier),sum(février),sum(mars),sum(avril),sum(mai),sum(juin),sum(juillet) FROM adhérant")
+            rows = cursor.fetchone()
 
             # Exemple de données de graphe
             categories = ["septembre", "octobre", "novembre", "décembre",  "janvier", "février", "mars",  "avril", "mai","juin","juillet"]

@@ -10,19 +10,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import mysql.connector
+from connexion_DB import connect_to_DB
 
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
-        self.mydb = (mysql.connector.connect(
-            host="localhost",
-            user="oussama",
-            password="projet2cp",
-            database="projet2cp",
-            port="3306"
-        )
-        )
         Dialog.setObjectName("Dialog")
         Dialog.resize(650, 580)
         Dialog.setMinimumSize(QtCore.QSize(650, 580))
@@ -139,12 +131,12 @@ class Ui_Dialog(object):
                 self.msg.exec_()
 
     def insertDb(self, object_name, date, Lieu, description):
-        mycursor = self.mydb.cursor()
+        connection, cursor = connect_to_DB()
         query = "INSERT INTO objets(object_name,datee,lieu,description) VALUES (%s, %s, %s, %s)"
         values = (object_name, date, Lieu, description)
-        mycursor.execute(query, values)
-        self.mydb.commit()
-        mycursor.close()
+        cursor.execute(query, values)
+        connection.commit()
+        cursor.close()
         return True
 
 

@@ -11,233 +11,243 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from objetsPerdues.objetsPerdues import Ui_MainWindowObjetsPerdues
 from stats.statistiques import Ui_MainWindowStats
+from rhMenu.rh import UI_MainWindowRh
+
 
 
 class Ui_MainWindowAdmin(object):
-    def setupUi(self, MainWindowAdmin):
-        MainWindowAdmin.setObjectName("MainWindowAdmin")
-        MainWindowAdmin.resize(1227, 461)
-        MainWindowAdmin.setMinimumSize(QtCore.QSize(6, 0))
-        MainWindowAdmin.setWindowTitle("")
-        MainWindowAdmin.setStyleSheet("")
-        self.centralwidget = QtWidgets.QWidget(MainWindowAdmin)
-        self.centralwidget.setStyleSheet("QWidget #centralwidget\n"
-"{\n"
-"border-image: url(:/hh/image 1.png) 0 0 0 0 stretch stretch;\n"
-"}")
-        self.centralwidget.setObjectName("centralwidget")
-        self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_8.setSpacing(0)
-        self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.widget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_2.setStyleSheet("QWidget #widget_2{\n"
-"border-top: 2px solid ;\n"
-"                                border-left: 2px solid;\n"
-"                                border-right: 2px solid ;\n"
-"                                border-color: rgb(26, 61, 119);\n"
-"                            }")
-        self.widget_2.setObjectName("widget_2")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget_2)
-        self.verticalLayout_2.setContentsMargins(-1, 40, -1, -1)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.label = QtWidgets.QLabel(self.widget_2)
-        font = QtGui.QFont()
-        font.setPointSize(24)
-        font.setBold(True)
-        font.setUnderline(False)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setStyleSheet("color: rgb(26, 61, 119);\n"
-"                                        ")
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.verticalLayout_2.addWidget(self.label)
-        self.verticalLayout_8.addWidget(self.widget_2)
-        self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setStyleSheet("border-bottom: 2px solid;\n"
-"                                border-left: 2px solid;\n"
-"                                border-right: 2px solid;\n"
-"                                border-color:rgb(26, 61, 119);\n"
-"                            ")
-        self.widget.setObjectName("widget")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setContentsMargins(20, -1, 20, -1)
-        self.horizontalLayout_2.setSpacing(20)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.pushButtonRessources = QtWidgets.QPushButton(self.widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonRessources.sizePolicy().hasHeightForWidth())
-        self.pushButtonRessources.setSizePolicy(sizePolicy)
-        self.pushButtonRessources.setMinimumSize(QtCore.QSize(200, 200))
-        self.pushButtonRessources.setMaximumSize(QtCore.QSize(200, 200))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setWeight(50)
-        self.pushButtonRessources.setFont(font)
-        self.pushButtonRessources.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButtonRessources.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
-        self.pushButtonRessources.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/hh/resources 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonRessources.setIcon(icon)
-        self.pushButtonRessources.setIconSize(QtCore.QSize(197, 220))
-        self.pushButtonRessources.setCheckable(True)
-        self.pushButtonRessources.setObjectName("pushButtonRessources")
-        self.horizontalLayout_2.addWidget(self.pushButtonRessources)
-        self.pushButtonAbonnements = QtWidgets.QPushButton(self.widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonAbonnements.sizePolicy().hasHeightForWidth())
-        self.pushButtonAbonnements.setSizePolicy(sizePolicy)
-        self.pushButtonAbonnements.setMinimumSize(QtCore.QSize(200, 200))
-        self.pushButtonAbonnements.setMaximumSize(QtCore.QSize(200, 200))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setWeight(50)
-        self.pushButtonAbonnements.setFont(font)
-        self.pushButtonAbonnements.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButtonAbonnements.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
-        self.pushButtonAbonnements.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/hh/Abonnements.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonAbonnements.setIcon(icon1)
-        self.pushButtonAbonnements.setIconSize(QtCore.QSize(197, 220))
-        self.pushButtonAbonnements.setCheckable(True)
-        self.pushButtonAbonnements.setObjectName("pushButtonAbonnements")
-        self.horizontalLayout_2.addWidget(self.pushButtonAbonnements)
-        self.pushButtonEdt = QtWidgets.QPushButton(self.widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonEdt.sizePolicy().hasHeightForWidth())
-        self.pushButtonEdt.setSizePolicy(sizePolicy)
-        self.pushButtonEdt.setMinimumSize(QtCore.QSize(200, 200))
-        self.pushButtonEdt.setMaximumSize(QtCore.QSize(200, 200))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setWeight(50)
-        self.pushButtonEdt.setFont(font)
-        self.pushButtonEdt.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButtonEdt.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
-        self.pushButtonEdt.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/hh/EDT.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonEdt.setIcon(icon2)
-        self.pushButtonEdt.setIconSize(QtCore.QSize(197, 220))
-        self.pushButtonEdt.setCheckable(True)
-        self.pushButtonEdt.setObjectName("pushButtonEdt")
-        self.horizontalLayout_2.addWidget(self.pushButtonEdt)
-        self.pushButtonLosts = QtWidgets.QPushButton(self.widget)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButtonLosts.sizePolicy().hasHeightForWidth())
-        self.pushButtonLosts.setSizePolicy(sizePolicy)
-        self.pushButtonLosts.setMinimumSize(QtCore.QSize(200, 200))
-        self.pushButtonLosts.setMaximumSize(QtCore.QSize(200, 200))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setWeight(50)
-        self.pushButtonLosts.setFont(font)
-        self.pushButtonLosts.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButtonLosts.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
-        self.pushButtonLosts.setText("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/hh/losts.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonLosts.setIcon(icon3)
-        self.pushButtonLosts.setIconSize(QtCore.QSize(197, 220))
-        self.pushButtonLosts.setCheckable(True)
-        self.pushButtonLosts.setFlat(False)
-        self.pushButtonLosts.setObjectName("pushButtonLosts")
-        self.horizontalLayout_2.addWidget(self.pushButtonLosts)
-        self.pushButtonFinance = QtWidgets.QPushButton(self.widget)
-        self.pushButtonFinance.setMinimumSize(QtCore.QSize(200, 200))
-        self.pushButtonFinance.setMaximumSize(QtCore.QSize(200, 200))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButtonFinance.setFont(font)
-        self.pushButtonFinance.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButtonFinance.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
-        self.pushButtonFinance.setText("")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap(":/hh/Finance.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonFinance.setIcon(icon4)
-        self.pushButtonFinance.setIconSize(QtCore.QSize(197, 220))
-        self.pushButtonFinance.setCheckable(True)
-        self.pushButtonFinance.setObjectName("pushButtonFinance")
-        self.horizontalLayout_2.addWidget(self.pushButtonFinance)
-        self.pushButtonStats = QtWidgets.QPushButton(self.widget)
-        self.pushButtonStats.setMinimumSize(QtCore.QSize(200, 200))
-        self.pushButtonStats.setMaximumSize(QtCore.QSize(200, 200))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButtonStats.setFont(font)
-        self.pushButtonStats.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.pushButtonStats.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
-        self.pushButtonStats.setText("")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(":/hh/stast.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonStats.setIcon(icon5)
-        self.pushButtonStats.setIconSize(QtCore.QSize(197, 220))
-        self.pushButtonStats.setCheckable(True)
-        self.pushButtonStats.setObjectName("pushButtonStats")
-        self.horizontalLayout_2.addWidget(self.pushButtonStats)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.verticalLayout_8.addWidget(self.widget)
-        MainWindowAdmin.setCentralWidget(self.centralwidget)
-        self.retranslateUi(MainWindowAdmin)
-        QtCore.QMetaObject.connectSlotsByName(MainWindowAdmin)
-        MainWindowAdmin.showMaximized()
-        self.pushButtonLosts.clicked.connect(self.afficherObjetsPerdues)
-        self.pushButtonStats.clicked.connect(self.afficherStatistique)
-
-    def retranslateUi(self, MainWindowAdmin):
-        _translate = QtCore.QCoreApplication.translate
-        self.label.setText(_translate("MainWindowAdmin", "JSS Excellence de Saoula."))
-
-    def afficherObjetsPerdues(self):
-            self.window = QtWidgets.QMainWindow()
-            self.ui = Ui_MainWindowObjetsPerdues()
-            self.ui.setupUi(self.window)
-            self.window.show()
-
-    def afficherStatistique(self):
-            self.window = QtWidgets.QMainWindow()
-            self.ui = Ui_MainWindowStats()
-            self.ui.setupUi(self.window)
-            self.window.show()
+        def setupUi(self, MainWindowAdmin):
+                MainWindowAdmin.setObjectName("MainWindowAdmin")
+                MainWindowAdmin.resize(1227, 461)
+                MainWindowAdmin.setMinimumSize(QtCore.QSize(6, 0))
+                MainWindowAdmin.setWindowTitle("")
+                MainWindowAdmin.setStyleSheet("")
+                self.centralwidget = QtWidgets.QWidget(MainWindowAdmin)
+                self.centralwidget.setStyleSheet("QWidget #centralwidget\n"
+                                                 "{\n"
+                                                 "border-image: url(:/hh/image 1.png) 0 0 0 0 stretch stretch;\n"
+                                                 "}")
+                self.centralwidget.setObjectName("centralwidget")
+                self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.centralwidget)
+                self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
+                self.verticalLayout_8.setSpacing(0)
+                self.verticalLayout_8.setObjectName("verticalLayout_8")
+                self.widget_2 = QtWidgets.QWidget(self.centralwidget)
+                self.widget_2.setStyleSheet("QWidget #widget_2{\n"
+                                            "border-top: 2px solid ;\n"
+                                            "                                border-left: 2px solid;\n"
+                                            "                                border-right: 2px solid ;\n"
+                                            "                                border-color: rgb(26, 61, 119);\n"
+                                            "                            }")
+                self.widget_2.setObjectName("widget_2")
+                self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget_2)
+                self.verticalLayout_2.setContentsMargins(-1, 40, -1, -1)
+                self.verticalLayout_2.setObjectName("verticalLayout_2")
+                self.label = QtWidgets.QLabel(self.widget_2)
+                font = QtGui.QFont()
+                font.setPointSize(24)
+                font.setBold(True)
+                font.setUnderline(False)
+                font.setWeight(75)
+                self.label.setFont(font)
+                self.label.setStyleSheet("color: rgb(26, 61, 119);\n"
+                                         "                                        ")
+                self.label.setAlignment(QtCore.Qt.AlignCenter)
+                self.label.setObjectName("label")
+                self.verticalLayout_2.addWidget(self.label)
+                self.verticalLayout_8.addWidget(self.widget_2)
+                self.widget = QtWidgets.QWidget(self.centralwidget)
+                self.widget.setStyleSheet("border-bottom: 2px solid;\n"
+                                          "                                border-left: 2px solid;\n"
+                                          "                                border-right: 2px solid;\n"
+                                          "                                border-color:rgb(26, 61, 119);\n"
+                                          "                            ")
+                self.widget.setObjectName("widget")
+                self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+                self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+                self.verticalLayout.setObjectName("verticalLayout")
+                self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+                self.horizontalLayout_2.setContentsMargins(20, -1, 20, -1)
+                self.horizontalLayout_2.setSpacing(20)
+                self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+                self.pushButtonRessources = QtWidgets.QPushButton(self.widget)
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(self.pushButtonRessources.sizePolicy().hasHeightForWidth())
+                self.pushButtonRessources.setSizePolicy(sizePolicy)
+                self.pushButtonRessources.setMinimumSize(QtCore.QSize(200, 200))
+                self.pushButtonRessources.setMaximumSize(QtCore.QSize(200, 200))
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                font.setBold(False)
+                font.setWeight(50)
+                self.pushButtonRessources.setFont(font)
+                self.pushButtonRessources.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.pushButtonRessources.setStyleSheet("border-radius: 10px;\n"
+                                                        "                                                    border-top:2px solid;\n"
+                                                        "                                                    border-color:rgb(26, 61, 119)\n"
+                                                        "                                                ")
+                self.pushButtonRessources.setText("")
+                icon = QtGui.QIcon()
+                icon.addPixmap(QtGui.QPixmap(":/hh/resources 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButtonRessources.setIcon(icon)
+                self.pushButtonRessources.setIconSize(QtCore.QSize(197, 220))
+                self.pushButtonRessources.setCheckable(True)
+                self.pushButtonRessources.setObjectName("pushButtonRessources")
+                self.horizontalLayout_2.addWidget(self.pushButtonRessources)
+                self.pushButtonAbonnements = QtWidgets.QPushButton(self.widget)
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(self.pushButtonAbonnements.sizePolicy().hasHeightForWidth())
+                self.pushButtonAbonnements.setSizePolicy(sizePolicy)
+                self.pushButtonAbonnements.setMinimumSize(QtCore.QSize(200, 200))
+                self.pushButtonAbonnements.setMaximumSize(QtCore.QSize(200, 200))
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                font.setBold(False)
+                font.setWeight(50)
+                self.pushButtonAbonnements.setFont(font)
+                self.pushButtonAbonnements.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.pushButtonAbonnements.setStyleSheet("border-radius: 10px;\n"
+                                                         "                                                    border-top:2px solid;\n"
+                                                         "                                                    border-color:rgb(26, 61, 119)\n"
+                                                         "                                                ")
+                self.pushButtonAbonnements.setText("")
+                icon1 = QtGui.QIcon()
+                icon1.addPixmap(QtGui.QPixmap(":/hh/Abonnements.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButtonAbonnements.setIcon(icon1)
+                self.pushButtonAbonnements.setIconSize(QtCore.QSize(197, 220))
+                self.pushButtonAbonnements.setCheckable(True)
+                self.pushButtonAbonnements.setObjectName("pushButtonAbonnements")
+                self.horizontalLayout_2.addWidget(self.pushButtonAbonnements)
+                self.pushButtonEdt = QtWidgets.QPushButton(self.widget)
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(self.pushButtonEdt.sizePolicy().hasHeightForWidth())
+                self.pushButtonEdt.setSizePolicy(sizePolicy)
+                self.pushButtonEdt.setMinimumSize(QtCore.QSize(200, 200))
+                self.pushButtonEdt.setMaximumSize(QtCore.QSize(200, 200))
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                font.setBold(False)
+                font.setWeight(50)
+                self.pushButtonEdt.setFont(font)
+                self.pushButtonEdt.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.pushButtonEdt.setStyleSheet("border-radius: 10px;\n"
+                                                 "                                                    border-top:2px solid;\n"
+                                                 "                                                    border-color:rgb(26, 61, 119)\n"
+                                                 "                                                ")
+                self.pushButtonEdt.setText("")
+                icon2 = QtGui.QIcon()
+                icon2.addPixmap(QtGui.QPixmap(":/hh/EDT.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButtonEdt.setIcon(icon2)
+                self.pushButtonEdt.setIconSize(QtCore.QSize(197, 220))
+                self.pushButtonEdt.setCheckable(True)
+                self.pushButtonEdt.setObjectName("pushButtonEdt")
+                self.horizontalLayout_2.addWidget(self.pushButtonEdt)
+                self.pushButtonLosts = QtWidgets.QPushButton(self.widget)
+                sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+                sizePolicy.setHorizontalStretch(0)
+                sizePolicy.setVerticalStretch(0)
+                sizePolicy.setHeightForWidth(self.pushButtonLosts.sizePolicy().hasHeightForWidth())
+                self.pushButtonLosts.setSizePolicy(sizePolicy)
+                self.pushButtonLosts.setMinimumSize(QtCore.QSize(200, 200))
+                self.pushButtonLosts.setMaximumSize(QtCore.QSize(200, 200))
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                font.setBold(False)
+                font.setWeight(50)
+                self.pushButtonLosts.setFont(font)
+                self.pushButtonLosts.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.pushButtonLosts.setStyleSheet("border-radius: 10px;\n"
+                                                   "                                                    border-top:2px solid;\n"
+                                                   "                                                    border-color:rgb(26, 61, 119)\n"
+                                                   "                                                ")
+                self.pushButtonLosts.setText("")
+                icon3 = QtGui.QIcon()
+                icon3.addPixmap(QtGui.QPixmap(":/hh/losts.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButtonLosts.setIcon(icon3)
+                self.pushButtonLosts.setIconSize(QtCore.QSize(197, 220))
+                self.pushButtonLosts.setCheckable(True)
+                self.pushButtonLosts.setFlat(False)
+                self.pushButtonLosts.setObjectName("pushButtonLosts")
+                self.horizontalLayout_2.addWidget(self.pushButtonLosts)
+                self.pushButtonFinance = QtWidgets.QPushButton(self.widget)
+                self.pushButtonFinance.setMinimumSize(QtCore.QSize(200, 200))
+                self.pushButtonFinance.setMaximumSize(QtCore.QSize(200, 200))
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                self.pushButtonFinance.setFont(font)
+                self.pushButtonFinance.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.pushButtonFinance.setStyleSheet("border-radius: 10px;\n"
+                                                     "                                                    border-top:2px solid;\n"
+                                                     "                                                    border-color:rgb(26, 61, 119)\n"
+                                                     "                                                ")
+                self.pushButtonFinance.setText("")
+                icon4 = QtGui.QIcon()
+                icon4.addPixmap(QtGui.QPixmap(":/hh/Finance.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButtonFinance.setIcon(icon4)
+                self.pushButtonFinance.setIconSize(QtCore.QSize(197, 220))
+                self.pushButtonFinance.setCheckable(True)
+                self.pushButtonFinance.setObjectName("pushButtonFinance")
+                self.horizontalLayout_2.addWidget(self.pushButtonFinance)
+                self.pushButtonStats = QtWidgets.QPushButton(self.widget)
+                self.pushButtonStats.setMinimumSize(QtCore.QSize(200, 200))
+                self.pushButtonStats.setMaximumSize(QtCore.QSize(200, 200))
+                font = QtGui.QFont()
+                font.setPointSize(12)
+                self.pushButtonStats.setFont(font)
+                self.pushButtonStats.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+                self.pushButtonStats.setStyleSheet("border-radius: 10px;\n"
+                                                   "                                                    border-top:2px solid;\n"
+                                                   "                                                    border-color:rgb(26, 61, 119)\n"
+                                                   "                                                ")
+                self.pushButtonStats.setText("")
+                icon5 = QtGui.QIcon()
+                icon5.addPixmap(QtGui.QPixmap(":/hh/stast.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+                self.pushButtonStats.setIcon(icon5)
+                self.pushButtonStats.setIconSize(QtCore.QSize(197, 220))
+                self.pushButtonStats.setCheckable(True)
+                self.pushButtonStats.setObjectName("pushButtonStats")
+                self.horizontalLayout_2.addWidget(self.pushButtonStats)
+                self.verticalLayout.addLayout(self.horizontalLayout_2)
+                self.verticalLayout_8.addWidget(self.widget)
+                MainWindowAdmin.setCentralWidget(self.centralwidget)
+                self.retranslateUi(MainWindowAdmin)
+                QtCore.QMetaObject.connectSlotsByName(MainWindowAdmin)
+                MainWindowAdmin.showMaximized()
+                self.pushButtonLosts.clicked.connect(self.afficherObjetsPerdues)
+                self.pushButtonStats.clicked.connect(self.afficherStatistique)
+                self.pushButtonRessources.clicked.connect(self.afficherRh)
 
 
 
+
+
+        def retranslateUi(self, MainWindowAdmin):
+                _translate = QtCore.QCoreApplication.translate
+                self.label.setText(_translate("MainWindowAdmin", "JSS Excellence de Saoula."))
+
+        def afficherObjetsPerdues(self):
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_MainWindowObjetsPerdues()
+                self.ui.setupUi(self.window)
+                self.window.show()
+
+        def afficherStatistique(self):
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_MainWindowStats()
+                self.ui.setupUi(self.window)
+                self.window.show()
+
+        def afficherRh(self):
+                self.window = QtWidgets.QMainWindow()
+                self.ui = UI_MainWindowRh()
+                self.ui.setupUi(self.window)
+                self.window.show()
 
 
 
@@ -246,10 +256,10 @@ from mainMenu import resources_main_admin
 
 
 if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindowAdmin = QtWidgets.QMainWindow()
-    ui = Ui_MainWindowAdmin()
-    ui.setupUi(MainWindowAdmin)
-    MainWindowAdmin.show()
-    sys.exit(app.exec_())
+        import sys
+        app = QtWidgets.QApplication(sys.argv)
+        MainWindowAdmin = QtWidgets.QMainWindow()
+        ui = Ui_MainWindowAdmin()
+        ui.setupUi(MainWindowAdmin)
+        MainWindowAdmin.show()
+        sys.exit(app.exec_())

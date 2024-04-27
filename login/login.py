@@ -23,6 +23,7 @@ class Ui_DialogLogin(object):
         DialogLogin.resize(1200, 800)
         DialogLogin.setMinimumSize(QtCore.QSize(1200, 800))
         DialogLogin.setMaximumSize(QtCore.QSize(1200, 800))
+        DialogLogin.setWindowIcon(QtGui.QIcon('../resourcesGenerales/iconGC.png'))
         self.verticalLayout = QtWidgets.QVBoxLayout(DialogLogin)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -140,7 +141,7 @@ class Ui_DialogLogin(object):
 
     def retranslateUi(self, DialogLogin):
         _translate = QtCore.QCoreApplication.translate
-        DialogLogin.setWindowTitle(_translate("DialogLogin", "Dialog"))
+        DialogLogin.setWindowTitle(_translate("DialogLogin", "Se connecter"))
         self.label.setText(_translate("DialogLogin", "Connectez-vous"))
         self.lineEdit.setPlaceholderText(_translate("DialogLogin", " Nom d\'utilisateur"))
         self.lineEdit_2.setPlaceholderText(_translate("DialogLogin", " Mot de passe"))

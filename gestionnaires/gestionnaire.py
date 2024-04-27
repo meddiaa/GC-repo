@@ -155,6 +155,8 @@ class Ui_gestionnaire(object):
 
         self.retranslateUi(gestionnaire)
         QtCore.QMetaObject.connectSlotsByName(gestionnaire)
+        gestionnaire.showMaximized()
+        self.tableWidget.adjustSize()
 
     def retranslateUi(self, gestionnaire):
         _translate = QtCore.QCoreApplication.translate
@@ -172,7 +174,7 @@ class Ui_gestionnaire(object):
         item.setText(_translate("gestionnaire", "Nom d\'Utilisateur"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("gestionnaire", "Mot De Passe"))
-import gestionnaire_rc
+from gestionnaires import gestionnaire_rc
 
 
 if __name__ == "__main__":

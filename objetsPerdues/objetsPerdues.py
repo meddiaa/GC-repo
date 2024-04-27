@@ -10,8 +10,15 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
-from ajouterObjet import Ui_Dialog
+#from ajouterObjet import Ui_Dialog
 from connexion_DB import connect_to_DB
+import mysql.connector
+
+
+
+
+#from ajouterObjet import Ui_Dialog
+
 
 class Ui_MainWindowObjetsPerdues(object):
     def setupUi(self, MainWindowObjetsPerdues):
@@ -116,6 +123,7 @@ class Ui_MainWindowObjetsPerdues(object):
         self.radioButton_2.clicked.connect(self.trier_plus_recent)
         self.radioButton_3.clicked.connect(self.trier_plus_ancien)
         self.pushButtonAjourter.clicked.connect((self.ajouter_objet))
+        self.pushButtonAjourter.clicked.connect(self.ajouter_objet)
         self.afficher_tout()
         self.tableWidgetLostObjects.setColumnWidth(0, 200)
         self.tableWidgetLostObjects.setColumnWidth(1, 150)
@@ -192,6 +200,8 @@ class Ui_MainWindowObjetsPerdues(object):
         self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.DescendingOrder)
     def trier_plus_ancien(self):
         self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.AscendingOrder)
+
+
     def ajouter_objet(self):
         self = QtWidgets.QMainWindow()
         self.ui = Ui_Dialog()

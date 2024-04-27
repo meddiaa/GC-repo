@@ -23,7 +23,6 @@ class Ui_MainWindowStats(object):
     def setupUi(self, MainWindowStats):
         MainWindowStats.setObjectName("MainWindowStats")
         MainWindowStats.resize(1003, 624)
-        MainWindowStats.showMaximized()
         self.centralwidget = QtWidgets.QWidget(MainWindowStats)
         self.centralwidget.setStyleSheet("QWidget#centralwidget{\n"
 "border-image: url(:/background/images/image 1.png);\n"
@@ -397,6 +396,7 @@ class Ui_MainWindowStats(object):
         total_paiment = self.total_paiments()
         texte_6 = str(total_paiment)
         self.labelGainTotal.setText(texte_6)
+        MainWindowStats.showMaximized()
 
 
     def retranslateUi(self, MainWindowStats):
@@ -681,7 +681,7 @@ class Ui_MainWindowStats(object):
     # Afficher l'image dans le QLabel
             pixmap = QtGui.QPixmap.fromImage(image)
             self.label_12.setPixmap(pixmap)
-import res_rc
+from stats import res_rc
 
 
 if __name__ == "__main__":

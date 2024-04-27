@@ -1,7 +1,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
+
+import mysql.connector
+
+from mainMenu.gest import Ui_MainWindowGest
 from mainMenu.gest import Ui_MainWindowGest
 from connexion_DB import connect_to_DB
+
 
 class Ui_DialogLogin(object):
     def setupUi(self, DialogLogin):
@@ -9,6 +14,7 @@ class Ui_DialogLogin(object):
         DialogLogin.resize(1200, 800)
         DialogLogin.setMinimumSize(QtCore.QSize(1200, 800))
         DialogLogin.setMaximumSize(QtCore.QSize(1200, 800))
+        DialogLogin.setWindowIcon(QtGui.QIcon('../resourcesGenerales/iconGC.png'))
         self.verticalLayout = QtWidgets.QVBoxLayout(DialogLogin)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -126,7 +132,7 @@ class Ui_DialogLogin(object):
 
     def retranslateUi(self, DialogLogin):
         _translate = QtCore.QCoreApplication.translate
-        DialogLogin.setWindowTitle(_translate("DialogLogin", "Dialog"))
+        DialogLogin.setWindowTitle(_translate("DialogLogin", "Se connecter"))
         self.label.setText(_translate("DialogLogin", "Connectez-vous"))
         self.lineEdit.setPlaceholderText(_translate("DialogLogin", " Nom d\'utilisateur"))
         self.lineEdit_2.setPlaceholderText(_translate("DialogLogin", " Mot de passe"))
@@ -174,6 +180,20 @@ class Ui_DialogLogin(object):
 
     def verify_admin(self, username, password):
         connection, cursor = connect_to_DB()
+        query = " SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s "
+        values = (username, password)
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+        cursor.close()
+        return bool(result)
+    def verify_gestionnaire(self, username, password):
+        connection, cursor = connect_to_DB()
+        query = " SELECT * FROM gestionnaire WHERE nom = %s AND mot_de_passe = %s "
+        values = (username, password)
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+        cursor.close()
+        connection, cursor = connect_to_DB()
         query = "SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s"
         values = (username, password)
         cursor.execute(query, values)
@@ -190,6 +210,8 @@ class Ui_DialogLogin(object):
         return bool(result)
 
 import resources_login_rc
+from mainMenu import resources_main_admin
+from mainMenu import resources_main_gest
 
 if __name__ == "__main__":
     import sys

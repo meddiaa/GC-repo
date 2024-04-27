@@ -9,7 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 from connexion_DB import connect_to_DB
 
 

@@ -230,7 +230,8 @@ class Ui_Offres(object):
         self.filterdropdown.setItemText(1, _translate("Offres", "ID"))
         self.filterdropdown.setItemText(2, _translate("Offres", "Sport"))
         self.recherche.setText(_translate("Offres", "rechercher"))
-import offres_rc
+        Offres.showMaximized()
+from offers import offres_rc
 
 
 if __name__ == "__main__":

@@ -116,7 +116,8 @@ class Ui_EDT(object):
         item.setText(_translate("EDT", "Vendredi"))
         item = self.tableWidget.horizontalHeaderItem(7)
         item.setText(_translate("EDT", "Samedi"))
-import edt_rc
+        EDT.showMaximized()
+from emploiDuTemps import edt_rc
 
 
 if __name__ == "__main__":

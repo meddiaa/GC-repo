@@ -12,6 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from objetsPerdues.objetsPerdues import Ui_MainWindowObjetsPerdues
 from stats.statistiques import Ui_MainWindowStats
 from rhMenu.rh import UI_MainWindowRh
+from financeClub.finance import Ui_MainWindowFinance
+from abonnements.abonnement import Ui_abonnement
+from emploiDuTemps.edt import Ui_EDT
 
 
 
@@ -222,6 +225,9 @@ class Ui_MainWindowAdmin(object):
                 self.pushButtonLosts.clicked.connect(self.afficherObjetsPerdues)
                 self.pushButtonStats.clicked.connect(self.afficherStatistique)
                 self.pushButtonRessources.clicked.connect(self.afficherRh)
+                self.pushButtonFinance.clicked.connect(self.afficherFinance)
+                self.pushButtonAbonnements.clicked.connect(self.afficherAbonnement)
+                self.pushButtonEdt.clicked.connect(self.afficherEDT)
 
 
 
@@ -248,9 +254,23 @@ class Ui_MainWindowAdmin(object):
                 self.ui = UI_MainWindowRh()
                 self.ui.setupUi(self.window)
                 self.window.show()
+        def afficherFinance(self):
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_MainWindowFinance()
+                self.ui.setupUi(self.window)
+                self.window.show()
 
+        def afficherAbonnement(self):
+                self.window = QtWidgets.QWidget()
+                self.ui = Ui_abonnement()
+                self.ui.setupUi(self.window)
+                self.window.show()
 
-
+        def afficherEDT(self):
+                self.window = QtWidgets.QWidget()
+                self.ui = Ui_EDT()
+                self.ui.setupUi(self.window)
+                self.window.show()
 
 from mainMenu import resources_main_admin
 

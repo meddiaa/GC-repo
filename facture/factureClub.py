@@ -11,7 +11,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_membres(object):
+class Ui_FacturesClub(object):
     def setupUi(self, membres):
         membres.setObjectName("membres")
         membres.resize(883, 576)
@@ -225,14 +225,15 @@ class Ui_membres(object):
         item.setText(_translate("membres", "Revenu"))
         self.tableWidget.setSortingEnabled(__sortingEnabled)
         self.Prix.setText(_translate("membres", "Prix Total :"))
-import factureClub_rc
+        membres.showMaximized()
+from facture import factureClub_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     membres = QtWidgets.QWidget()
-    ui = Ui_membres()
+    ui = Ui_FacturesClub()
     ui.setupUi(membres)
     membres.show()
     sys.exit(app.exec_())

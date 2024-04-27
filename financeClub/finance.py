@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from offers.offres import Ui_Offres
+from facture.factureClub import Ui_FacturesClub
 
 
 class Ui_MainWindowFinance(object):
@@ -111,7 +113,9 @@ class Ui_MainWindowFinance(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.verticalLayout_8.addWidget(self.widget)
         MainWindowFinance.setCentralWidget(self.centralwidget)
-
+        MainWindowFinance.showMaximized()
+        self.pushButtonOffres.clicked.connect(self.afficherOffres)
+        self.pushButtonFacture.clicked.connect(self.afficherFactures)
         self.retranslateUi(MainWindowFinance)
         QtCore.QMetaObject.connectSlotsByName(MainWindowFinance)
 
@@ -119,7 +123,19 @@ class Ui_MainWindowFinance(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindowFinance.setWindowTitle(_translate("MainWindowFinance", "MainWindow"))
         self.label.setText(_translate("MainWindowFinance", "Finance"))
-import finance_rc
+
+    def afficherOffres(self):
+        self.Offres = QtWidgets.QWidget()
+        self.ui = Ui_Offres()
+        self.ui.setupUi(self.Offres)
+        self.Offres.show()
+
+    def afficherFactures(self):
+        self.Factures = QtWidgets.QWidget()
+        self.ui = Ui_FacturesClub()
+        self.ui.setupUi(self.Factures)
+        self.Factures.show()
+from financeClub import finance_rc
 
 
 if __name__ == "__main__":

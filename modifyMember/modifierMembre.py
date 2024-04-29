@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from connexion_DB import connect_to_DB
 
 
 class Ui_MainWindowModifierMembre(object):
@@ -284,6 +285,7 @@ class Ui_MainWindowModifierMembre(object):
 
         self.retranslateUi(MainWindowModifierMembre)
         QtCore.QMetaObject.connectSlotsByName(MainWindowModifierMembre)
+        self.pushButtonSave.clicked.connect(self.modifier_membre)
 
     def retranslateUi(self, MainWindowModifierMembre):
         _translate = QtCore.QCoreApplication.translate
@@ -306,6 +308,29 @@ class Ui_MainWindowModifierMembre(object):
         self.lineEditNumsec.setPlaceholderText(_translate("MainWindowModifierMembre", " Numéro de sécurité sociale"))
         self.pushButtonSave.setText(_translate("MainWindowModifierMembre", "Enregistrer"))
         self.pushButtonAnnuler.setText(_translate("MainWindowModifierMembre", "Annuler"))
+
+    def modifier_membre(self):
+        connection, cursor = connect_to_DB()
+        nom = self.lineEditNom.text()
+        prenom = self.lineEditPrenom.text()
+        date_naissance = self.dateEdit.date().toString("yyyy-MM-dd")
+        num_telephone = self.lineEditNumtlph.text()
+        sexe = ""
+        if self.checkBoxMasculin.isChecked():
+            sexe = "M"
+        elif self.checkBoxFeminin.isChecked():
+            sexe = "F"
+        bane = False
+        if self.checkBoxBanedYes.isChecked():
+            bane = True
+        assure = False
+        if self.checkBoxAssureOui.isChecked():
+            assure = True
+        query = "UPDATE adhérant SET nom = %s, prénom = %s, date_naissance = %s, numéro_téléphone = %s, Gender = %s, Assuré = %s, Bané = %s WHERE ID = %s"
+        values = (nom, prenom, date_naissance, num_telephone, sexe, assure, bane, id_membre)
+        cursor.execute(query, values)
+        connection.commit()
+
 from modifyMember import res_rc
 
 

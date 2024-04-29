@@ -340,7 +340,6 @@ class Ui_membres(object):
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE prénom LIKE %s"
         elif critere_recherche == "ID":
             query = "SELECT ID, nom, prénom, Gender, date_naissance, numéro_téléphone, Assuré, Bané FROM adhérant WHERE ID LIKE %s"
-
         texte_recherche_avec_joker = f"%{texte_recherche}%"
         cursor.execute(query, (texte_recherche_avec_joker,))
         data = cursor.fetchall()

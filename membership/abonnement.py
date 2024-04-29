@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_abonnement(object):
     def setupUi(self, abonnement):
         abonnement.setObjectName("abonnement")
@@ -250,7 +249,7 @@ class Ui_abonnement(object):
         self.filterdropdown.setItemText(4, _translate("abonnement", "Sport"))
         self.recherche.setPlaceholderText("Rechercher")
 
-import abonnement_rc
+from membership import abonnement_rc
 
 
 if __name__ == "__main__":

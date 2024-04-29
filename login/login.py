@@ -1,8 +1,6 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
-
 import mysql.connector
-
 from mainMenu.gest import Ui_MainWindowGest
 from mainMenu.gest import Ui_MainWindowGest
 from connexion_DB import connect_to_DB

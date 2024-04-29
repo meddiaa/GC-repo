@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from connexion_DB import connect_to_DB
 
 
 class Ui_Offres(object):
@@ -65,7 +66,7 @@ class Ui_Offres(object):
         self.tableWidget.setShowGrid(True)
         self.tableWidget.setCornerButtonEnabled(True)
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(6)
+        self.tableWidget.setColumnCount(4)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -76,9 +77,6 @@ class Ui_Offres(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(4, item)
-        item = QtWidgets.QTableWidgetItem()
-        self.tableWidget.setHorizontalHeaderItem(5, item)
         self.tableWidget.horizontalHeader().setVisible(True)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(191)
@@ -206,31 +204,84 @@ class Ui_Offres(object):
         spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem5)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
+        self.tableWidget.setColumnWidth(0, 150)
+        self.tableWidget.setColumnWidth(1, 350)
+        self.tableWidget.setColumnWidth(2, 350)
+        self.tableWidget.setColumnWidth(3, 150)
+        self.searchButton.clicked.connect(self.recherche_critere)
 
         self.retranslateUi(Offres)
         QtCore.QMetaObject.connectSlotsByName(Offres)
+        self.afficher_tout()
 
     def retranslateUi(self, Offres):
         _translate = QtCore.QCoreApplication.translate
         Offres.setWindowTitle(_translate("Offres", "membre"))
         self.label.setText(_translate("Offres", "Gestion Des Offres"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("Offres", "ID"))
+        item.setText(_translate("Offres", "ID_offre"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("Offres", "Nom"))
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("Offres", "Sport"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("Offres", "Durée"))
-        item = self.tableWidget.horizontalHeaderItem(4)
         item.setText(_translate("Offres", "Prix"))
-        item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("Offres", "№ De Séances"))
         self.filterdropdown.setItemText(0, _translate("Offres", "choisir"))
-        self.filterdropdown.setItemText(1, _translate("Offres", "ID"))
+        self.filterdropdown.setItemText(1, _translate("Offres", "ID_offre"))
         self.filterdropdown.setItemText(2, _translate("Offres", "Sport"))
         self.recherche.setText(_translate("Offres", "rechercher"))
         Offres.showMaximized()
+
+    def afficher_tout(self):
+        connection, cursor = connect_to_DB()
+        query = "SELECT ID_offre, NOM_offre, sport, prix FROM offre"
+        cursor.execute(query)
+        data = cursor.fetchall()
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(0)
+        for numero_ligne, donnees_ligne in enumerate(data):
+            self.tableWidget.insertRow(numero_ligne)
+            for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                item.setFont(QtGui.QFont("Arial", 15))
+                self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+    def recherche_critere(self):
+        connection, cursor = connect_to_DB()
+        texte_recherche = self.recherche.text()
+        critere_recherche = self.filterdropdown.currentText()
+        if critere_recherche == "choisir":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Warning)
+            self.msg.setText("Veuillez choisir un critère de recherche.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+            return
+        if critere_recherche == "Sport":
+            query = "SELECT ID_offre, NOM_offre, sport, prix FROM offre WHERE sport LIKE %s"
+        elif critere_recherche == "ID_offre":
+            query = "SELECT ID_offre, NOM_offre, sport, prix FROM offre WHERE ID_offre LIKE %s"
+        texte_recherche_avec_joker = f"%{texte_recherche}%"
+        cursor.execute(query, (texte_recherche_avec_joker,))
+        data = cursor.fetchall()
+        if not data:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Aucun membre n'existe avec ce critère de recherche.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+            return
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(0)
+        for numero_ligne, donnees_ligne in enumerate(data):
+            self.tableWidget.insertRow(numero_ligne)
+            for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                item.setFont(QtGui.QFont("Arial", 15))
+                self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+
+
 from offers import offres_rc
 
 

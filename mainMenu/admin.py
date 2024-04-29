@@ -13,7 +13,7 @@ from objetsPerdues.objetsPerdues import Ui_MainWindowObjetsPerdues
 from stats.statistiques import Ui_MainWindowStats
 from rhMenu.rh import UI_MainWindowRh
 from financeClub.finance import Ui_MainWindowFinance
-#from abonnements.abonnement import Ui_abonnement
+from membership.abonnement import Ui_abonnement
 from emploiDuTemps.edt import Ui_EDT
 
 

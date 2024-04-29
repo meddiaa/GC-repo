@@ -10,7 +10,6 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
 class Ui_EDT(object):
     def setupUi(self, EDT):
         EDT.setObjectName("EDT")

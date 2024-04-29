@@ -316,35 +316,34 @@ class Ui_membres(object):
                 self.window = QtWidgets.QMainWindow()
                 self.ui = Ui_MainWindowModifierMembre()
                 self.ui.setupUi(self.window)
-                self.afficher_adhérant_info(id_modif)
+                #self.afficher_adhérant_info(id_modif)
+                self.ui.lineEditID.setText(id_modif)
+                connection, cursor = connect_to_DB()
+                query = "SELECT nom, prénom, Gender, date_naissance, numéro_téléphone, email , Assuré, Bané FROM adhérant WHERE ID = %s"
+                cursor.execute(query, (id_modif,))
+                data = cursor.fetchone()
+                if data:
+                    self.ui.lineEditNom.setText(data[0])
+                    self.ui.lineEditPrenom.setText(data[1])
+                    self.ui.lineEditNumtlph.setText(data[4])
+                    self.ui.dateEdit.setDate(data[3])
+                    self.ui.lineEditEmail.setText(data[5])
+                    if data[2] == 'M':
+                        self.ui.checkBoxMasculin.setChecked(True)
+                    elif data[2] == 'F':
+                        self.ui.checkBoxFeminin.setChecked(True)
+
+                    if data[6] == 1:
+                        self.ui.checkBoxAssureOui.setChecked(True)
+                    else:
+                        self.ui.checkBoxAssureNon.setChecked(True)
+
+                    if data[7] == 1:
+                        self.ui.checkBoxBanedYes.setChecked(True)
+                    else:
+                        self.ui.checkBoxBannedNo.setChecked(True)
+                cursor.close()
                 self.window.show()
-
-    def afficher_adhérant_info(self, id_modif):
-        connection, cursor = connect_to_DB()
-        query = "SELECT nom, prénom, Gender, date_naissance, numéro_téléphone, email , Assuré, Bané FROM adhérant WHERE ID = %s"
-        cursor.execute(query, (id_modif,))
-        data = cursor.fetchone()
-        if data:
-            self.ui.lineEditNom.setText(data[0])
-            self.ui.lineEditPrenom.setText(data[1])
-            self.ui.lineEditNumtlph.setText(data[4])
-            self.ui.dateEdit.setDate(data[3])
-            self.ui.lineEditEmail.setText(data[5])
-            if data[2] == 'M':
-                self.ui.checkBoxMasculin.setChecked(True)
-            elif data[2] == 'F':
-                self.ui.checkBoxFeminin.setChecked(True)
-
-            if data[6] == 1:
-                self.ui.checkBoxAssureOui.setChecked(True)
-            else:
-                self.ui.checkBoxAssureNon.setChecked(True)
-
-            if data[7] == 1:
-                self.ui.checkBoxBanedYes.setChecked(True)
-            else:
-                self.ui.checkBoxBannedNo.setChecked(True)
-        cursor.close()
 
     def afficher_femmes(self):
         connection, cursor = connect_to_DB()

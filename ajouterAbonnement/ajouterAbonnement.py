@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\ajouterAbonnement.ui'
+# Form implementation generated from reading ui file 'ajouterAbonnement.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -53,6 +53,14 @@ class Ui_ajouterAbonnement(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.widget_6)
         self.verticalLayout_4.setSpacing(15)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.label_2 = QtWidgets.QLabel(self.widget_6)
+        self.label_2.setMinimumSize(QtCore.QSize(50, 50))
+        self.label_2.setMaximumSize(QtCore.QSize(50, 50))
+        self.label_2.setText("")
+        self.label_2.setPixmap(QtGui.QPixmap(":/icons/add.png"))
+        self.label_2.setScaledContents(True)
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout_4.addWidget(self.label_2)
         self.Id = QtWidgets.QLabel(self.widget_6)
         self.Id.setMinimumSize(QtCore.QSize(0, 35))
         font = QtGui.QFont()
@@ -216,6 +224,7 @@ class Ui_ajouterAbonnement(object):
         self.dropdownOffre.setItemText(0, _translate("ajouterAbonnement", "Choisir"))
         self.pushButtonSave.setText(_translate("ajouterAbonnement", "Enregistrer"))
         self.pushButtonAnnuler.setText(_translate("ajouterAbonnement", "Annuler"))
+import ajouterAbonnement_rc
 
 
 if __name__ == "__main__":

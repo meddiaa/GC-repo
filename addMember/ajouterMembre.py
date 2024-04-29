@@ -367,8 +367,8 @@ class UI_MainWindowAjouterMembre(object):
         cursor.execute(query, values)
         connection.commit()
         cursor.close()
-
         return True
+
 from addMember import res_rc
 
 if __name__ == "__main__":

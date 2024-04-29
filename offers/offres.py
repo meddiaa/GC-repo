@@ -10,7 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from connexion_DB import connect_to_DB
-
+from ajoffre.ajouterOffre import Ui_ajouterAbonnement
+from modifoffre.modifierOffre import Ui_modifierOffre
+from connexion_DB import connect_to_DB
 
 class Ui_Offres(object):
     def setupUi(self, Offres):
@@ -229,8 +231,83 @@ class Ui_Offres(object):
         self.filterdropdown.setItemText(0, _translate("Offres", "choisir"))
         self.filterdropdown.setItemText(1, _translate("Offres", "ID_offre"))
         self.filterdropdown.setItemText(2, _translate("Offres", "Sport"))
-        self.recherche.setText(_translate("Offres", "rechercher"))
+        self.recherche.setPlaceholderText('Rechercher')
+        self.ajouter.clicked.connect(self.afficherAjouterOffre)
+        self.modifier.clicked.connect(self.afficherModifierOffre)
+        self.supprimer.clicked.connect(self.supprimer_offre)
         Offres.showMaximized()
+
+    def supprimer_offre(self):
+        connection, cursor = connect_to_DB()
+        nom_offre = self.recherche.text()
+        if nom_offre == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.setText("Veuillez saisir l'objet à supprimer.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        else:
+            query = "DELETE FROM offre WHERE NOM_offre = %s"
+            cursor.execute(query, (nom_offre,))
+            connection.commit()
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("L'offre a été supprimé avec succès")
+            self.msg.setWindowTitle("Suppression avec succès")
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.exec_()
+            self.afficher_tout()
+            self.recherche.setText("")
+
+    def update_object_list(self):
+        self.afficher_tout()
+
+    def afficherAjouterOffre(self):
+        self.window = QtWidgets.QDialog()
+        self.ui = Ui_ajouterAbonnement(self)
+        self.ui.setupUi(self.window)
+        self.window.show()
+    def afficherModifierOffre(self):
+        id_modif = self.recherche.text()
+        if id_modif == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Veuillez saisir l'ID.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.filterdropdown.currentText() != 'ID_offre':
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("La modification se fait uniquement à partir de l'ID.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        else:
+            connection, cursor = connect_to_DB()
+            query = "SELECT * FROM offre WHERE ID_offre = %s"
+            cursor.execute(query, (id_modif,))
+            data = cursor.fetchone()
+            if not data:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setIcon(QtWidgets.QMessageBox.Warning)
+                self.msg.setText(f"L'ID {id_modif} n'existe pas.")
+                self.msg.setWindowTitle("Erreur")
+                self.msg.exec_()
+                return
+            else:
+                connection, cursor = connect_to_DB()
+                query = "SELECT NOM_offre,prix FROM offre WHERE ID_offre = %s"
+                cursor.execute(query, (id_modif,))
+                data = cursor.fetchone()
+                if data:
+                    self.window = QtWidgets.QDialog()
+                    self.ui = Ui_modifierOffre(self)
+                    self.ui.setupUi(self.window)
+                    self.ui.lineEditID.setText(id_modif)
+                    self.ui.lineEditNom.setText(data[0])
+                    self.ui.lineEditDatePrix.setText(str(data[1]))
+                cursor.close()
+                self.window.show()
 
     def afficher_tout(self):
         connection, cursor = connect_to_DB()
@@ -279,7 +356,6 @@ class Ui_Offres(object):
                 item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
                 item.setFont(QtGui.QFont("Arial", 15))
                 self.tableWidget.setItem(numero_ligne, numero_colonne, item)
-
 
 
 from offers import offres_rc

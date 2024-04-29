@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+<<<<<<< HEAD
 from lesCoaches.coaches import Ui_coaches
 from gestionnaires.gestionnaire import Ui_gestionnaire
 from lesMembres.membres import Ui_membres
@@ -18,6 +19,16 @@ class UI_MainWindowRh(object):
         MainWindowRh.resize(1045, 526)
         MainWindowRh.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindowRh)
+=======
+
+
+class Ui_MainWindowGest(object):
+    def setupUi(self, MainWindowGest):
+        MainWindowGest.setObjectName("MainWindowGest")
+        MainWindowGest.resize(1045, 526)
+        MainWindowGest.setStyleSheet("")
+        self.centralwidget = QtWidgets.QWidget(MainWindowGest)
+>>>>>>> cf83a7a3f8b58d42bb5b5517c74df45d699006da
         self.centralwidget.setStyleSheet("QWidget #centralwidget\n"
 "{\n"
 "border-image: url(:/background/image 1.png) 0 0 0 0 stretch stretch;\n"
@@ -137,6 +148,7 @@ class UI_MainWindowRh(object):
         self.horizontalLayout_2.addWidget(self.pushButtonGest)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.verticalLayout_8.addWidget(self.widget)
+<<<<<<< HEAD
         self.pushButtonCoaches.clicked.connect(self.afficherCoaches)
         self.pushButtonGest.clicked.connect(self.afficherGestionnaire)
         self.pushButtonMembres.clicked.connect(self.afficherMembres)
@@ -169,13 +181,32 @@ class UI_MainWindowRh(object):
             self.ui.setupUi(self.window)
             self.window.show()
 from rhMenu import rh_rc
+=======
+        MainWindowGest.setCentralWidget(self.centralwidget)
+
+        self.retranslateUi(MainWindowGest)
+        QtCore.QMetaObject.connectSlotsByName(MainWindowGest)
+
+    def retranslateUi(self, MainWindowGest):
+        _translate = QtCore.QCoreApplication.translate
+        MainWindowGest.setWindowTitle(_translate("MainWindowGest", "MainWindow"))
+        self.label.setText(_translate("MainWindowGest", "Ressources Humaines"))
+import rh_rc
+>>>>>>> cf83a7a3f8b58d42bb5b5517c74df45d699006da
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
+<<<<<<< HEAD
     MainWindowRh = QtWidgets.QMainWindow()
     ui = UI_MainWindowRh()
     ui.setupUi(MainWindowRh)
     MainWindowRh.show()
+=======
+    MainWindowGest = QtWidgets.QMainWindow()
+    ui = Ui_MainWindowGest()
+    ui.setupUi(MainWindowGest)
+    MainWindowGest.show()
+>>>>>>> cf83a7a3f8b58d42bb5b5517c74df45d699006da
     sys.exit(app.exec_())

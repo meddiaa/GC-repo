@@ -9,7 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from lesMembres.membres import Ui_membres
+from abonnements.abonnement import Ui_abonnement
+from emploiDuTemps.edt import Ui_EDT
+from objetsPerdues.objetsPerdues import Ui_MainWindowObjetsPerdues
 
 class Ui_MainWindowGest(object):
     def setupUi(self, MainWindowGest):
@@ -161,11 +164,39 @@ class Ui_MainWindowGest(object):
         self.retranslateUi(MainWindowGest)
         QtCore.QMetaObject.connectSlotsByName(MainWindowGest)
         MainWindowGest.showMaximized()
+        self.pushButtonMembres.clicked.connect(self.afficherMembres)
+        self.pushButtonAbonnements.clicked.connect(self.afficherAbonnement)
+        self.pushButtonEdt.clicked.connect(self.afficherEDT)
+        self.pushButtonLosts.clicked.connect(self.afficherObjetsPerdues)
 
     def retranslateUi(self, MainWindowGest):
         _translate = QtCore.QCoreApplication.translate
         MainWindowGest.setWindowTitle(_translate("MainWindowGest", "MainWindow"))
         self.label.setText(_translate("MainWindowGest", "JSS Excellence de Saoula."))
+
+    def afficherMembres(self):
+            self.window = QtWidgets.QWidget()
+            self.ui = Ui_membres()
+            self.ui.setupUi(self.window)
+            self.window.show()
+
+    def afficherAbonnement(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_abonnement()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def afficherEDT(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_EDT()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def afficherObjetsPerdues(self):
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_MainWindowObjetsPerdues()
+        self.ui.setupUi(self.window)
+        self.window.show()
 from mainMenu import resources_main_gest
 
 

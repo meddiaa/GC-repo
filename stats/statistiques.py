@@ -577,7 +577,7 @@ class Ui_MainWindowStats(object):
             self.fig, self.ax = plt.subplots(figsize=(6, 4))
 
             self.ax.bar(categories, valeurs)
-            self.ax.set_xlabel('genre')
+            self.ax.set_xlabel('Sexe')
             self.ax.set_ylabel('nombre')
             self.ax.set_title('nombre d\'hommes et de femmes')
             self.ax.tick_params(axis='x', rotation=25)

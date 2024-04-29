@@ -10,15 +10,8 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
-#from ajouterObjet import Ui_Dialog
+from objetsPerdues.ajouterObjet import Ui_Dialog
 from connexion_DB import connect_to_DB
-import mysql.connector
-
-
-
-
-#from ajouterObjet import Ui_Dialog
-
 
 class Ui_MainWindowObjetsPerdues(object):
     def setupUi(self, MainWindowObjetsPerdues):
@@ -122,26 +115,18 @@ class Ui_MainWindowObjetsPerdues(object):
         self.radioButton.clicked.connect(self.trier_AZ)
         self.radioButton_2.clicked.connect(self.trier_plus_recent)
         self.radioButton_3.clicked.connect(self.trier_plus_ancien)
-        self.pushButtonAjourter.clicked.connect((self.ajouter_objet))
         self.pushButtonAjourter.clicked.connect(self.ajouter_objet)
+        self.pushButtonSupprimer.clicked.connect(self.supprimer_objet)
         self.afficher_tout()
         self.tableWidgetLostObjects.setColumnWidth(0, 200)
         self.tableWidgetLostObjects.setColumnWidth(1, 150)
         self.tableWidgetLostObjects.setColumnWidth(2, 200)
         self.tableWidgetLostObjects.setColumnWidth(3, 1500)
-    def retranslateUi(self, MainWindowObjetsPerdues):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindowObjetsPerdues.setWindowTitle(_translate("MainWindowObjetsPerdues", "Objets perdus"))
-        self.lineEditRecherche.setPlaceholderText(_translate("MainWindowObjetsPerdues", "Rechercher un objet"))
-        self.retranslateUi(MainWindowObjetsPerdues)
-        QtCore.QMetaObject.connectSlotsByName(MainWindowObjetsPerdues)
 
-        #show window maximiased
-        MainWindowObjetsPerdues.showMaximized()
     def retranslateUi(self, MainWindowObjetsPerdues):
         _translate = QtCore.QCoreApplication.translate
         MainWindowObjetsPerdues.setWindowTitle(_translate("MainWindowObjetsPerdues", "Objets perdues"))
-        self.lineEditRecherche.setPlaceholderText(_translate("MainWindowObjetsPerdues", "Rechercher un onbejt"))
+        self.lineEditRecherche.setPlaceholderText(_translate("MainWindowObjetsPerdues", "Rechercher un objet"))
         self.pushButtonRechercher.setText(_translate("MainWindowObjetsPerdues", "Rechercher"))
         self.radioButton.setText(_translate("MainWindowObjetsPerdues", "A-Z"))
         self.radioButton_2.setText(_translate("MainWindowObjetsPerdues", "Plus récent"))
@@ -157,6 +142,10 @@ class Ui_MainWindowObjetsPerdues(object):
         item.setText(_translate("MainWindowObjetsPerdues", "Lieu"))
         item = self.tableWidgetLostObjects.horizontalHeaderItem(3)
         item.setText(_translate("MainWindowObjetsPerdues", "Description"))
+
+    def update_object_list(self):
+        self.afficher_tout()
+
     def afficher_tout(self):
         connection, cursor = connect_to_DB()
         query = "SELECT object_name, datee, lieu, description FROM objets"
@@ -193,6 +182,30 @@ class Ui_MainWindowObjetsPerdues(object):
                 item.setFont(QtGui.QFont("Arial", 10))
                 self.tableWidgetLostObjects.setItem(numero_ligne, numero_colonne, item)
 
+    def supprimer_objet(self):
+        connection, cursor = connect_to_DB()
+        nom_objet = self.lineEditRecherche.text()
+        if nom_objet == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.setText("Veuillez saisir l'objet à supprimer.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        else:
+            query = "DELETE FROM objets WHERE object_name = %s"
+            cursor.execute(query, (nom_objet,))
+            connection.commit()
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("L'objet a été supprimé avec succès")
+            self.msg.setWindowTitle("Suppression avec succès")
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.exec_()
+            self.afficher_tout()
+            self.lineEditRecherche.setText("")
+
+
 
     def trier_AZ(self):
         self.tableWidgetLostObjects.sortByColumn(0, QtCore.Qt.AscendingOrder)
@@ -201,46 +214,12 @@ class Ui_MainWindowObjetsPerdues(object):
     def trier_plus_ancien(self):
         self.tableWidgetLostObjects.sortByColumn(1, QtCore.Qt.AscendingOrder)
 
-
     def ajouter_objet(self):
-        self = QtWidgets.QMainWindow()
-        self.ui = Ui_Dialog()
-        self.ui.setupUi(self)
-        self.show()
-        object_name = self.window.lineEditObjet.text()
-        Lieu = self.window.lineEditLieu.text()
-        date = self.window.dateEdit.date().toString("yyyy-MM-dd")
-        description = self.window.lineEditDescription.text()
-        if object_name == "" or Lieu == "" or description == "":
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
-            self.msg.setText("Veuillez Saisir Les Champs Obligatoires")
-            self.msg.setWindowTitle("Erreur")
-            self.msg.exec_()
-        elif self.insertDb(object_name, date, Lieu, description):
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setIcon(QtWidgets.QMessageBox.Information)
-            self.msg.setText("Objet Ajouté avec succés")
-            self.msg.setWindowTitle("Succès")
-            self.msg.exec_()
-            self.lineEditObjet.setText("")
-            self.lineEditLieu.setText("")
-            self.dateEdit.setDate(QtCore.QDate.currentDate())
-            self.lineEditDescription.setText("")
-        else:
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
-            self.msg.setText("Insertion Echouée")
-            self.msg.setWindowTitle("Erreur")
-            self.msg.exec_()
-    def insertDb(self, object_name, date, Lieu, description):
-        connection, cursor = connect_to_DB()
-        query = "INSERT INTO objets(object_name,datee,lieu,description) VALUES (%s, %s, %s, %s)"
-        values = (object_name, date, Lieu, description)
-        cursor.execute(query, values)
-        connection.commit()
-        cursor.close()
-        return True
+        self.window = QtWidgets.QMainWindow()
+        self.ui = Ui_Dialog(self)
+        self.ui.setupUi(self.window)
+        self.window.show()
+
 
 if __name__ == "__main__":
     import sys

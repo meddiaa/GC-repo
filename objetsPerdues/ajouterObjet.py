@@ -11,8 +11,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from connexion_DB import connect_to_DB
 
-
 class Ui_Dialog(object):
+    def __init__(self, main_window):
+        self.main_window = main_window
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(650, 580)
@@ -88,7 +89,6 @@ class Ui_Dialog(object):
 "color: rgb(252, 252, 252);\n"
 "border-radius:5px;")
         self.pushButton.setObjectName("pushButton")
-
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
         self.pushButton.clicked.connect(self.add_object)
@@ -115,9 +115,10 @@ class Ui_Dialog(object):
         elif self.insertDb(object_name, date, Lieu, description):
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
-            self.msg.setText("Objet Ajouté avec succés")
+            self.msg.setText("Objet Ajouté avec succès")
             self.msg.setWindowTitle("Succès")
             self.msg.exec_()
+            self.main_window.update_object_list()
             self.lineEditObjet.setText("")
             self.lineEditLieu.setText("")
             self.dateEdit.setDate(QtCore.QDate.currentDate())

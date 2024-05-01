@@ -272,7 +272,7 @@ class Ui_ajouterGest(object):
         num_tlphn = self.lineEditNumtlph.text()
         email = self.lineEditEmail.text()
         mdp = self.lineEditNomUti.text()
-        if username == "" or familyName == "" or num_tlphn == "" or email == "" or mdp == "":
+        if username == "" or familyName == "" or num_tlphn == "" or mdp == "":
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Critical)
             self.msg.setText("Veuillez Saisir Les Champs Obligatoires")

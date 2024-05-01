@@ -11,18 +11,19 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from connexion_DB import connect_to_DB
 from addGest.ajouterGest import Ui_ajouterGest
+from modifGest.modifierGest import Ui_modifierGest
 
 
 class Ui_gestionnaire(object):
-    def setupUi(self, gestionnaire):
-        gestionnaire.setObjectName("gestionnaire")
-        gestionnaire.resize(1373, 576)
-        gestionnaire.setStyleSheet("background-color: rgb(210, 210, 210);")
-        self.gridLayout = QtWidgets.QGridLayout(gestionnaire)
+    def setupUi(self, gestionnaires):
+        gestionnaires.setObjectName("gestionnaires")
+        gestionnaires.resize(1373, 576)
+        gestionnaires.setStyleSheet("background-color: rgb(210, 210, 210);")
+        self.gridLayout = QtWidgets.QGridLayout(gestionnaires)
         self.gridLayout.setObjectName("gridLayout")
-        self.topheader = QtWidgets.QWidget(gestionnaire)
+        self.topheader = QtWidgets.QWidget(gestionnaires)
         self.topheader.setStyleSheet("\n"
-"background-color:  rgb(210, 210, 210)")
+                                     "background-color:  rgb(210, 210, 210)")
         self.topheader.setObjectName("topheader")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.topheader)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -37,12 +38,12 @@ class Ui_gestionnaire(object):
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
         self.gridLayout.addWidget(self.topheader, 0, 0, 1, 1)
-        self.table = QtWidgets.QWidget(gestionnaire)
+        self.table = QtWidgets.QWidget(gestionnaires)
         font = QtGui.QFont()
         font.setPointSize(10)
         self.table.setFont(font)
         self.table.setStyleSheet("\n"
-"background-color:  rgb(210, 210, 210)")
+                                 "background-color:  rgb(210, 210, 210)")
         self.table.setObjectName("table")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.table)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -51,14 +52,14 @@ class Ui_gestionnaire(object):
         font.setPointSize(1)
         self.tableWidget.setFont(font)
         self.tableWidget.setStyleSheet("QHeaderView::section {background-color: rgb(210, 210, 210);\n"
-"border: 1px solid rgb(26, 61, 119);\n"
-"font-size: 12pt;\n"
-"font:bold;}\n"
-"QTableView {\n"
-"border: 2px solid rgb(26, 61, 119);\n"
-"border-top:1px solid rgb(26, 61, 119);\n"
-"}\n"
-"")
+                                       "border: 1px solid rgb(26, 61, 119);\n"
+                                       "font-size: 12pt;\n"
+                                       "font:bold;}\n"
+                                       "QTableView {\n"
+                                       "border: 2px solid rgb(26, 61, 119);\n"
+                                       "border-top:1px solid rgb(26, 61, 119);\n"
+                                       "}\n"
+                                       "")
         self.tableWidget.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.tableWidget.setMidLineWidth(0)
         self.tableWidget.setAutoScroll(True)
@@ -91,78 +92,97 @@ class Ui_gestionnaire(object):
         self.tableWidget.verticalHeader().setDefaultSectionSize(38)
         self.verticalLayout.addWidget(self.tableWidget)
         self.gridLayout.addWidget(self.table, 2, 0, 1, 1)
-        self.FilterButton = QtWidgets.QWidget(gestionnaire)
+        self.FilterButton = QtWidgets.QWidget(gestionnaires)
         self.FilterButton.setStyleSheet("\n"
-"background-color:  rgb(210, 210, 210)")
+                                        "background-color:  rgb(210, 210, 210)")
         self.FilterButton.setObjectName("FilterButton")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.FilterButton)
+        self.horizontalLayout.setSizeConstraint(QtWidgets.QLayout.SetDefaultConstraint)
+        self.horizontalLayout.setContentsMargins(0, -1, 0, -1)
+        self.horizontalLayout.setSpacing(60)
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem = QtWidgets.QSpacerItem(1000, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
-        self.ajouter = QtWidgets.QPushButton(self.FilterButton)
-        self.ajouter.setMinimumSize(QtCore.QSize(50, 50))
-        self.ajouter.setMaximumSize(QtCore.QSize(50, 50))
+        self.lineEditRechercher = QtWidgets.QLineEdit(self.FilterButton)
+        self.lineEditRechercher.setMinimumSize(QtCore.QSize(750, 30))
+        self.lineEditRechercher.setMaximumSize(QtCore.QSize(750, 30))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEditRechercher.setFont(font)
+        self.lineEditRechercher.setStyleSheet("background-color: rgb(231, 231, 231);\n"
+                                              "color: rgb(163, 163, 163);\n"
+                                              "border-radius:2px")
+        self.lineEditRechercher.setObjectName("lineEditRechercher")
+        self.horizontalLayout.addWidget(self.lineEditRechercher)
+        self.rechecherButton = QtWidgets.QPushButton(self.FilterButton)
+        self.rechecherButton.setMinimumSize(QtCore.QSize(40, 40))
+        self.rechecherButton.setMaximumSize(QtCore.QSize(40, 40))
+        self.rechecherButton.setStyleSheet("background-color: rgb(231, 231, 231);\n"
+                                           "border-radius:10px;\n"
+                                           "border:1px solid rgb(26, 61, 119);")
+        self.rechecherButton.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/loupe.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.rechecherButton.setIcon(icon)
+        self.rechecherButton.setIconSize(QtCore.QSize(20, 20))
+        self.rechecherButton.setObjectName("rechecherButton")
+        self.horizontalLayout.addWidget(self.rechecherButton)
+        self.ajouterButton = QtWidgets.QPushButton(self.FilterButton)
+        self.ajouterButton.setMinimumSize(QtCore.QSize(50, 50))
+        self.ajouterButton.setMaximumSize(QtCore.QSize(50, 50))
         font = QtGui.QFont()
         font.setPointSize(1)
-        self.ajouter.setFont(font)
-        self.ajouter.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.ajouter.setStyleSheet("background-color: rgb(26, 61, 119);\n"
-"border-radius:5px")
-        self.ajouter.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icons/add (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.ajouter.setIcon(icon)
-        self.ajouter.setIconSize(QtCore.QSize(35, 35))
-        self.ajouter.setCheckable(True)
-        self.ajouter.setObjectName("ajouter")
-        self.horizontalLayout.addWidget(self.ajouter)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem1)
-        self.supprimer = QtWidgets.QPushButton(self.FilterButton)
-        self.supprimer.setMinimumSize(QtCore.QSize(50, 50))
-        self.supprimer.setMaximumSize(QtCore.QSize(50, 50))
-        self.supprimer.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.supprimer.setStyleSheet("background-color: rgb(26, 61, 119);\n"
-"border-radius:5px;")
-        self.supprimer.setText("")
+        self.ajouterButton.setFont(font)
+        self.ajouterButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.ajouterButton.setStyleSheet("background-color: rgb(26, 61, 119);\n"
+                                         "border-radius:5px")
+        self.ajouterButton.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icons/delete (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.supprimer.setIcon(icon1)
-        self.supprimer.setIconSize(QtCore.QSize(35, 35))
-        self.supprimer.setCheckable(True)
-        self.supprimer.setObjectName("supprimer")
-        self.horizontalLayout.addWidget(self.supprimer)
-        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem2)
-        self.modifier = QtWidgets.QPushButton(self.FilterButton)
-        self.modifier.setMinimumSize(QtCore.QSize(50, 50))
-        self.modifier.setMaximumSize(QtCore.QSize(50, 50))
+        icon1.addPixmap(QtGui.QPixmap(":/icons/add (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.ajouterButton.setIcon(icon1)
+        self.ajouterButton.setIconSize(QtCore.QSize(35, 35))
+        self.ajouterButton.setCheckable(True)
+        self.ajouterButton.setObjectName("ajouterButton")
+        self.horizontalLayout.addWidget(self.ajouterButton)
+        self.supprimerButton = QtWidgets.QPushButton(self.FilterButton)
+        self.supprimerButton.setMinimumSize(QtCore.QSize(50, 50))
+        self.supprimerButton.setMaximumSize(QtCore.QSize(50, 50))
+        self.supprimerButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.supprimerButton.setStyleSheet("background-color: rgb(26, 61, 119);\n"
+                                           "border-radius:5px;")
+        self.supprimerButton.setText("")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/delete (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.supprimerButton.setIcon(icon2)
+        self.supprimerButton.setIconSize(QtCore.QSize(35, 35))
+        self.supprimerButton.setCheckable(True)
+        self.supprimerButton.setObjectName("supprimerButton")
+        self.horizontalLayout.addWidget(self.supprimerButton)
+        self.modifierButton = QtWidgets.QPushButton(self.FilterButton)
+        self.modifierButton.setMinimumSize(QtCore.QSize(50, 50))
+        self.modifierButton.setMaximumSize(QtCore.QSize(50, 50))
         font = QtGui.QFont()
         font.setPointSize(15)
-        self.modifier.setFont(font)
-        self.modifier.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.modifier.setStyleSheet("background-color: rgb(26, 61, 119);\n"
-"border-radius:5px;")
-        self.modifier.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/icons/compose (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.modifier.setIcon(icon2)
-        self.modifier.setIconSize(QtCore.QSize(35, 35))
-        self.modifier.setCheckable(True)
-        self.modifier.setObjectName("modifier")
-        self.horizontalLayout.addWidget(self.modifier)
-        spacerItem3 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem3)
+        self.modifierButton.setFont(font)
+        self.modifierButton.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.modifierButton.setStyleSheet("background-color: rgb(26, 61, 119);\n"
+                                          "border-radius:5px;")
+        self.modifierButton.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/icons/compose (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.modifierButton.setIcon(icon3)
+        self.modifierButton.setIconSize(QtCore.QSize(35, 35))
+        self.modifierButton.setCheckable(True)
+        self.modifierButton.setObjectName("modifierButton")
+        self.horizontalLayout.addWidget(self.modifierButton)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
 
-
-        self.retranslateUi(gestionnaire)
-        QtCore.QMetaObject.connectSlotsByName(gestionnaire)
-        gestionnaire.showMaximized()
-        self.tableWidget.adjustSize()
+        self.retranslateUi(gestionnaires)
+        QtCore.QMetaObject.connectSlotsByName(gestionnaires)
         self.afficher_tout()
-        self.ajouter.clicked.connect(self.afficherAjouterGest)
-        self.modifier.clicked.connect(self.afficherModifierGest)
+        self.ajouterButton.clicked.connect(self.afficherAjouterGest)
+        self.modifierButton.clicked.connect(self.afficherModifierGest)
+        self.supprimerButton.clicked.connect(self.supprimer_gest)
         self.tableWidget.setColumnWidth(0, 150)
         self.tableWidget.setColumnWidth(1, 350)
         self.tableWidget.setColumnWidth(2, 350)
@@ -170,22 +190,24 @@ class Ui_gestionnaire(object):
         self.tableWidget.setColumnWidth(4, 250)
         self.tableWidget.setColumnWidth(5, 350)
 
-    def retranslateUi(self, gestionnaire):
+    def retranslateUi(self, gestionnaires):
         _translate = QtCore.QCoreApplication.translate
-        gestionnaire.setWindowTitle(_translate("gestionnaire", "membre"))
-        self.label.setText(_translate("gestionnaire", "Gestion Des Gestionnaires"))
+        gestionnaires.setWindowTitle(_translate("gestionnaires", "gestionnaires"))
+        self.label.setText(_translate("gestionnaires", "Gestion Des Gestionnaires"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("gestionnaire", "ID"))
+        item.setText(_translate("gestionnaires", "ID"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("gestionnaire", "Nom"))
+        item.setText(_translate("gestionnaires", "Nom"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("gestionnaire", "Prénom"))
+        item.setText(_translate("gestionnaires", "Prénom"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("gestionnaire", "Email"))
+        item.setText(_translate("gestionnaires", "Email"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("gestionnaire", "N° De Téléphone"))
+        item.setText(_translate("gestionnaires", "N° De Téléphone"))
         item = self.tableWidget.horizontalHeaderItem(5)
-        item.setText(_translate("gestionnaire", "Mot De Passe"))
+        item.setText(_translate("gestionnaires", "Mot De Passe"))
+        self.lineEditRechercher.setPlaceholderText(_translate("gestionnaires", "Saisir l'id du gestionnaire que vous voulez modifier/supprimer"))
+        gestionnaires.showMaximized()
 
     def update_object_list(self):
         self.afficher_tout()
@@ -197,22 +219,16 @@ class Ui_gestionnaire(object):
         self.window.show()
 
     def afficherModifierGest(self):
-        id_modif = self.recherche.text()
+        id_modif = self.lineEditRechercher.text()
         if id_modif == "":
             self.msg = QtWidgets.QMessageBox()
             self.msg.setIcon(QtWidgets.QMessageBox.Information)
             self.msg.setText("Veuillez saisir l'ID.")
             self.msg.setWindowTitle("Erreur")
             self.msg.exec_()
-        elif self.filterdropdown.currentText() != 'ID':
-            self.msg = QtWidgets.QMessageBox()
-            self.msg.setIcon(QtWidgets.QMessageBox.Information)
-            self.msg.setText("La modification se fait uniquement à partir de l'ID.")
-            self.msg.setWindowTitle("Erreur")
-            self.msg.exec_()
         else:
             connection, cursor = connect_to_DB()
-            query = "SELECT * FROM adhérant WHERE ID = %s"
+            query = "SELECT * FROM gestionnaire WHERE gestionnaire_id = %s"
             cursor.execute(query, (id_modif,))
             data = cursor.fetchone()
             if not data:
@@ -223,34 +239,20 @@ class Ui_gestionnaire(object):
                 self.msg.exec_()
                 return
             else:
-                self.window = QtWidgets.QMainWindow()
-                self.ui = Ui_MainWindowModifierMembre(self)
+                self.window = QtWidgets.QDialog()
+                self.ui = Ui_modifierGest(self)
                 self.ui.setupUi(self.window)
-                self.ui.lineEditID.setText(id_modif)
+                self.ui.lineEditNom.setText(id_modif)
                 connection, cursor = connect_to_DB()
-                query = "SELECT nom, prénom, Gender, date_naissance, numéro_téléphone, email , Assuré, Bané FROM adhérant WHERE ID = %s"
+                query = "SELECT nom, prénom, email,numéro_téléphone, mot_de_passe FROM gestionnaire WHERE gestionnaire_id = %s"
                 cursor.execute(query, (id_modif,))
                 data = cursor.fetchone()
                 if data:
-                    self.ui.lineEditNom.setText(data[0])
-                    self.ui.lineEditPrenom.setText(data[1])
-                    self.ui.lineEditNumtlph.setText(data[4])
-                    self.ui.dateEdit.setDate(data[3])
-                    self.ui.lineEditEmail.setText(data[5])
-                    if data[2] == 'M':
-                        self.ui.checkBoxMasculin.setChecked(True)
-                    elif data[2] == 'F':
-                        self.ui.checkBoxFeminin.setChecked(True)
-
-                    if data[6] == 1:
-                        self.ui.checkBoxAssureOui.setChecked(True)
-                    else:
-                        self.ui.checkBoxAssureNon.setChecked(True)
-
-                    if data[7] == 1:
-                        self.ui.checkBoxBanedYes.setChecked(True)
-                    else:
-                        self.ui.checkBoxBannedNo.setChecked(True)
+                    self.ui.lineEditPrenom.setText(data[0])
+                    self.ui.lineEditNumtlph.setText(data[1])
+                    self.ui.lineEditEmail.setText(data[3])
+                    self.ui.lineEditNomUti.setText(data[2])
+                    self.ui.lineEditMDP.setText(data[4])
                 cursor.close()
                 self.window.show()
 
@@ -270,6 +272,30 @@ class Ui_gestionnaire(object):
                     self.tableWidget.resizeColumnsToContents()
             except Exception as e:
                     print("Erreur lors de la récupération des données:", e)
+
+
+    def supprimer_gest(self):
+        connection, cursor = connect_to_DB()
+        supp_id = self.lineEditRechercher.text()
+        if supp_id != "":
+            query = "DELETE FROM gestionnaire WHERE gestionnaire_id = %s"
+            cursor.execute(query, (supp_id,))
+            connection.commit()
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Votre gestionnaire a été supprimé avec succès")
+            self.msg.setWindowTitle("Suppression avec succès")
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.exec_()
+            self.afficher_tout()
+            self.lineEditRechercher.setText("")
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.setText("Veuillez saisir l'id du gestionnaire à supprimer")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
 from gestionnaires import gestionnaire_rc
 
 

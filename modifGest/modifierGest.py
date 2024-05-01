@@ -9,9 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from connexion_DB import connect_to_DB
 
 
 class Ui_modifierGest(object):
+    def __init__(self, main_window):
+        self.main_window = main_window
     def setupUi(self, modifierGest):
         modifierGest.setObjectName("modifierGest")
         modifierGest.resize(876, 567)
@@ -74,6 +77,7 @@ class Ui_modifierGest(object):
         self.lineEditNom.setMinimumSize(QtCore.QSize(0, 35))
         self.lineEditNom.setMaximumSize(QtCore.QSize(16777215, 35))
         self.lineEditNom.setSizeIncrement(QtCore.QSize(0, 0))
+        self.lineEditNom.setReadOnly(True)
         font = QtGui.QFont()
         font.setFamily("Agency FB")
         font.setPointSize(13)
@@ -177,6 +181,30 @@ class Ui_modifierGest(object):
         self.lineEditNomUti.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.lineEditNomUti.setObjectName("lineEditNomUti")
         self.verticalLayout_4.addWidget(self.lineEditNomUti)
+        self.labelMDP = QtWidgets.QLabel(self.widget_6)
+        self.labelMDP.setMaximumSize(QtCore.QSize(16777215, 35))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.labelMDP.setFont(font)
+        self.labelMDP.setStyleSheet("color: rgb(26, 61, 119);")
+        self.labelMDP.setObjectName("labelMDP")
+        self.verticalLayout_4.addWidget(self.labelMDP)
+        self.lineEditMDP = QtWidgets.QLineEdit(self.widget_6)
+        self.lineEditMDP.setMinimumSize(QtCore.QSize(0, 35))
+        self.lineEditMDP.setMaximumSize(QtCore.QSize(16777215, 35))
+        font = QtGui.QFont()
+        font.setFamily("Agency FB")
+        font.setPointSize(13)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lineEditMDP.setFont(font)
+        self.lineEditMDP.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.lineEditMDP.setEchoMode(QtWidgets.QLineEdit.Password)
+        self.lineEditMDP.setObjectName("lineEditMDP")
+        self.verticalLayout_4.addWidget(self.lineEditMDP)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setContentsMargins(10, -1, 10, -1)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -191,9 +219,9 @@ class Ui_modifierGest(object):
         self.pushButtonSave.setFont(font)
         self.pushButtonSave.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButtonSave.setStyleSheet("background-color: rgb(35, 84, 209);\n"
-"color: rgb(252, 252, 252);\n"
-"border-radius:5px;\n"
-"")
+                                          "color: rgb(252, 252, 252);\n"
+                                          "border-radius:5px;\n"
+                                          "")
         self.pushButtonSave.setCheckable(True)
         self.pushButtonSave.setObjectName("pushButtonSave")
         self.horizontalLayout_3.addWidget(self.pushButtonSave)
@@ -208,8 +236,8 @@ class Ui_modifierGest(object):
         self.pushButtonAnnuler.setFont(font)
         self.pushButtonAnnuler.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButtonAnnuler.setStyleSheet("background-color: rgb(255, 93, 93);\n"
-"border-radius:5px;\n"
-"color: rgb(252, 252, 252);")
+                                             "border-radius:5px;\n"
+                                             "color: rgb(252, 252, 252);")
         self.pushButtonAnnuler.setCheckable(True)
         self.pushButtonAnnuler.setObjectName("pushButtonAnnuler")
         self.horizontalLayout_3.addWidget(self.pushButtonAnnuler)
@@ -224,31 +252,54 @@ class Ui_modifierGest(object):
 
         self.retranslateUi(modifierGest)
         QtCore.QMetaObject.connectSlotsByName(modifierGest)
+        self.pushButtonSave.clicked.connect(self.modifier_Gest)
 
     def retranslateUi(self, modifierGest):
         _translate = QtCore.QCoreApplication.translate
         modifierGest.setWindowTitle(_translate("modifierGest", "modifierGest"))
         self.label.setText(_translate("modifierGest", "Modifier un Gestionnaire"))
-        self.labelNom.setText(_translate("modifierGest", "Nom"))
-        self.lineEditNom.setPlaceholderText(_translate("modifierGest", "Nom"))
-        self.labelPrenom.setText(_translate("modifierGest", "Prénom"))
-        self.lineEditPrenom.setPlaceholderText(_translate("modifierGest", "Prénom"))
-        self.labelNumTel.setText(_translate("modifierGest", "Numéro de téléphone"))
-        self.lineEditNumtlph.setPlaceholderText(_translate("modifierGest", "Numéro de téléphone"))
-        self.labelEmail.setText(_translate("modifierGest", " E-mail"))
-        self.lineEditEmail.setPlaceholderText(_translate("modifierGest", " E-mail"))
-        self.labelNomUtil.setText(_translate("modifierGest", "Mot de passe"))
-        self.lineEditNomUti.setPlaceholderText(_translate("modifierGest", "Mot de passe"))
+        self.labelNom.setText(_translate("modifierGest", "ID"))
+        self.lineEditNom.setPlaceholderText(_translate("modifierGest", "ID"))
+        self.labelPrenom.setText(_translate("modifierGest", "Nom"))
+        self.lineEditPrenom.setPlaceholderText(_translate("modifierGest", "Nom"))
+        self.labelNumTel.setText(_translate("modifierGest", "Prénom"))
+        self.lineEditNumtlph.setPlaceholderText(_translate("modifierGest", "Prénom"))
+        self.labelEmail.setText(_translate("modifierGest", "Numéro de téléphone"))
+        self.lineEditEmail.setPlaceholderText(_translate("modifierGest", "Numéro de téléphone"))
+        self.labelNomUtil.setText(_translate("modifierGest", "E-mail"))
+        self.lineEditNomUti.setPlaceholderText(_translate("modifierGest", "E-mail"))
+        self.labelMDP.setText(_translate("modifierGest", "Mot de passe"))
+        self.lineEditMDP.setPlaceholderText(_translate("modifierGest", "Mot de passe"))
         self.pushButtonSave.setText(_translate("modifierGest", "Enregistrer"))
         self.pushButtonAnnuler.setText(_translate("modifierGest", "Annuler"))
-import modifierGest_rc
+
+    def modifier_Gest(self):
+        id_membre = self.lineEditNom.text()
+        connection, cursor = connect_to_DB()
+        nom = self.lineEditPrenom.text()
+        prenom = self.lineEditNumtlph.text()
+        num_telephone = self.lineEditEmail.text()
+        mdp = self.lineEditMDP.text()
+        email = self.lineEditNomUti.text()
+        query = "UPDATE gestionnaire SET nom = %s, prénom = %s, email = %s, numéro_téléphone = %s, mot_de_passe = %s WHERE gestionnaire_id = %s"
+        values = (nom, prenom, email, num_telephone, mdp,id_membre)
+        cursor.execute(query, values)
+        connection.commit()
+        self.main_window.update_object_list()
+        self.msg = QtWidgets.QMessageBox()
+        self.msg.setIcon(QtWidgets.QMessageBox.Information)
+        self.msg.setText("La modification a terminé avec succès")
+        self.msg.setWindowTitle("Success")
+        self.msg.exec_()
+
+from modifGest import modifierGest_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     modifierGest = QtWidgets.QDialog()
-    ui = Ui_modifierGest()
+    ui = Ui_modifierGest(QtWidgets)
     ui.setupUi(modifierGest)
     modifierGest.show()
     sys.exit(app.exec_())

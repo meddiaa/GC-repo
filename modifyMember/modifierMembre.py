@@ -353,7 +353,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindowModifierMembre = QtWidgets.QMainWindow()
-    ui = Ui_MainWindowModifierMembre()
+    ui = Ui_MainWindowModifierMembre(QtWidgets)
     ui.setupUi(MainWindowModifierMembre)
     MainWindowModifierMembre.show()
     sys.exit(app.exec_())

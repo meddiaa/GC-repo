@@ -226,6 +226,7 @@ class Ui_coaches(object):
         self.tableWidget.setColumnWidth(6, 150)
         self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
         self.ajouter.clicked.connect(self.afficherAjouterCoach)
+        self.supprimer.clicked.connect(self.supprimer_coach)
 
     def update_object_list(self):
         self.afficher_tout()
@@ -327,6 +328,32 @@ class Ui_coaches(object):
                             item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
                             item.setFont(QtGui.QFont("Arial", 15))
                             self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+    def supprimer_coach(self):
+        critere_id = self.filterdropdown.currentText()
+        supp_id = self.recherche.text()
+        if critere_id == "ID" and supp_id != "":
+            connection, cursor = connect_to_DB()
+            query = "DELETE FROM coach_sport WHERE id_coach = %s"
+            cursor.execute(query, (supp_id,))
+            query = "DELETE FROM coach WHERE id_coach = %s"
+            cursor.execute(query, (supp_id,))
+            connection.commit()
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Votre coach a été supprimé avec succès")
+            self.msg.setWindowTitle("Suppression avec succès")
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.exec_()
+            self.afficher_tout()
+            self.recherche.setText("")
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.setText("Veuillez supprimer un coach par son ID uniquement.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
 
 from lesCoaches import coaches_rc
 

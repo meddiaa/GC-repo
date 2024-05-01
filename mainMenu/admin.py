@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from objetsPerdues.objetsPerdues import Ui_MainWindowObjetsPerdues
+from objetsPerdues.affich_objetsPerdues import Ui_MainWindowObjetsPerdues
 from stats.statistiques import Ui_MainWindowStats
 from rhMenu.rh import UI_MainWindowRh
 from financeClub.finance import Ui_MainWindowFinance

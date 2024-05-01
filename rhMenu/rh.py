@@ -9,32 +9,23 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-<<<<<<< HEAD
 from lesCoaches.coaches import Ui_coaches
 from gestionnaires.gestionnaire import Ui_gestionnaire
 from lesMembres.membres import Ui_membres
+
+
 class UI_MainWindowRh(object):
     def setupUi(self, MainWindowRh):
         MainWindowRh.setObjectName("MainWindowRh")
         MainWindowRh.resize(1045, 526)
         MainWindowRh.setStyleSheet("")
         self.centralwidget = QtWidgets.QWidget(MainWindowRh)
-=======
-
-
-class Ui_MainWindowGest(object):
-    def setupUi(self, MainWindowGest):
-        MainWindowGest.setObjectName("MainWindowGest")
-        MainWindowGest.resize(1045, 526)
-        MainWindowGest.setStyleSheet("")
-        self.centralwidget = QtWidgets.QWidget(MainWindowGest)
->>>>>>> cf83a7a3f8b58d42bb5b5517c74df45d699006da
         self.centralwidget.setStyleSheet("QWidget #centralwidget\n"
-"{\n"
-"border-image: url(:/background/image 1.png) 0 0 0 0 stretch stretch;\n"
-"border-color: rgb(26, 61, 119);\n"
-"border: solid 10px;\n"
-"}")
+                                         "{\n"
+                                         "border-image: url(:/background/image 1.png) 0 0 0 0 stretch stretch;\n"
+                                         "border-color: rgb(26, 61, 119);\n"
+                                         "border: solid 10px;\n"
+                                         "}")
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_8 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_8.setSpacing(0)
@@ -53,7 +44,7 @@ class Ui_MainWindowGest(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setStyleSheet("color: rgb(26, 61, 119);\n"
-"                                        ")
+                                 "                                        ")
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.verticalLayout_2.addWidget(self.label)
@@ -83,9 +74,9 @@ class Ui_MainWindowGest(object):
         self.pushButtonMembres.setFont(font)
         self.pushButtonMembres.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButtonMembres.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
+                                             "                                                    border-top:2px solid;\n"
+                                             "                                                    border-color:rgb(26, 61, 119)\n"
+                                             "                                                ")
         self.pushButtonMembres.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/membres 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -109,9 +100,9 @@ class Ui_MainWindowGest(object):
         self.pushButtonCoaches.setFont(font)
         self.pushButtonCoaches.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButtonCoaches.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
+                                             "                                                    border-top:2px solid;\n"
+                                             "                                                    border-color:rgb(26, 61, 119)\n"
+                                             "                                                ")
         self.pushButtonCoaches.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/icons/coaches 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -135,9 +126,9 @@ class Ui_MainWindowGest(object):
         self.pushButtonGest.setFont(font)
         self.pushButtonGest.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.pushButtonGest.setStyleSheet("border-radius: 10px;\n"
-"                                                    border-top:2px solid;\n"
-"                                                    border-color:rgb(26, 61, 119)\n"
-"                                                ")
+                                          "                                                    border-top:2px solid;\n"
+                                          "                                                    border-color:rgb(26, 61, 119)\n"
+                                          "                                                ")
         self.pushButtonGest.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/icons/gestionnaire 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -148,7 +139,6 @@ class Ui_MainWindowGest(object):
         self.horizontalLayout_2.addWidget(self.pushButtonGest)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.verticalLayout_8.addWidget(self.widget)
-<<<<<<< HEAD
         self.pushButtonCoaches.clicked.connect(self.afficherCoaches)
         self.pushButtonGest.clicked.connect(self.afficherGestionnaire)
         self.pushButtonMembres.clicked.connect(self.afficherMembres)
@@ -157,56 +147,39 @@ class Ui_MainWindowGest(object):
         self.retranslateUi(MainWindowRh)
         QtCore.QMetaObject.connectSlotsByName(MainWindowRh)
         MainWindowRh.showMaximized()
-        
+
     def retranslateUi(self, MainWindowRh):
         _translate = QtCore.QCoreApplication.translate
         MainWindowRh.setWindowTitle(_translate("MainWindowRh", "MainWindow"))
         self.label.setText(_translate("MainWindowRh", "Ressources Humaines"))
 
     def afficherCoaches(self):
-            self.window = QtWidgets.QWidget()
-            self.ui = Ui_coaches()
-            self.ui.setupUi(self.window)
-            self.window.show()
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_coaches()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def afficherGestionnaire(self):
-            self.window = QtWidgets.QWidget()
-            self.ui = Ui_gestionnaire()
-            self.ui.setupUi(self.window)
-            self.window.show()
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_gestionnaire()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def afficherMembres(self):
-            self.window = QtWidgets.QWidget()
-            self.ui = Ui_membres()
-            self.ui.setupUi(self.window)
-            self.window.show()
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_membres()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+
 from rhMenu import rh_rc
-=======
-        MainWindowGest.setCentralWidget(self.centralwidget)
-
-        self.retranslateUi(MainWindowGest)
-        QtCore.QMetaObject.connectSlotsByName(MainWindowGest)
-
-    def retranslateUi(self, MainWindowGest):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindowGest.setWindowTitle(_translate("MainWindowGest", "MainWindow"))
-        self.label.setText(_translate("MainWindowGest", "Ressources Humaines"))
-import rh_rc
->>>>>>> cf83a7a3f8b58d42bb5b5517c74df45d699006da
-
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
-<<<<<<< HEAD
     MainWindowRh = QtWidgets.QMainWindow()
     ui = UI_MainWindowRh()
     ui.setupUi(MainWindowRh)
     MainWindowRh.show()
-=======
-    MainWindowGest = QtWidgets.QMainWindow()
-    ui = Ui_MainWindowGest()
-    ui.setupUi(MainWindowGest)
-    MainWindowGest.show()
->>>>>>> cf83a7a3f8b58d42bb5b5517c74df45d699006da
     sys.exit(app.exec_())

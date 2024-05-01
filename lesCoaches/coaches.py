@@ -10,6 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
+from addCoach.ajouterCoach import Ui_Dialog
 from connexion_DB import connect_to_DB
 
 
@@ -224,6 +225,16 @@ class Ui_coaches(object):
         self.tableWidget.setColumnWidth(5, 350)
         self.tableWidget.setColumnWidth(6, 150)
         self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+        self.ajouter.clicked.connect(self.afficherAjouterCoach)
+
+    def update_object_list(self):
+        self.afficher_tout()
+
+    def afficherAjouterCoach(self):
+        self.window = QtWidgets.QDialog()
+        self.ui = Ui_Dialog(self)
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def retranslateUi(self, coaches):
         _translate = QtCore.QCoreApplication.translate

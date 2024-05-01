@@ -9,9 +9,13 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from connexion_DB import connect_to_DB
+import sys
 
 
 class Ui_Dialog(object):
+    def __init__(self, main_window):
+        self.main_window = main_window
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(1063, 580)
@@ -342,6 +346,7 @@ class Ui_Dialog(object):
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.pushButtonSave.clicked.connect(self.add_Coach)
 
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
@@ -367,14 +372,62 @@ class Ui_Dialog(object):
         self.lineEditNumsec.setPlaceholderText(_translate("Dialog", " Numéro de sécurité sociale"))
         self.pushButtonSave.setText(_translate("Dialog", "Enregistrer"))
         self.pushButtonAnnuler.setText(_translate("Dialog", "Annuler"))
-import ajouterCoach_rc
+
+    def add_Coach(self):
+        username = self.lineEditNom.text()
+        familyName = self.lineEditPrenom.text()
+        date_naissance = self.dateEdit.date().toString("yyyy-MM-dd")
+        num_tlphn = self.lineEditNumtlph.text()
+        sexe = ""
+        if self.checkBoxMasculin.isChecked():
+            sexe = "M"
+        elif self.checkBoxFeminin.isChecked():
+            sexe = "F"
+        if username == "" or familyName == "" or num_tlphn == "" or date_naissance == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Veuillez Saisir Les Champs Obligatoires (Nom, Prénom , Date de naissance et Numéro de téléphone )")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.insertDb(username, familyName, date_naissance, num_tlphn, sexe):
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Coach Ajouté avec succés")
+            self.msg.setWindowTitle("Succès")
+            self.msg.exec_()
+            self.main_window.update_object_list()
+            self.lineEditNom.setText("")
+            self.lineEditPrenom.setText("")
+            self.lineEditEmail.setText("")
+            self.dateEdit.setDate(QtCore.QDate.currentDate())
+            self.lineEditNumtlph.setText("")
+            self.lineEditContactUrgence.setText("")
+            self.lineEditNumsec.setText("")
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Insertion Echouée")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+
+    def insertDb(self, username, familyName, date_naissance, num_tlphn,sexe):
+        connection, cursor = connect_to_DB()
+        cursor.execute("SELECT MAX(id_coach) FROM coach")
+        last_id = cursor.fetchone()[0]
+        new_id = last_id + 1
+        query = "INSERT INTO coach (id_coach, nom, prénom, date_naissance , numéro_tel,Gender) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (new_id, username, familyName, date_naissance, num_tlphn, sexe)
+        cursor.execute(query, values)
+        connection.commit()
+        cursor.close()
+        return True
+from addCoach import ajouterCoach_rc
 
 
 if __name__ == "__main__":
-    import sys
     app = QtWidgets.QApplication(sys.argv)
-    Dialog = QtWidgets.QDialog()
-    ui = Ui_Dialog()
-    ui.setupUi(Dialog)
-    Dialog.show()
-    sys.exit(app.exec_())
+    Dialog = QtWidgets.QDialog()  # Create the main dialog window
+    ui = Ui_Dialog(Dialog)  # Pass the required main_window argument
+    ui.setupUi(Dialog)  # Set up the user interface
+    Dialog.show()  # Show the dialog window
+    sys.exit(app.exec_())  # Start the application loop

@@ -9,9 +9,12 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from connexion_DB import connect_to_DB
+import sys
 
 class Ui_ajouterGest(object):
+    def __init__(self, main_window):
+        self.main_window = main_window
     def setupUi(self, ajouterGest):
         ajouterGest.setObjectName("ajouterGest")
         ajouterGest.resize(904, 672)
@@ -197,11 +200,6 @@ class Ui_ajouterGest(object):
         font.setPointSize(13)
         font.setBold(True)
         font.setWeight(75)
-        self.lineEditMDP.setFont(font)
-        self.lineEditMDP.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.lineEditMDP.setEchoMode(QtWidgets.QLineEdit.Password)
-        self.lineEditMDP.setObjectName("lineEditMDP")
-        self.verticalLayout_4.addWidget(self.lineEditMDP)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setContentsMargins(10, -1, 10, -1)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
@@ -249,6 +247,7 @@ class Ui_ajouterGest(object):
 
         self.retranslateUi(ajouterGest)
         QtCore.QMetaObject.connectSlotsByName(ajouterGest)
+        self.pushButtonSave.clicked.connect(self.add_Gest)
 
     def retranslateUi(self, ajouterGest):
         _translate = QtCore.QCoreApplication.translate
@@ -262,20 +261,61 @@ class Ui_ajouterGest(object):
         self.lineEditNumtlph.setPlaceholderText(_translate("ajouterGest", "Numéro de téléphone"))
         self.labelEmail.setText(_translate("ajouterGest", " E-mail"))
         self.lineEditEmail.setPlaceholderText(_translate("ajouterGest", " E-mail"))
-        self.labelNomUtil.setText(_translate("ajouterGest", "Nom d\'Utilisateur"))
-        self.lineEditNomUti.setPlaceholderText(_translate("ajouterGest", "Nom d\'Utilisateur"))
-        self.labelMDP.setText(_translate("ajouterGest", "Mot de passe"))
-        self.lineEditMDP.setPlaceholderText(_translate("ajouterGest", "Mot de passe"))
+        self.labelNomUtil.setText(_translate("ajouterGest", "Mot de passe"))
+        self.lineEditNomUti.setPlaceholderText(_translate("ajouterGest", "Mot de passe"))
         self.pushButtonSave.setText(_translate("ajouterGest", "Enregistrer"))
         self.pushButtonAnnuler.setText(_translate("ajouterGest", "Annuler"))
-import ajouterGest_rc
+
+    def add_Gest(self):
+        username = self.lineEditNom.text()
+        familyName = self.lineEditPrenom.text()
+        num_tlphn = self.lineEditNumtlph.text()
+        email = self.lineEditEmail.text()
+        mdp = self.lineEditNomUti.text()
+        if username == "" or familyName == "" or num_tlphn == "" or email == "" or mdp == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Veuillez Saisir Les Champs Obligatoires")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.insertDb(username, familyName, email, num_tlphn, mdp):
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Gestionnaire Ajouté avec succés")
+            self.msg.setWindowTitle("Succès")
+            self.msg.exec_()
+            self.main_window.update_object_list()
+            self.lineEditNom.setText("")
+            self.lineEditPrenom.setText("")
+            self.lineEditEmail.setText("")
+            self.lineEditNumtlph.setText("")
+            self.lineEditNomUti.setText("")
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Critical)
+            self.msg.setText("Insertion Echouée")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+
+    def insertDb(self, username, familyName, email, num_tlphn,mdp):
+        connection, cursor = connect_to_DB()
+        cursor.execute("SELECT MAX(gestionnaire_id) FROM gestionnaire")
+        last_id = cursor.fetchone()[0]
+        new_id = last_id + 1
+        query = "INSERT INTO gestionnaire (gestionnaire_id, nom, prénom, email , numéro_téléphone,mot_de_passe) VALUES (%s, %s, %s, %s, %s, %s)"
+        values = (new_id, username, familyName, email, num_tlphn, mdp)
+        cursor.execute(query, values)
+        connection.commit()
+        cursor.close()
+        return True
+from addGest import ajouterGest_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     ajouterGest = QtWidgets.QDialog()
-    ui = Ui_ajouterGest()
+    ui = Ui_ajouterGest(QtWidgets)
     ui.setupUi(ajouterGest)
     ajouterGest.show()
     sys.exit(app.exec_())

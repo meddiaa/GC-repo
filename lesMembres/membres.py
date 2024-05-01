@@ -314,9 +314,8 @@ class Ui_membres(object):
                 return
             else:
                 self.window = QtWidgets.QMainWindow()
-                self.ui = Ui_MainWindowModifierMembre()
+                self.ui = Ui_MainWindowModifierMembre(self)
                 self.ui.setupUi(self.window)
-                #self.afficher_adhérant_info(id_modif)
                 self.ui.lineEditID.setText(id_modif)
                 connection, cursor = connect_to_DB()
                 query = "SELECT nom, prénom, Gender, date_naissance, numéro_téléphone, email , Assuré, Bané FROM adhérant WHERE ID = %s"

@@ -147,12 +147,14 @@ class Ui_membres(object):
 "border-radius:10px;\n"
 "border-color: solid rgb(255, 255, 255);")
         self.PrixTotal.setText("")
+        self.PrixTotal.setReadOnly(True)
         self.PrixTotal.setEchoMode(QtWidgets.QLineEdit.Normal)
         self.PrixTotal.setReadOnly(True)
         self.PrixTotal.setObjectName("PrixTotal")
         self.horizontalLayout.addWidget(self.PrixTotal)
         self.verticalLayout.addWidget(self.widget)
         self.gridLayout.addWidget(self.table, 1, 0, 1, 1)
+
 
         self.retranslateUi(membres)
         QtCore.QMetaObject.connectSlotsByName(membres)

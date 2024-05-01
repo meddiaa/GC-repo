@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from connexion_DB import connect_to_DB
+from addGest.ajouterGest import Ui_ajouterGest
 
 
 class Ui_gestionnaire(object):
@@ -153,10 +155,20 @@ class Ui_gestionnaire(object):
         self.horizontalLayout.addItem(spacerItem3)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
 
+
         self.retranslateUi(gestionnaire)
         QtCore.QMetaObject.connectSlotsByName(gestionnaire)
         gestionnaire.showMaximized()
         self.tableWidget.adjustSize()
+        self.afficher_tout()
+        self.ajouter.clicked.connect(self.afficherAjouterGest)
+        self.modifier.clicked.connect(self.afficherModifierGest)
+        self.tableWidget.setColumnWidth(0, 150)
+        self.tableWidget.setColumnWidth(1, 350)
+        self.tableWidget.setColumnWidth(2, 350)
+        self.tableWidget.setColumnWidth(3, 400)
+        self.tableWidget.setColumnWidth(4, 250)
+        self.tableWidget.setColumnWidth(5, 350)
 
     def retranslateUi(self, gestionnaire):
         _translate = QtCore.QCoreApplication.translate
@@ -169,11 +181,95 @@ class Ui_gestionnaire(object):
         item = self.tableWidget.horizontalHeaderItem(2)
         item.setText(_translate("gestionnaire", "Prénom"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("gestionnaire", "N° De Téléphone"))
+        item.setText(_translate("gestionnaire", "Email"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("gestionnaire", "Nom d\'Utilisateur"))
+        item.setText(_translate("gestionnaire", "N° De Téléphone"))
         item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("gestionnaire", "Mot De Passe"))
+
+    def update_object_list(self):
+        self.afficher_tout()
+
+    def afficherAjouterGest(self):
+        self.window = QtWidgets.QDialog()
+        self.ui = Ui_ajouterGest(self)
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+    def afficherModifierGest(self):
+        id_modif = self.recherche.text()
+        if id_modif == "":
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Veuillez saisir l'ID.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        elif self.filterdropdown.currentText() != 'ID':
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("La modification se fait uniquement à partir de l'ID.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+        else:
+            connection, cursor = connect_to_DB()
+            query = "SELECT * FROM adhérant WHERE ID = %s"
+            cursor.execute(query, (id_modif,))
+            data = cursor.fetchone()
+            if not data:
+                self.msg = QtWidgets.QMessageBox()
+                self.msg.setIcon(QtWidgets.QMessageBox.Warning)
+                self.msg.setText(f"L'ID {id_modif} n'existe pas.")
+                self.msg.setWindowTitle("Erreur")
+                self.msg.exec_()
+                return
+            else:
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_MainWindowModifierMembre(self)
+                self.ui.setupUi(self.window)
+                self.ui.lineEditID.setText(id_modif)
+                connection, cursor = connect_to_DB()
+                query = "SELECT nom, prénom, Gender, date_naissance, numéro_téléphone, email , Assuré, Bané FROM adhérant WHERE ID = %s"
+                cursor.execute(query, (id_modif,))
+                data = cursor.fetchone()
+                if data:
+                    self.ui.lineEditNom.setText(data[0])
+                    self.ui.lineEditPrenom.setText(data[1])
+                    self.ui.lineEditNumtlph.setText(data[4])
+                    self.ui.dateEdit.setDate(data[3])
+                    self.ui.lineEditEmail.setText(data[5])
+                    if data[2] == 'M':
+                        self.ui.checkBoxMasculin.setChecked(True)
+                    elif data[2] == 'F':
+                        self.ui.checkBoxFeminin.setChecked(True)
+
+                    if data[6] == 1:
+                        self.ui.checkBoxAssureOui.setChecked(True)
+                    else:
+                        self.ui.checkBoxAssureNon.setChecked(True)
+
+                    if data[7] == 1:
+                        self.ui.checkBoxBanedYes.setChecked(True)
+                    else:
+                        self.ui.checkBoxBannedNo.setChecked(True)
+                cursor.close()
+                self.window.show()
+
+    def afficher_tout(self):
+            connection, cursor = connect_to_DB()
+            self.tableWidget.setRowCount(0)
+            query = "SELECT * FROM gestionnaire"
+            try:
+                    cursor.execute(query)
+                    results = cursor.fetchall()
+                    for row_index, row_data in enumerate(results):
+                            self.tableWidget.insertRow(row_index)
+                            for col_index, data in enumerate(row_data):
+                                    item = QtWidgets.QTableWidgetItem(str(data))
+                                    item.setFont(QtGui.QFont("Arial", 15))
+                                    self.tableWidget.setItem(row_index, col_index, item)
+                    self.tableWidget.resizeColumnsToContents()
+            except Exception as e:
+                    print("Erreur lors de la récupération des données:", e)
 from gestionnaires import gestionnaire_rc
 
 

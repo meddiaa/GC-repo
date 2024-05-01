@@ -12,6 +12,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from connexion_DB import connect_to_DB
 
 class Ui_MainWindowModifierMembre(object):
+    def __init__(self, main_window):
+        self.main_window = main_window
     def setupUi(self, MainWindowModifierMembre):
         MainWindowModifierMembre.setObjectName("MainWindowModifierMembre")
         MainWindowModifierMembre.resize(1060, 780)
@@ -338,12 +340,13 @@ class Ui_MainWindowModifierMembre(object):
         values = (nom, prenom, date_naissance, num_telephone, sexe, assure, bane, id_membre)
         cursor.execute(query, values)
         connection.commit()
+        self.main_window.update_object_list()
         self.msg = QtWidgets.QMessageBox()
         self.msg.setIcon(QtWidgets.QMessageBox.Information)
         self.msg.setText("La modification a terminé avec succès")
         self.msg.setWindowTitle("Success")
         self.msg.exec_()
-import res_rc
+from modifyMember import res_rc
 
 
 if __name__ == "__main__":

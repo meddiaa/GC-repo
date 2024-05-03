@@ -224,7 +224,7 @@ class Ui_ajouterAbonnement(object):
         self.dropdownOffre.setItemText(0, _translate("ajouterAbonnement", "Choisir"))
         self.pushButtonSave.setText(_translate("ajouterAbonnement", "Enregistrer"))
         self.pushButtonAnnuler.setText(_translate("ajouterAbonnement", "Annuler"))
-import ajouterAbonnement_rc
+from addAbonnement import ajouterAbonnement_rc
 
 
 if __name__ == "__main__":

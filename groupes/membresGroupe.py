@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file '.\groupes.ui'
+# Form implementation generated from reading ui file 'membresGroupe.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -9,12 +9,18 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import mysql.connector
+from ajouterMembreGroupe import Ui_ajouterMembreGroupe
+from connexion_DB import connect_to_DB
+
+class Ui_Groupe(object):
+    def __init__(self, ID_groupe):
+        self.ID_groupe = ID_groupe
 
 
-class Ui_Groupes(object):
     def setupUi(self, Groupes):
         Groupes.setObjectName("Groupes")
-        Groupes.resize(1373, 576)
+        Groupes.resize(1400, 600)
         Groupes.setStyleSheet("background-color: rgb(210, 210, 210);")
         self.gridLayout = QtWidgets.QGridLayout(Groupes)
         self.gridLayout.setObjectName("gridLayout")
@@ -65,7 +71,7 @@ class Ui_Groupes(object):
         self.tableWidget.setShowGrid(True)
         self.tableWidget.setCornerButtonEnabled(True)
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(5)
+        self.tableWidget.setColumnCount(6)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -77,6 +83,8 @@ class Ui_Groupes(object):
         self.tableWidget.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(5, item)
         self.tableWidget.horizontalHeader().setVisible(True)
         self.tableWidget.horizontalHeader().setCascadingSectionResizes(False)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(191)
@@ -113,6 +121,8 @@ class Ui_Groupes(object):
         self.filterdropdown.addItem("")
         self.filterdropdown.addItem("")
         self.filterdropdown.addItem("")
+        self.filterdropdown.addItem("")
+        self.filterdropdown.addItem("")
         self.horizontalLayout.addWidget(self.filterdropdown)
         spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
@@ -143,7 +153,7 @@ class Ui_Groupes(object):
 "border:1px solid rgb(26, 61, 119);")
         self.searchButton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icons/loupe.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/Icons/loupe.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.searchButton.setIcon(icon)
         self.searchButton.setIconSize(QtCore.QSize(20, 20))
         self.searchButton.setCheckable(True)
@@ -162,7 +172,7 @@ class Ui_Groupes(object):
 "border-radius:5px")
         self.ajouter.setText("")
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icons/add (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/Icons/add (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.ajouter.setIcon(icon1)
         self.ajouter.setIconSize(QtCore.QSize(35, 35))
         self.ajouter.setCheckable(True)
@@ -178,7 +188,7 @@ class Ui_Groupes(object):
 "border-radius:5px;")
         self.supprimer.setText("")
         icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/icons/delete (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon2.addPixmap(QtGui.QPixmap(":/Icons/delete (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.supprimer.setIcon(icon2)
         self.supprimer.setIconSize(QtCore.QSize(35, 35))
         self.supprimer.setCheckable(True)
@@ -186,58 +196,161 @@ class Ui_Groupes(object):
         self.horizontalLayout.addWidget(self.supprimer)
         spacerItem4 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem4)
-        self.modifier = QtWidgets.QPushButton(self.FilterButton)
-        self.modifier.setMinimumSize(QtCore.QSize(50, 50))
-        self.modifier.setMaximumSize(QtCore.QSize(50, 50))
-        font = QtGui.QFont()
-        font.setPointSize(15)
-        self.modifier.setFont(font)
-        self.modifier.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.modifier.setStyleSheet("background-color: rgb(26, 61, 119);\n"
-"border-radius:5px;")
-        self.modifier.setText("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/icons/compose (1).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.modifier.setIcon(icon3)
-        self.modifier.setIconSize(QtCore.QSize(35, 35))
-        self.modifier.setCheckable(True)
-        self.modifier.setObjectName("modifier")
-        self.horizontalLayout.addWidget(self.modifier)
+
         spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem5)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
 
         self.retranslateUi(Groupes)
         QtCore.QMetaObject.connectSlotsByName(Groupes)
+        self.affichage_membres()
+        self.searchButton.clicked.connect(self.rechercher)
+        self.supprimer.clicked.connect(self.suppression)
+        self.ajouter.clicked.connect(self.ouverture_page_ajout_membre)
+
+    def ouverture_page_ajout_membre(self):
+        self.Groupemembres = QtWidgets.QWidget()
+        self.ui2 = Ui_ajouterMembreGroupe(self.ID_groupe)
+        self.ui2.setupUi(self.Groupemembres)
+        self.Groupemembres.show()
 
     def retranslateUi(self, Groupes):
         _translate = QtCore.QCoreApplication.translate
-        Groupes.setWindowTitle(_translate("Groupes", "groupes"))
-        self.label.setText(_translate("Groupes", "Gestion Des Groupes"))
+        Groupes.setWindowTitle(_translate("Groupes", "membresGroupe"))
+        self.label.setText(_translate("Groupes", "Membres Du Groupe " + self.ID_groupe))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Groupes", "ID"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("Groupes", "Sexe"))
+        item.setText(_translate("Groupes", "Nom"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("Groupes", "Sport"))
+        item.setText(_translate("Groupes", "Prenom"))
         item = self.tableWidget.horizontalHeaderItem(3)
-        item.setText(_translate("Groupes", "Tranche d\'Age"))
+        item.setText(_translate("Groupes", "Sexe"))
         item = self.tableWidget.horizontalHeaderItem(4)
-        item.setText(_translate("Groupes", "Echelle De Poids"))
+        item.setText(_translate("Groupes", "Age"))
+        item = self.tableWidget.horizontalHeaderItem(5)
+        item.setText(_translate("Groupes", "Poids"))
         self.filterdropdown.setItemText(0, _translate("Groupes", "choisir"))
         self.filterdropdown.setItemText(1, _translate("Groupes", "ID"))
-        self.filterdropdown.setItemText(2, _translate("Groupes", "Sport"))
-        self.filterdropdown.setItemText(3, _translate("Groupes", "Tranche d\'Age"))
-        self.filterdropdown.setItemText(4, _translate("Groupes", "Echelle de Poids"))
+        self.filterdropdown.setItemText(2, _translate("Groupes", "Nom"))
+        self.filterdropdown.setItemText(3, _translate("Groupes", "Prenom"))
+        self.filterdropdown.setItemText(4, _translate("Groupes", "Sexe"))
+        self.filterdropdown.setItemText(5, _translate("Groupes", "Age"))
+        self.filterdropdown.setItemText(6, _translate("Groupes", "Poids"))
         self.recherche.setText(_translate("Groupes", "rechercher"))
-import groupes_rc
+
+    def affichage_membres(self):
+        connection, cursor = connect_to_DB()
+
+        query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s;"
+        cursor.execute(query,(self.ID_groupe,))
+        data = cursor.fetchall()
+        self.tableWidget.clearContents()
+        self.tableWidget.setRowCount(0)
+        for numero_ligne, donnees_ligne in enumerate(data):
+            self.tableWidget.insertRow(numero_ligne)
+            for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                item.setFont(QtGui.QFont("Arial", 15))
+                self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+    def rechercher(self):
+        connection, cursor = connect_to_DB()
+
+        critere_rech = self.filterdropdown.currentText()
+        texte_rech = self.recherche.text()
+        try:
+            try:
+                if critere_rech == "ID":
+                    query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s and ID = %s;"
+                    cursor.execute(query,(self.ID_groupe,texte_rech,))
+                elif critere_rech == "Nom":
+                    query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s and nom = %s;"
+                    cursor.execute(query, (self.ID_groupe, texte_rech,))
+                elif critere_rech == "Prenom":
+                    query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s and prénom = %s;"
+                    cursor.execute(query, (self.ID_groupe, texte_rech,))
+                elif critere_rech == "Sexe":
+                    query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s and sexe = %s;"
+                    cursor.execute(query, (self.ID_groupe, texte_rech,))
+                elif critere_rech == "Age":
+                    query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s and age = %s;"
+                    cursor.execute(query, (self.ID_groupe, texte_rech,))
+                elif critere_rech == "Poids":
+                    query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s and poids = %s;"
+                    cursor.execute(query, (self.ID_groupe, texte_rech,))
+            finally:
+                  data = cursor.fetchall()
+                  self.tableWidget.clearContents()
+                  self.tableWidget.setRowCount(0)
+                  for numero_ligne, donnees_ligne in enumerate(data):
+                      self.tableWidget.insertRow(numero_ligne)
+                      for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                           item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                           item.setFont(QtGui.QFont("Arial", 15))
+                           self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+        except Exception :
+
+            self.msg2 = QtWidgets.QMessageBox()
+            self.msg2.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg2.setWindowTitle("erreur")
+            self.msg2.setText("Attention : veuillez saisir un critere de recherche")
+            self.msg2.exec_()
+            query = "SELECT ID,nom,prénom,Gender,age,groupes_adhérants.poids FROM groupes_adhérants right join adhérant on id_adhérant=ID where id_adhérant=ID and id_groupe = %s;"
+            cursor.execute(query,(self.ID_groupe,))
+            data = cursor.fetchall()
+            self.tableWidget.clearContents()
+            self.tableWidget.setRowCount(0)
+            for numero_ligne, donnees_ligne in enumerate(data):
+                self.tableWidget.insertRow(numero_ligne)
+                for numero_colonne, donnee_colonne in enumerate(donnees_ligne):
+                    item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
+                    item.setFont(QtGui.QFont("Arial", 15))
+                    self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+    def suppression(self):
+        connection, cursor = connect_to_DB()
+        critere_id = self.filterdropdown.currentText()
+        supp_id = self.recherche.text()
+
+        if critere_id == "ID":
+            query = "select * from groupes_adhérants where id_groupe = %s and id_adhérant=%s"
+            cursor.execute(query, (self.ID_groupe,supp_id,))
+            existence = cursor.fetchone()
+            if existence:
+                query = "DELETE FROM groupes_adhérants WHERE id_groupe=%s and id_adhérant = %s"
+                cursor.execute(query, (self.ID_groupe,supp_id,))
+                self.msg2 = QtWidgets.QMessageBox()
+                self.msg2.setIcon(QtWidgets.QMessageBox.Information)
+                self.msg.setWindowTitle("Erreur")
+                self.msg2.setText("votre abonnement a été supprimé avec succes")
+                self.msg2.exec_()
+            else:
+                self.msg3 = QtWidgets.QMessageBox()
+                self.msg3.setIcon(QtWidgets.QMessageBox.Information)
+                self.msg.setWindowTitle("Erreur")
+                self.msg3.setText("Attention l'ID saisi n'existe pas dans ce groupe")
+                self.msg3.exec_()
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Il faut supprimer un groupe à partir de son ID seulement")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
+
+            # Fermez le curseur et la connexion à la base de données
+        cursor.close()
+        connection.close()
+
+import membresGroupes_rc
 
 
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     Groupes = QtWidgets.QWidget()
-    ui = Ui_Groupes()
+    ui = Ui_Groupe(3)
     ui.setupUi(Groupes)
     Groupes.show()
     sys.exit(app.exec_())

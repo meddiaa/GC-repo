@@ -321,7 +321,7 @@ class Ui_QWdidgetSuivie(object):
             connection.close()
 
 
-import suivie_rc
+from Suivi import suivie_rc
 
 
 if __name__ == "__main__":

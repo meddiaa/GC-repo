@@ -11,10 +11,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from objetsPerdues.affich_objetsPerdues import Ui_MainWindowObjetsPerdues
 from stats.statistiques import Ui_MainWindowStats
-from rhMenu.rh import UI_MainWindowRh
+from rhMenu.rh import Ui_MainWindowGest
 from financeClub.finance import Ui_MainWindowFinance
 from membership.abonnement import Ui_abonnement
 from emploiDuTemps.edt import Ui_EDT
+from edt.edtPage import Ui_MainWindowEDT
 
 
 
@@ -251,7 +252,7 @@ class Ui_MainWindowAdmin(object):
 
         def afficherRh(self):
                 self.window = QtWidgets.QMainWindow()
-                self.ui = UI_MainWindowRh()
+                self.ui = Ui_MainWindowGest()
                 self.ui.setupUi(self.window)
                 self.window.show()
         def afficherFinance(self):
@@ -267,8 +268,8 @@ class Ui_MainWindowAdmin(object):
                 self.window.show()
 
         def afficherEDT(self):
-                self.window = QtWidgets.QWidget()
-                self.ui = Ui_EDT()
+                self.window = QtWidgets.QMainWindow()
+                self.ui = Ui_MainWindowEDT()
                 self.ui.setupUi(self.window)
                 self.window.show()
 

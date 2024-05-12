@@ -343,7 +343,7 @@ class Ui_abonnement(object):
             self.msg2.setText("Attention : veuillez saisir un critere de recherche")
             self.msg2.exec_()
 
-import abonnement_rc
+from membership import abonnement_rc
 
 
 if __name__ == "__main__":

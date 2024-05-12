@@ -311,7 +311,7 @@ class Ui_MainWindowEDT(object):
                 connection.close()
 
 
-import edt_rc
+from edt import edt_rc
 
 
 if __name__ == "__main__":

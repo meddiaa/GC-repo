@@ -1,24 +1,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from mainMenu.admin import Ui_MainWindowAdmin
-
 import mysql.connector
-
 from mainMenu.gest import Ui_MainWindowGest
-
-
 from mainMenu.gest import Ui_MainWindowGest
 from connexion_DB import connect_to_DB
 
 
 class Ui_DialogLogin(object):
     def setupUi(self, DialogLogin):
-        self.mydb = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="moh@med18082004",
-            database="JSS",
-            port="3306"
-        )
         DialogLogin.setObjectName("DialogLogin")
         DialogLogin.resize(1200, 800)
         DialogLogin.setMinimumSize(QtCore.QSize(1200, 800))
@@ -188,21 +177,20 @@ class Ui_DialogLogin(object):
             self.lineEdit_2.setText("")
 
     def verify_admin(self, username, password):
-
-        mycursor = self.mydb.cursor()
+        connection, cursor = connect_to_DB()
         query = " SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s "
         values = (username, password)
-        mycursor.execute(query, values)
-        result = mycursor.fetchall()
-        mycursor.close()
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+        cursor.close()
         return bool(result)
     def verify_gestionnaire(self, username, password):
-        mycursor = self.mydb.cursor()
+        connection, cursor = connect_to_DB()
         query = " SELECT * FROM gestionnaire WHERE nom = %s AND mot_de_passe = %s "
         values = (username, password)
-        mycursor.execute(query, values)
-        result = mycursor.fetchall()
-        mycursor.close()
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+        cursor.close()
         connection, cursor = connect_to_DB()
         query = "SELECT * FROM admin WHERE nom = %s AND mot_de_passe = %s"
         values = (username, password)

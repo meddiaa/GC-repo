@@ -191,7 +191,7 @@ class Ui_FacturesClub(object):
         self.horizontalLayout.addWidget(self.PrixTotal)
         self.verticalLayout.addWidget(self.widget)
         self.gridLayout.addWidget(self.table, 2, 0, 1, 1)
-
+        self.PrixTotal.setReadOnly(True)
         self.retranslateUi(membres)
         QtCore.QMetaObject.connectSlotsByName(membres)
 

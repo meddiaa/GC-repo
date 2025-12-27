@@ -1,102 +1,95 @@
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets, QtGui
+import sys
+import random
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        self.centralwidget.setObjectName("centralwidget")
-        self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
-        self.gridLayout.setObjectName("gridLayout")
-        self.schedule_table = QtWidgets.QTableWidget(self.centralwidget)
-        self.schedule_table.setObjectName("schedule_table")
-        self.gridLayout.addWidget(self.schedule_table, 1, 0, 1, 1)
-        self.generate_button = QtWidgets.QPushButton(self.centralwidget)
-        self.generate_button.setObjectName("generate_button")
-        self.gridLayout.addWidget(self.generate_button, 0, 0, 1, 1)
-        MainWindow.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
-    def retranslateUi(self, MainWindow):
-        _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.generate_button.setText(_translate("MainWindow", "Generate Schedule"))
-
-class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
+class EmploiDuTempsApp(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        self.setupUi(self)
+        self.init_ui()
+
+    def init_ui(self):
+        # Créez le layout principal
+        main_layout = QtWidgets.QVBoxLayout()
+
+        # Création des champs de saisie
+        self.coach_input = QtWidgets.QLineEdit()
+        self.salle_input = QtWidgets.QLineEdit()
+        self.groupe_input = QtWidgets.QLineEdit()
+
+        # Ajoutez les étiquettes et les champs au layout
+        main_layout.addWidget(QtWidgets.QLabel("Liste des coachs (séparés par des virgules):"))
+        main_layout.addWidget(self.coach_input)
+
+        main_layout.addWidget(QtWidgets.QLabel("Liste des salles (séparées par des virgules):"))
+        main_layout.addWidget(self.salle_input)
+
+        main_layout.addWidget(QtWidgets.QLabel("Liste des groupes (séparés par des virgules):"))
+        main_layout.addWidget(self.groupe_input)
+
+        # Créez le bouton pour générer l'emploi du temps
+        self.generate_button = QtWidgets.QPushButton("Générer l'emploi du temps")
         self.generate_button.clicked.connect(self.generate_schedule)
+        main_layout.addWidget(self.generate_button)
+
+        # Créez un tableau pour afficher l'emploi du temps
+        self.schedule_table = QtWidgets.QTableWidget()
+        self.schedule_table.setRowCount(7)  # Dimanche à samedi
+        self.schedule_table.setColumnCount(2)  # Deux séances par jour
+        self.schedule_table.setHorizontalHeaderLabels(["Séance 1", "Séance 2"])
+        self.schedule_table.setVerticalHeaderLabels(
+            ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"]
+        )
+        main_layout.addWidget(self.schedule_table)
+
+        self.setLayout(main_layout)
 
     def generate_schedule(self):
-        # Obtenez la disponibilité des coachs et des salles à partir de l'interface utilisateur
-        coach_availability = self.get_coach_availability()
-        room_availability = self.get_room_availability()
-        num_sessions_per_day = self.get_num_sessions_per_day()
+        # Récupérez les valeurs saisies par l'utilisateur
+        coachs = self.coach_input.text().split(',')
+        salles = self.salle_input.text().split(',')
+        groupes = self.groupe_input.text().split(',')
 
-        # Générez l'emploi du temps
-        schedule = self.generate_schedule_from_availability(coach_availability, room_availability, num_sessions_per_day)
+        # Pour éviter les conflits, utilisez des ensembles pour garder la trace des éléments déjà utilisés
+        used_coaches = {}  # Clé : (jour, séance), Valeur : liste de coachs
+        used_salles = {}  # Clé : (jour, séance), Valeur : liste de salles
+        used_groupes = {}  # Clé : jour, Valeur : liste de groupes
 
-        # Affichez l'emploi du temps généré
-        self.display_schedule(schedule)
+        for i in range(7):  # Pour chaque jour de la semaine
+            used_groupes[i] = set()  # Assurez-vous qu'un groupe n'est pas utilisé plusieurs fois par jour
+            for j in range(2):  # Deux séances par jour
+                valid = False
+                while not valid:
+                    # Choisissez un coach, une salle et un groupe aléatoirement
+                    coach = random.choice(coachs).strip()
+                    salle = random.choice(salles).strip()
+                    groupe = random.choice(groupes).strip()
 
-    def get_coach_availability(self):
-        # Exemple: Récupérez la disponibilité des coachs à partir de l'interface utilisateur
-        # Retournez un dictionnaire où les clés sont les jours de la semaine et les valeurs sont les listes de coachs disponibles
-        coach_availability = {}
-        # Exemple de remplissage manuel (remplacez cela par votre propre logique d'interface utilisateur)
-        for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]:
-            coach_availability[day] = ["Coach A", "Coach B"]  # Liste des coachs disponibles pour chaque jour
-        return coach_availability
+                    # Vérifiez les conflits
+                    coach_conflict = coach in used_coaches.get((i, j), [])
+                    salle_conflict = salle in used_salles.get((i, j), [])
+                    groupe_conflict = groupe in used_groupes[i]
 
-    def get_room_availability(self):
-        # Exemple: Récupérez la disponibilité des salles à partir de l'interface utilisateur
-        # Retournez un dictionnaire où les clés sont les jours de la semaine et les valeurs sont les listes de salles disponibles
-        room_availability = {}
-        # Exemple de remplissage manuel (remplacez cela par votre propre logique d'interface utilisateur)
-        for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]:
-            room_availability[day] = ["Room 1", "Room 2"]  # Liste des salles disponibles pour chaque jour
-        return room_availability
+                    if not (coach_conflict or salle_conflict or groupe_conflict):
+                        valid = True
+                        # Ajoutez les éléments utilisés à l'ensemble
+                        if (i, j) not in used_coaches:
+                            used_coaches[(i, j)] = []
+                        used_coaches[(i, j)].append(coach)
 
-    def get_num_sessions_per_day(self):
-        # Exemple: Récupérez le nombre de séances par jour à partir de l'interface utilisateur
-        # Retournez un dictionnaire où les clés sont les jours de la semaine et les valeurs sont le nombre de séances
-        num_sessions_per_day = {}
-        # Exemple de remplissage manuel (remplacez cela par votre propre logique d'interface utilisateur)
-        for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]:
-            num_sessions_per_day[day] = 2  # Nombre de séances pour chaque jour
-        return num_sessions_per_day
+                        if (i, j) not in used_salles:
+                            used_salles[(i, j)] = []
+                        used_salles[(i, j)].append(salle)
 
-    def generate_schedule_from_availability(self, coach_availability, room_availability, num_sessions_per_day):
-        # Générez l'emploi du temps à partir des informations de disponibilité fournies
-        schedule = []
-        for day in coach_availability.keys():
-            sessions = []
-            for session in range(num_sessions_per_day[day]):
-                coach = coach_availability[day][session % len(coach_availability[day])]
-                room = room_availability[day][session % len(room_availability[day])]
-                sessions.append((coach, room))
-            schedule.append(sessions)
-        return schedule
+                        used_groupes[i].add(groupe)
 
-    def display_schedule(self, schedule):
-        # Affichez l'emploi du temps généré dans la table
-        days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-        num_sessions = max(len(sessions) for sessions in schedule)
-        self.schedule_table.setRowCount(num_sessions)
-        self.schedule_table.setColumnCount(len(days))
-        self.schedule_table.setHorizontalHeaderLabels(days)
-        for day_index, day in enumerate(days):
-            for session_index, session in enumerate(schedule[day_index]):
-                coach, room = session
-                item = QtWidgets.QTableWidgetItem(f"{coach}, {room}")
-                self.schedule_table.setItem(session_index, day_index, item)
+                        # Créez le texte à afficher dans le tableau
+                        session_info = f"Coach: {coach}\nSalle: {salle}\nGroupe: {groupe}"
+                        self.schedule_table.setItem(i, j, QtWidgets.QTableWidgetItem(session_info))
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = MainWindow()
-    MainWindow.show()
-    sys.exit(app.exec_())
+
+# Créez une application PyQt5
+app = QtWidgets.QApplication(sys.argv)
+window = EmploiDuTempsApp()
+window.show()
+sys.exit(app.exec_())

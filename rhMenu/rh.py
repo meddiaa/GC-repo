@@ -12,12 +12,16 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from lesCoaches.coaches import Ui_coaches
 from gestionnaires.gestionnaire import Ui_gestionnaire
 from lesMembres.membres import Ui_membres
-class UI_MainWindowRh(object):
-    def setupUi(self, MainWindowRh):
-        MainWindowRh.setObjectName("MainWindowRh")
-        MainWindowRh.resize(1045, 526)
-        MainWindowRh.setStyleSheet("")
-        self.centralwidget = QtWidgets.QWidget(MainWindowRh)
+from Suivi.SuiviePage import Ui_QWdidgetSuivie
+from groupe.groupes import Ui_Groupes
+
+
+class Ui_MainWindowGest(object):
+    def setupUi(self, MainWindowGest):
+        MainWindowGest.setObjectName("MainWindowGest")
+        MainWindowGest.resize(1617, 526)
+        MainWindowGest.setStyleSheet("")
+        self.centralwidget = QtWidgets.QWidget(MainWindowGest)
         self.centralwidget.setStyleSheet("QWidget #centralwidget\n"
 "{\n"
 "border-image: url(:/background/image 1.png) 0 0 0 0 stretch stretch;\n"
@@ -57,6 +61,36 @@ class UI_MainWindowRh(object):
         self.horizontalLayout_2.setContentsMargins(55, 40, 55, 40)
         self.horizontalLayout_2.setSpacing(55)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButtonSuivie = QtWidgets.QPushButton(self.widget)
+        self.pushButtonSuivie.setMinimumSize(QtCore.QSize(253, 253))
+        self.pushButtonSuivie.setMaximumSize(QtCore.QSize(250, 250))
+        self.pushButtonSuivie.setStyleSheet("border-radius: 10px;\n"
+"                                                    border-top:2px solid;\n"
+"                                                    border-color:rgb(26, 61, 119)\n"
+"                                                ")
+        self.pushButtonSuivie.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/SuivieDeDeve.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButtonSuivie.setIcon(icon)
+        self.pushButtonSuivie.setIconSize(QtCore.QSize(320, 250))
+        self.pushButtonSuivie.setCheckable(True)
+        self.pushButtonSuivie.setObjectName("pushButtonSuivie")
+        self.horizontalLayout_2.addWidget(self.pushButtonSuivie)
+        self.pushButtonGroupes = QtWidgets.QPushButton(self.widget)
+        self.pushButtonGroupes.setMinimumSize(QtCore.QSize(253, 253))
+        self.pushButtonGroupes.setMaximumSize(QtCore.QSize(250, 250))
+        self.pushButtonGroupes.setStyleSheet("border-radius: 10px;\n"
+"                                                    border-top:2px solid;\n"
+"                                                    border-color:rgb(26, 61, 119)\n"
+"                                                ")
+        self.pushButtonGroupes.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/icons/Groupes.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButtonGroupes.setIcon(icon1)
+        self.pushButtonGroupes.setIconSize(QtCore.QSize(320, 250))
+        self.pushButtonGroupes.setCheckable(True)
+        self.pushButtonGroupes.setObjectName("pushButtonGroupes")
+        self.horizontalLayout_2.addWidget(self.pushButtonGroupes)
         self.pushButtonMembres = QtWidgets.QPushButton(self.widget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -76,9 +110,9 @@ class UI_MainWindowRh(object):
 "                                                    border-color:rgb(26, 61, 119)\n"
 "                                                ")
         self.pushButtonMembres.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icons/membres 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonMembres.setIcon(icon)
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap(":/icons/membres 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButtonMembres.setIcon(icon2)
         self.pushButtonMembres.setIconSize(QtCore.QSize(320, 250))
         self.pushButtonMembres.setCheckable(True)
         self.pushButtonMembres.setObjectName("pushButtonMembres")
@@ -102,9 +136,9 @@ class UI_MainWindowRh(object):
 "                                                    border-color:rgb(26, 61, 119)\n"
 "                                                ")
         self.pushButtonCoaches.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icons/coaches 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonCoaches.setIcon(icon1)
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(":/icons/coaches 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButtonCoaches.setIcon(icon3)
         self.pushButtonCoaches.setIconSize(QtCore.QSize(320, 250))
         self.pushButtonCoaches.setCheckable(True)
         self.pushButtonCoaches.setObjectName("pushButtonCoaches")
@@ -128,54 +162,71 @@ class UI_MainWindowRh(object):
 "                                                    border-color:rgb(26, 61, 119)\n"
 "                                                ")
         self.pushButtonGest.setText("")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap(":/icons/gestionnaire 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButtonGest.setIcon(icon2)
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap(":/icons/gestionnaire 1.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButtonGest.setIcon(icon4)
         self.pushButtonGest.setIconSize(QtCore.QSize(320, 250))
         self.pushButtonGest.setCheckable(True)
         self.pushButtonGest.setObjectName("pushButtonGest")
         self.horizontalLayout_2.addWidget(self.pushButtonGest)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.verticalLayout_8.addWidget(self.widget)
-        self.pushButtonCoaches.clicked.connect(self.afficherCoaches)
-        self.pushButtonGest.clicked.connect(self.afficherGestionnaire)
-        self.pushButtonMembres.clicked.connect(self.afficherMembres)
-        MainWindowRh.setCentralWidget(self.centralwidget)
+        MainWindowGest.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindowRh)
-        QtCore.QMetaObject.connectSlotsByName(MainWindowRh)
-        MainWindowRh.showMaximized()
-        
-    def retranslateUi(self, MainWindowRh):
+        self.retranslateUi(MainWindowGest)
+        QtCore.QMetaObject.connectSlotsByName(MainWindowGest)
+        MainWindowGest.showMaximized()
+        self.pushButtonCoaches.clicked.connect(self.afficherCoaches)
+        self.pushButtonMembres.clicked.connect(self.afficherMembres)
+        self.pushButtonGest.clicked.connect(self.afficherGestionnaire)
+        self.pushButtonSuivie.clicked.connect(self.afficherSuivi)
+        self.pushButtonGroupes.clicked.connect(self.afficherGroupes)
+        self.pushButtonGroupes.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.pushButtonSuivie.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+
+    def retranslateUi(self, MainWindowGest):
         _translate = QtCore.QCoreApplication.translate
-        MainWindowRh.setWindowTitle(_translate("MainWindowRh", "MainWindow"))
-        self.label.setText(_translate("MainWindowRh", "Ressources Humaines"))
+        MainWindowGest.setWindowTitle(_translate("MainWindowGest", "MainWindow"))
+        self.label.setText(_translate("MainWindowGest", "Ressources Humaines"))
 
     def afficherCoaches(self):
-            self.window = QtWidgets.QWidget()
-            self.ui = Ui_coaches()
-            self.ui.setupUi(self.window)
-            self.window.show()
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_coaches()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def afficherGestionnaire(self):
-            self.window = QtWidgets.QWidget()
-            self.ui = Ui_gestionnaire()
-            self.ui.setupUi(self.window)
-            self.window.show()
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_gestionnaire()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def afficherMembres(self):
-            self.window = QtWidgets.QWidget()
-            self.ui = Ui_membres()
-            self.ui.setupUi(self.window)
-            self.window.show()
-from rhMenu import rh_rc
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_membres()
+        self.ui.setupUi(self.window)
+        self.window.show()
 
+    def afficherSuivi(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_QWdidgetSuivie()
+        self.ui.setupUi(self.window)
+        self.window.show()
+    def afficherGroupes(self):
+        self.window = QtWidgets.QWidget()
+        self.ui = Ui_Groupes()
+        self.ui.setupUi(self.window)
+        self.window.show()
+
+
+from rhMenu import rh_rc
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
     MainWindowRh = QtWidgets.QMainWindow()
-    ui = UI_MainWindowRh()
+    ui = Ui_MainWindowGest()
     ui.setupUi(MainWindowRh)
     MainWindowRh.show()
     sys.exit(app.exec_())

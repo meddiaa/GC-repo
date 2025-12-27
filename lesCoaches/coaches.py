@@ -10,9 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox, QTextEdit , QLabel, QComboBox, QLineEdit
-
-import mysql.connector
-
+from addCoach.ajouterCoach import Ui_Dialog
 from connexion_DB import connect_to_DB
 
 
@@ -215,17 +213,6 @@ class Ui_coaches(object):
         spacerItem5 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem5)
         self.gridLayout.addWidget(self.FilterButton, 1, 0, 1, 1)
-
-        self.connection = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="moh@med18082004",
-                database="JSS",
-                port="3306"
-        )
-        self.cursor = self.connection.cursor()
-
-
         self.afficher_tout()
         self.pushButton.clicked.connect(self.rechercher_critere)
         self.retranslateUi(coaches)
@@ -238,6 +225,17 @@ class Ui_coaches(object):
         self.tableWidget.setColumnWidth(5, 350)
         self.tableWidget.setColumnWidth(6, 150)
         self.tableWidget.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+        self.ajouter.clicked.connect(self.afficherAjouterCoach)
+        self.supprimer.clicked.connect(self.supprimer_coach)
+
+    def update_object_list(self):
+        self.afficher_tout()
+
+    def afficherAjouterCoach(self):
+        self.window = QtWidgets.QDialog()
+        self.ui = Ui_Dialog(self)
+        self.ui.setupUi(self.window)
+        self.window.show()
 
     def retranslateUi(self, coaches):
         _translate = QtCore.QCoreApplication.translate
@@ -266,20 +264,12 @@ class Ui_coaches(object):
         coaches.showMaximized()
 
     def afficher_tout(self):
-
+            connection, cursor = connect_to_DB()
             self.tableWidget.setRowCount(0)
-            query = "SELECT coach.id_coach, coach.nom, coach.prénom, coach.date_naissance, coach.Gender, coach.numéro_tel FROM coach "
-            try:
-                    self.cursor.execute(query)
-                    results = self.cursor.fetchall()
-            except:
-                connection, cursor = connect_to_DB()
-                self.tableWidget.setRowCount(0)
             query = "SELECT coach.id_coach, coach.nom, coach.prénom, coach.date_naissance, coach.Gender, coach.numéro_tel, sport.nom FROM coach LEFT JOIN coach_sport ON coach.id_coach = coach_sport.id_coach LEFT JOIN sport ON coach_sport.id_sport = sport.id_sport"
             try:
                     cursor.execute(query)
                     results = cursor.fetchall()
-
                     for row_index, row_data in enumerate(results):
                             self.tableWidget.insertRow(row_index)
                             for col_index, data in enumerate(row_data):
@@ -291,10 +281,7 @@ class Ui_coaches(object):
                     print("Erreur lors de la récupération des données:", e)
 
     def rechercher_critere(self):
-
-
             connection, cursor = connect_to_DB()
-
             texte_recherche = self.recherche.text()  # Texte dans la barre de recherche
             critere_recherche = self.filterdropdown.currentText()  # Critère choisi dans le dropdown
 
@@ -317,13 +304,8 @@ class Ui_coaches(object):
             # Ajoutez des caractères joker au texte de recherche
             texte_recherche_avec_joker = f"%{texte_recherche}%"
             # Exécution de la requête
-
-            self.cursor.execute(query, (texte_recherche_avec_joker,))
-            data = self.cursor.fetchall()  # Récupération des résultats
-
             cursor.execute(query, (texte_recherche_avec_joker,))
             data = cursor.fetchall()  # Récupération des résultats
-
 
 
             # Si aucun résultat n'est trouvé
@@ -346,6 +328,32 @@ class Ui_coaches(object):
                             item = QtWidgets.QTableWidgetItem(str(donnee_colonne))
                             item.setFont(QtGui.QFont("Arial", 15))
                             self.tableWidget.setItem(numero_ligne, numero_colonne, item)
+
+    def supprimer_coach(self):
+        critere_id = self.filterdropdown.currentText()
+        supp_id = self.recherche.text()
+        if critere_id == "ID" and supp_id != "":
+            connection, cursor = connect_to_DB()
+            query = "DELETE FROM coach_sport WHERE id_coach = %s"
+            cursor.execute(query, (supp_id,))
+            query = "DELETE FROM coach WHERE id_coach = %s"
+            cursor.execute(query, (supp_id,))
+            connection.commit()
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setText("Votre coach a été supprimé avec succès")
+            self.msg.setWindowTitle("Suppression avec succès")
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.exec_()
+            self.afficher_tout()
+            self.recherche.setText("")
+        else:
+            self.msg = QtWidgets.QMessageBox()
+            self.msg.setIcon(QtWidgets.QMessageBox.Information)
+            self.msg.setWindowIcon(QtGui.QIcon("../resourcesGenerales/iconGC.png"))
+            self.msg.setText("Veuillez supprimer un coach par son ID uniquement.")
+            self.msg.setWindowTitle("Erreur")
+            self.msg.exec_()
 
 from lesCoaches import coaches_rc
 
